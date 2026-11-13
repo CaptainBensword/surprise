@@ -1,18 +1,20 @@
-# ODD THINGS — Creature Workshop
+# PHASEBOUND — A Two-World Platform Game
 
-A small interactive character maker built as a static website
+A small browser platform game with three short levels
 
-## Use it
+## Controls
 
-1. Give your creature a name
-2. Pick its color, body shape and eyes
-3. Add a flower, crown or leaf
-4. Give it a pat or use **Surprise me**
-5. Save it to your collection
+- **A / D** or **Left / Right** — move
+- **Space** or **W / Up** — jump
+- **E** — switch between Dawn and Dusk phases
+- **R** — restart the current level
 
-Saved creatures stay in the browser on the device where they were made
+Collect all three light fragments in each level to open the exit gate
+Some platforms only exist in one phase, so switch worlds to find your route
 
-The website lives in one `index.html` file and needs no build step
+On touch screens, use the on-screen movement, jump, and phase buttons
+
+The game is a single `index.html` file with no build step or external game engine
 
 ## GitHub Pages
 
