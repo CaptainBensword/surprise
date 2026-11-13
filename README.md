@@ -1,16 +1,19 @@
-# SPECTRUM — Open Receiver
+# ODD THINGS — Creature Workshop
 
-A tiny interactive radio receiver built as a static website
+A small interactive character maker built as a static website
 
-## Play
+## Use it
 
-- Drag the frequency dial to tune between 88.0 and 108.0 MHz
-- Run a band sweep to reveal three transmissions
-- Tune to a carrier until the signal locks
-- Decode it to hear what came through
+1. Give your creature a name
+2. Pick its color, body shape and eyes
+3. Add a flower, crown or leaf
+4. Give it a pat or use **Surprise me**
+5. Save it to your collection
 
-The site is a single `index.html` file with no build step or dependencies
+Saved creatures stay in the browser on the device where they were made
+
+The website lives in one `index.html` file and needs no build step
 
 ## GitHub Pages
 
-In the repository, open **Settings → Pages** and choose **Deploy from a branch**, then select **main** and **/(root)**
+Open **Settings → Pages**, choose **Deploy from a branch**, then select **main** and **/(root)**
