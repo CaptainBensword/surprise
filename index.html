@@ -3,219 +3,566 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b101c">
-<meta name="description" content="A short platform adventure between two shifting worlds">
-<title>PHASEBOUND — A Two-World Platform Game</title>
+<meta name="theme-color" content="#09111b">
+<meta name="description" content="THREADLINE — a first-person rooftop traversal game">
+<title>THREADLINE — Rooftop District</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
-:root{--bg:#0b101c;--panel:#131c2c;--panel2:#18243a;--line:#2b3950;--ink:#ecf3f6;--muted:#8191a4;--mint:#64e5c2;--violet:#b69aff;--gold:#ffd27a;--mono:'DM Mono',monospace;--sans:'Space Grotesk',sans-serif}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);min-height:100vh}button{font:inherit;cursor:pointer;color:inherit}::selection{background:var(--mint);color:#08131a}
-.topbar{height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(5vw,18px);background:#0b101cdd;position:relative;z-index:2}
-.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font:500 10px var(--mono);letter-spacing:.15em}.brand-mark{width:25px;height:25px;display:grid;place-items:center;border:1px solid var(--mint);color:var(--mint);border-radius:8px 8px 8px 2px;font-size:15px;transform:rotate(-8deg)}
-.top-right{color:#8191a4;font:8px var(--mono);letter-spacing:.13em}.top-right b{color:var(--mint);font-weight:400;margin-left:8px}
-main{max-width:1250px;margin:auto;padding:0 5vw}
-.intro{padding:37px 0 20px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
-.kicker{font:9px var(--mono);letter-spacing:.16em;color:var(--mint);text-transform:uppercase}
-h1{font-size:clamp(34px,4.5vw,53px);line-height:1;letter-spacing:-.065em;margin:9px 0 0;font-weight:700}
-.intro-copy{max-width:245px;color:#94a1b1;font-size:11px;line-height:1.65;margin:0 0 2px}
-.game-shell{border:1px solid var(--line);background:#101a2a;border-radius:14px;overflow:hidden;box-shadow:0 22px 60px #0005}
-.hud{min-height:62px;padding:12px 17px;display:flex;align-items:center;justify-content:space-between;gap:15px;background:#121d2e;border-bottom:1px solid var(--line)}
-.hud-left{display:flex;align-items:center;gap:14px;min-width:0}.level-number{color:var(--mint);font:9px var(--mono);letter-spacing:.13em;white-space:nowrap}.level-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hud-right{display:flex;align-items:center;gap:13px}.fragment-count{color:#a9b6c4;font:9px var(--mono);white-space:nowrap}.fragment-count strong{color:var(--gold);font-weight:500}
-.phase-chip{display:flex;align-items:center;gap:7px;border:1px solid #3a5260;border-radius:20px;padding:7px 10px;color:var(--mint);font:8px var(--mono);letter-spacing:.09em;white-space:nowrap}.phase-chip.dusk{color:var(--violet);border-color:#5a4c79}.phase-chip i{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 9px currentColor}
-.canvas-wrap{position:relative;background:#111e30;overflow:hidden}
-canvas{display:block;width:100%;aspect-ratio:16/9;height:auto;outline:none}
-.overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:#08101bd9;backdrop-filter:blur(7px);padding:22px;text-align:center;z-index:2}
-.overlay.show{display:flex;animation:fade-in .25s ease}
-.overlay-card{max-width:370px}.overlay-tag{font:9px var(--mono);letter-spacing:.18em;color:var(--mint)}.overlay h2{font-size:36px;letter-spacing:-.05em;margin:12px 0 8px}.overlay p{font-size:12px;line-height:1.65;color:#aab8c4;margin:0 auto 18px;max-width:290px}.overlay button{border:0;border-radius:7px;background:var(--mint);color:#07151a;padding:12px 18px;font-size:10px;font-weight:700;letter-spacing:.07em}
-.controls-bar{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:#121d2e;border-top:1px solid var(--line)}
-.control-legend{display:flex;flex-wrap:wrap;gap:13px;color:#8f9dad;font:8px var(--mono);letter-spacing:.04em}.keycap{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 5px;margin-right:4px;border:1px solid #44536a;border-bottom-width:2px;border-radius:5px;color:#d6e0e7;font:9px var(--mono)}
-.phase-button{border:1px solid #4b6681;background:#1b2b40;border-radius:7px;padding:10px 13px;color:var(--mint);font:9px var(--mono);letter-spacing:.08em;white-space:nowrap;transition:.18s}
-.phase-button:hover{border-color:var(--mint);transform:translateY(-1px)}.phase-button.dusk{color:var(--violet);border-color:#6a5b8e}
-.mobile-controls{display:none;padding:11px 12px;background:#0e1828;border-top:1px solid var(--line);gap:8px;align-items:center;justify-content:space-between}
-.pad-group{display:flex;gap:7px}.pad{width:46px;height:42px;border:1px solid #40506a;background:#19263b;border-radius:8px;color:#dfe8ec;font-size:16px;touch-action:none;user-select:none}.pad:active,.pad.held{background:#2b4055;border-color:var(--mint)}.pad.action{width:auto;min-width:62px;padding:0 10px;font:9px var(--mono);letter-spacing:.05em}.pad.jump{color:var(--gold)}.pad.phase{color:var(--mint)}
-.hint-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 2px 0;color:#7e8fa1;font:8px var(--mono);letter-spacing:.06em}.hint-row span:last-child{color:#a4b0bb;text-align:right}
-footer{display:flex;justify-content:space-between;gap:12px;padding:24px 0 30px;color:#627287;font:8px var(--mono);letter-spacing:.12em}
-.toast{position:fixed;z-index:5;left:50%;bottom:20px;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:var(--gold);color:#1e2631;padding:11px 15px;border-radius:7px;font:9px var(--mono);letter-spacing:.06em;white-space:nowrap;transition:.2s;box-shadow:0 8px 25px #0006}.toast.show{opacity:1;transform:translate(-50%,0)}
-@keyframes fade-in{from{opacity:0}to{opacity:1}}
-@media(max-width:650px){.topbar{padding:0 14px}.top-right{font-size:7px}main{padding:0 12px}.intro{display:block;padding:30px 0 17px}.intro h1{font-size:39px}.intro-copy{margin-top:10px;max-width:330px}.hud{padding:10px 11px;gap:8px}.hud-left{gap:8px}.level-number{font-size:8px}.level-name{font-size:10px}.hud-right{gap:7px}.fragment-count{font-size:8px}.phase-chip{font-size:7px;padding:6px 7px}.controls-bar{padding:10px 11px}.control-legend{gap:7px;font-size:7px}.keycap{min-width:17px;height:17px}.phase-button{padding:9px 9px;font-size:8px}.mobile-controls{display:flex}.hint-row{font-size:7px;line-height:1.5}footer{font-size:7px;flex-wrap:wrap}}
-@media(max-width:390px){.control-legend{gap:5px}.control-legend span:last-child{display:none}.phase-button{letter-spacing:0}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+:root{--bg:#09111b;--panel:#101c29;--panel2:#172638;--line:#2a3c4d;--ink:#edf5f7;--muted:#8ea2b1;--red:#f45b64;--cyan:#71e7fa;--gold:#ffd47c;--mono:ui-monospace,SFMono-Regular,Consolas,monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--sans)}button{font:inherit;color:inherit;cursor:pointer}#view{position:fixed;inset:0;width:100%;height:100%;display:block;outline:none}
+.hud{position:fixed;inset:0;pointer-events:none;z-index:3}.top{position:absolute;left:18px;right:18px;top:16px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:11px;padding:10px 13px;background:#09131ddc;border:1px solid #ffffff1b;border-radius:8px;backdrop-filter:blur(12px)}.mark{width:27px;height:27px;border:2px solid var(--red);border-radius:6px 6px 6px 1px;transform:rotate(-9deg);display:grid;place-items:center;color:var(--red);font-weight:900;font-size:16px}.brand-name{font-size:13px;font-weight:850;letter-spacing:.15em}.brand-sub{font:8px var(--mono);letter-spacing:.12em;color:var(--muted);margin-top:3px}.mission{margin:0 auto;padding:10px 15px;background:#09131ddc;border:1px solid #ffffff1b;border-radius:8px;min-width:245px;text-align:center;backdrop-filter:blur(12px)}.mission-label{font:8px var(--mono);letter-spacing:.16em;color:var(--red)}.mission-text{font-size:11px;font-weight:650;margin-top:4px}.right-hud{display:flex;gap:8px;align-items:flex-start}.stat{min-width:78px;text-align:right;padding:9px 11px;background:#09131ddc;border:1px solid #ffffff1b;border-radius:7px;backdrop-filter:blur(12px)}.stat-label{font:8px var(--mono);letter-spacing:.13em;color:var(--muted)}.stat-value{font:700 17px var(--mono);margin-top:3px}.stat-value small{font-size:9px;color:var(--muted)}#map{width:142px;height:142px;background:#09131de8;border:1px solid #ffffff2a;border-radius:9px;backdrop-filter:blur(12px)}
+.crosshair{position:absolute;left:50%;top:50%;width:22px;height:22px;transform:translate(-50%,-50%);opacity:.9}.crosshair:before,.crosshair:after{content:"";position:absolute;background:#eafaff;box-shadow:0 0 7px #71e7fa}.crosshair:before{width:1px;height:22px;left:10px;top:0}.crosshair:after{height:1px;width:22px;top:10px;left:0}.crosshair i{position:absolute;width:4px;height:4px;border:1px solid var(--cyan);border-radius:50%;left:8px;top:8px}
+.bottom{position:absolute;left:18px;right:18px;bottom:15px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px}.left-bottom{display:flex;align-items:flex-end;gap:8px}.hint{padding:9px 11px;border:1px solid #ffffff1b;background:#09131ddc;border-radius:7px;font:9px var(--mono);color:#b9c9d1;letter-spacing:.04em;backdrop-filter:blur(10px)}.hint b{color:var(--cyan);font-weight:600}.hint.red b{color:var(--red)}.speed-wrap{width:170px;padding:9px 11px;border:1px solid #ffffff1b;background:#09131ddc;border-radius:7px}.speed-head{display:flex;justify-content:space-between;font:8px var(--mono);letter-spacing:.12em;color:var(--muted)}.speed-track{height:4px;margin-top:8px;background:#253849;border-radius:10px;overflow:hidden}.speed-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--red));border-radius:10px;transition:width .1s}
+.toast{position:absolute;left:50%;bottom:72px;transform:translate(-50%,10px);opacity:0;padding:10px 15px;border:1px solid #71e7fa66;background:#09131df2;border-radius:6px;color:#eafaff;font:9px var(--mono);letter-spacing:.08em;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+.lockhint{position:absolute;left:50%;top:calc(50% + 26px);transform:translateX(-50%);font:8px var(--mono);letter-spacing:.12em;color:#d6e8ed;background:#09131dbb;border:1px solid #ffffff20;padding:5px 8px;border-radius:4px;display:none}.lockhint.show{display:block}
+.screen{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 42%,#162e40c9,#050b13ed 70%);backdrop-filter:blur(10px)}.screen.active{display:flex;animation:fade .25s ease}.panel{width:min(610px,100%);padding:32px;border:1px solid #ffffff28;border-radius:12px;background:linear-gradient(145deg,#152638f5,#0a141ff5);box-shadow:0 30px 100px #0009}.eyebrow{font:9px var(--mono);letter-spacing:.2em;color:var(--red)}h1{font-size:clamp(43px,9vw,76px);line-height:.9;letter-spacing:-.075em;margin:16px 0 12px;font-weight:950}.title-accent{color:var(--red)}.intro{max-width:430px;color:#a8bbc5;font-size:13px;line-height:1.65;margin:0 0 22px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:21px 0 23px}.control{padding:10px 11px;border:1px solid #ffffff15;background:#0a1520;border-radius:6px;display:flex;align-items:center;gap:10px;color:#aebfc8;font-size:10px}.keys{flex-shrink:0;min-width:57px;color:#f2f7f8;font:9px var(--mono);letter-spacing:.04em}.start{width:100%;border:0;border-radius:6px;padding:15px;background:var(--red);color:#160c10;font-size:11px;font-weight:850;letter-spacing:.12em;transition:transform .16s,filter .16s}.start:hover{transform:translateY(-2px);filter:brightness(1.09)}.fine{font:8px var(--mono);letter-spacing:.08em;color:#708696;margin-top:13px;text-align:center}
+.pause-panel{width:min(410px,100%)}.pause-panel h2{font-size:34px;letter-spacing:-.06em;margin:12px 0}.pause-panel p{color:#9db0bc;font-size:12px;line-height:1.6}.pause-actions{display:flex;gap:8px;margin-top:20px}.pause-actions button{flex:1;border:1px solid #ffffff25;background:#1b2d3d;border-radius:6px;padding:12px 10px;font-size:10px;font-weight:750}.pause-actions button:first-child{background:var(--red);border-color:var(--red);color:#160c10}
+#mobile{display:none;position:fixed;inset:auto 14px 16px 14px;z-index:4;justify-content:space-between;pointer-events:none}.mobile-pad{display:grid;grid-template-columns:repeat(3,43px);grid-template-rows:repeat(2,40px);gap:4px;pointer-events:auto}.mobile-pad button,.mobile-actions button{border:1px solid #ffffff40;background:#09131dcc;border-radius:7px;color:#eef8fa;font:10px var(--mono);touch-action:none}.mobile-pad [data-key="KeyW"]{grid-column:2}.mobile-pad [data-key="KeyA"]{grid-column:1;grid-row:2}.mobile-pad [data-key="KeyS"]{grid-column:2;grid-row:2}.mobile-pad [data-key="KeyD"]{grid-column:3;grid-row:2}.mobile-actions{display:flex;gap:6px;align-items:flex-end;pointer-events:auto}.mobile-actions button{height:46px;padding:0 12px;color:var(--cyan)}.mobile-actions .jump{color:var(--gold)}.mobile-actions .zip{color:var(--red)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media(max-width:760px){.top{left:8px;right:8px;top:8px}.brand{padding:7px 9px}.brand-name{font-size:10px}.brand-sub{font-size:7px}.mission{min-width:0;padding:8px 9px}.mission-text{font-size:9px}.right-hud{gap:5px}.stat{min-width:55px;padding:7px 8px}.stat-value{font-size:13px}#map{width:96px;height:96px}.bottom{left:8px;right:8px;bottom:8px}.hint{font-size:7px;padding:8px}.speed-wrap{width:112px;padding:8px}.left-bottom{gap:5px}.controls{grid-template-columns:1fr}.panel{padding:23px}.intro{font-size:12px}.lockhint{top:calc(50% + 26px)}}
+@media(max-width:520px){.mission{display:none}.right-hud .stat:nth-child(2){display:none}#map{width:82px;height:82px}.bottom{display:none}#mobile{display:flex}.brand-sub{display:none}.panel{padding:19px}.control{padding:8px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
-<header class="topbar"><a class="brand" href="#"><span class="brand-mark">✳</span><span>PHASEBOUND / MINI ADVENTURE</span></a><div class="top-right">FIELD TEST 01 <b>● PLAYABLE</b></div></header>
-<main>
-<section class="intro"><div><div class="kicker">A small platform adventure</div><h1>One place, two worlds</h1></div><p class="intro-copy">Collect the three light fragments and find the exit<br>Some platforms only exist in the other phase</p></section>
-<section class="game-shell">
-<div class="hud"><div class="hud-left"><div class="level-number" id="levelNumber">LEVEL 01</div><div class="level-name" id="levelName">THE FIRST FRACTURE</div></div><div class="hud-right"><div class="fragment-count">FRAGMENTS <strong id="fragmentCount">0 / 3</strong></div><div class="phase-chip" id="phaseChip"><i></i><span id="phaseName">DAWN PHASE</span></div></div></div>
-<div class="canvas-wrap"><canvas id="game" width="960" height="540" tabindex="0" aria-label="Platform game. Use left and right arrows to move, space to jump, and E to switch between phases"></canvas>
-<div class="overlay" id="overlay"><div class="overlay-card"><div class="overlay-tag" id="overlayTag">LEVEL COMPLETE</div><h2 id="overlayTitle">Nice work</h2><p id="overlayText">You found every fragment</p><button id="overlayButton">NEXT LEVEL ↗</button></div></div></div>
-<div class="controls-bar"><div class="control-legend"><span><i class="keycap">A</i><i class="keycap">D</i> MOVE</span><span><i class="keycap">SPACE</i> JUMP</span><span><i class="keycap">E</i> SWITCH PHASE</span><span><i class="keycap">R</i> RESTART</span></div><button class="phase-button" id="phaseButton">⇄ &nbsp; SWITCH PHASE</button></div>
-<div class="mobile-controls"><div class="pad-group"><button class="pad" data-hold="left" aria-label="Move left">◀</button><button class="pad" data-hold="right" aria-label="Move right">▶</button></div><div class="pad-group"><button class="pad action jump" data-action="jump">JUMP</button><button class="pad action phase" id="mobilePhase">⇄ PHASE</button></div></div>
-</section>
-<div class="hint-row"><span>TIP / THE COLORED PLATFORMS CHANGE WHEN YOU SWITCH PHASE</span><span id="statusText">FIND 3 FRAGMENTS TO OPEN THE GATE</span></div>
-<footer><span>PHASEBOUND / A TWO-WORLD PLATFORMER</span><span>MOVE · SWITCH · ESCAPE</span><span>GOOD LUCK OUT THERE</span></footer>
-</main>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas id="view" aria-label="THREADLINE 3D rooftop traversal game"></canvas>
+<div class="hud">
+ <div class="top">
+  <div class="brand"><div class="mark">T</div><div><div class="brand-name">THREADLINE</div><div class="brand-sub">ROOFTOP DISTRICT / 01</div></div></div>
+  <div class="mission"><div class="mission-label">CURRENT RUN</div><div class="mission-text" id="objective">Restore the rooftop relay network</div></div>
+  <div class="right-hud">
+   <div class="stat"><div class="stat-label">SPEED</div><div class="stat-value" id="speed">0 <small>km/h</small></div></div>
+   <div class="stat"><div class="stat-label">HEIGHT</div><div class="stat-value" id="height">0 <small>m</small></div></div>
+   <div class="stat"><div class="stat-label">RELAYS</div><div class="stat-value" id="relayCount">0/5</div></div>
+   <canvas id="map" width="284" height="284" aria-label="City map"></canvas>
+  </div>
+ </div>
+ <div class="crosshair"><i></i></div>
+ <div class="lockhint" id="lockHint">CLICK TO CAPTURE VIEW</div>
+ <div class="bottom">
+  <div class="left-bottom">
+   <div class="hint"><b>LMB</b> HOLD / SWING</div>
+   <div class="hint"><b>RMB</b> QUICK ZIP</div>
+   <div class="hint red"><b>SPACE</b> JUMP / RELEASE</div>
+   <div class="hint"><b>R</b> RECALL</div>
+  </div>
+  <div class="speed-wrap"><div class="speed-head"><span>TRAVERSE SPEED</span><span id="speedNumber">0</span></div><div class="speed-track"><div class="speed-fill" id="speedFill"></div></div></div>
+ </div>
+ <div class="toast" id="toast"></div>
+</div>
+<div id="mobile">
+ <div class="mobile-pad">
+  <button data-key="KeyW">▲</button><button data-key="KeyA">◀</button><button data-key="KeyS">▼</button><button data-key="KeyD">▶</button>
+ </div>
+ <div class="mobile-actions"><button class="jump" data-mobile="jump">JUMP</button><button data-mobile="web">WEB</button><button class="zip" data-mobile="zip">ZIP</button></div>
+</div>
+<div class="screen active" id="titleScreen">
+ <div class="panel">
+  <div class="eyebrow">CITY NETWORK / FIELD TEST 01</div>
+  <h1>THREAD<span class="title-accent">LINE</span></h1>
+  <p class="intro">A whole district of rooftops, towers, and shortcuts. Restore the relay network, then find the extraction point. The fastest route is usually the one you make.</p>
+  <div class="controls">
+   <div class="control"><span class="keys">W A S D</span><span>Move through the city</span></div>
+   <div class="control"><span class="keys">MOUSE</span><span>Look around</span></div>
+   <div class="control"><span class="keys">HOLD LMB</span><span>Fire a line and swing</span></div>
+   <div class="control"><span class="keys">RMB / E</span><span>Zip toward a building</span></div>
+   <div class="control"><span class="keys">SPACE</span><span>Jump or release with a boost</span></div>
+   <div class="control"><span class="keys">SHIFT</span><span>Run faster</span></div>
+   <div class="control"><span class="keys">R</span><span>Recall to your last roof</span></div>
+   <div class="control"><span class="keys">ESC</span><span>Pause the run</span></div>
+  </div>
+  <button class="start" id="startButton">ENTER THE DISTRICT</button>
+  <div class="fine">NO DOWNLOADS · NO BUILD STEP · JUST THE CITY</div>
+ </div>
+</div>
+<div class="screen" id="pauseScreen">
+ <div class="panel pause-panel">
+  <div class="eyebrow">RUN PAUSED</div><h2>Take a breather.</h2><p>Your relay progress is saved for this run. The rooftops will still be there.</p>
+  <div class="pause-actions"><button id="resumeButton">BACK TO THE CITY</button><button id="recallButton">RECALL</button></div>
+ </div>
+</div>
+<div class="screen" id="finishScreen">
+ <div class="panel pause-panel">
+  <div class="eyebrow">NETWORK RESTORED</div><h2>District connected.</h2><p>You found every relay and reached the extraction point. Keep moving around the city, or run the route again.</p>
+  <div class="pause-actions"><button id="freeRoamButton">KEEP EXPLORING</button><button id="againButton">RUN IT AGAIN</button></div>
+ </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
 <script>
-(()=>{
-'use strict';
-const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+(function(){
+"use strict";
 const $=id=>document.getElementById(id);
-const W=960,H=540;
-const levels=[
-{name:'THE FIRST FRACTURE',world:1660,gate:1510,platforms:[
-{x:0,y:470,w:300,h:70,p:'both'},{x:330,y:405,w:130,h:18,p:'dawn'},{x:490,y:340,w:125,h:18,p:'dusk'},{x:645,y:400,w:125,h:18,p:'both'},{x:800,y:325,w:130,h:18,p:'dawn'},{x:960,y:265,w:135,h:18,p:'dusk'},{x:1130,y:470,w:530,h:70,p:'both'}],
-shards:[{x:205,y:431,p:'both'},{x:548,y:301,p:'dusk'},{x:856,y:286,p:'dawn'}]},
-{name:'THE HOLLOW CAUSEWAY',world:1800,gate:1650,platforms:[
-{x:0,y:470,w:250,h:70,p:'both'},{x:280,y:405,w:110,h:18,p:'dawn'},{x:425,y:345,w:105,h:18,p:'dusk'},{x:565,y:285,w:110,h:18,p:'dawn'},{x:715,y:390,w:100,h:18,p:'both'},{x:855,y:325,w:105,h:18,p:'dusk'},{x:995,y:260,w:110,h:18,p:'dawn'},{x:1145,y:375,w:100,h:18,p:'both'},{x:1280,y:315,w:110,h:18,p:'dusk'},{x:1435,y:470,w:365,h:70,p:'both'}],
-shards:[{x:170,y:431,p:'both'},{x:615,y:246,p:'dawn'},{x:1335,y:276,p:'dusk'}]},
-{name:'THE PALE ENGINE',world:1900,gate:1750,platforms:[
-{x:0,y:470,w:240,h:70,p:'both'},{x:270,y:405,w:100,h:18,p:'dusk'},{x:405,y:320,w:105,h:18,p:'dawn'},{x:550,y:390,w:100,h:18,p:'both'},{x:690,y:315,w:105,h:18,p:'dusk'},{x:830,y:235,w:110,h:18,p:'dawn'},{x:980,y:365,w:110,h:18,p:'both'},{x:1130,y:290,w:105,h:18,p:'dusk'},{x:1270,y:215,w:110,h:18,p:'dawn'},{x:1420,y:365,w:100,h:18,p:'both'},{x:1570,y:470,w:330,h:70,p:'both'}],
-shards:[{x:165,y:431,p:'both'},{x:878,y:196,p:'dawn'},{x:1183,y:251,p:'dusk'}]}
+const canvas=$("view"),mapCanvas=$("map"),mapCtx=mapCanvas.getContext("2d");
+if(!window.THREE){$("objective").textContent="The 3D engine could not load. Check your connection and refresh.";return}
+const T=window.THREE;
+let renderer;
+try{renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,powerPreference:"high-performance"});}catch(err){$("objective").textContent="WebGL is unavailable in this browser.";return}
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.outputColorSpace=T.SRGBColorSpace;
+renderer.toneMapping=T.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.1;
+const scene=new T.Scene();
+scene.background=new T.Color(0x172b3b);
+scene.fog=new T.FogExp2(0x172b3b,0.00145);
+const camera=new T.PerspectiveCamera(78,window.innerWidth/window.innerHeight,.08,1100);
+camera.rotation.order="YXZ";
+scene.add(new T.HemisphereLight(0xbddded,0x25313d,2.05));
+const sun=new T.DirectionalLight(0xffd1a2,2.25);sun.position.set(-180,260,-120);scene.add(sun);
+const fill=new T.DirectionalLight(0x6bc6e3,.55);fill.position.set(200,90,180);scene.add(fill);
+const glowMat=new T.MeshBasicMaterial({color:0xffc67a});
+const sunDisc=new T.Mesh(new T.SphereGeometry(18,20,16),glowMat);sunDisc.position.set(-260,210,-510);scene.add(sunDisc);
+const groundMat=new T.MeshStandardMaterial({color:0x1b2a36,roughness:1});
+const roadMat=new T.MeshStandardMaterial({color:0x273541,roughness:.95});
+const sidewalkMat=new T.MeshStandardMaterial({color:0x46535a,roughness:1});
+const parkMat=new T.MeshStandardMaterial({color:0x24443e,roughness:1});
+const roofMat=new T.MeshStandardMaterial({color:0x394955,roughness:.95});
+const ventMat=new T.MeshStandardMaterial({color:0x62727a,roughness:.8});
+const antennaMat=new T.MeshStandardMaterial({color:0xa9b8bd,metalness:.55,roughness:.45});
+const buildingMats=[
+ new T.MeshStandardMaterial({color:0x405363,roughness:.82}),
+ new T.MeshStandardMaterial({color:0x59636a,roughness:.86}),
+ new T.MeshStandardMaterial({color:0x354957,roughness:.83}),
+ new T.MeshStandardMaterial({color:0x665d58,roughness:.88}),
+ new T.MeshStandardMaterial({color:0x3c4c5b,roughness:.8}),
+ new T.MeshStandardMaterial({color:0x535d69,roughness:.85})
 ];
+const windowGeo=new T.BoxGeometry(2.15,.72,.12);
+const windowMat=new T.MeshStandardMaterial({color:0xffffff,emissive:0x344c5b,emissiveIntensity:.55,roughness:.45});
+const buildings=[],buildingMeshes=[],anchors=[],nodes=[],decor=[];
+const city={spacing:86,limit:4};
+const rnd=(()=>{let s=20261113;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}})();
+const rand=(a,b)=>a+rnd()*(b-a);
+const box=(w,h,d,mat,x,y,z,parent=scene)=>{const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);parent.add(m);return m};
+function addRoads(){
+ const floor=new T.Mesh(new T.PlaneGeometry(940,940),groundMat);floor.rotation.x=-Math.PI/2;floor.position.y=-.12;scene.add(floor);
+ const extent=760;
+ for(let i=-4;i<4;i++){
+  const lane=(i+.5)*city.spacing;
+  box(18,.09,extent,roadMat,lane,.01,0);
+  box(extent,.09,18,roadMat,0,.012,lane);
+ }
+ const dashGeo=new T.BoxGeometry(.42,.08,5.5);
+ const dashCount=8*27*2;
+ const dashes=new T.InstancedMesh(dashGeo,new T.MeshStandardMaterial({color:0xd8c8a0,emissive:0x3a3223,emissiveIntensity:.22}),dashCount);
+ const temp=new T.Object3D();let index=0;
+ for(let i=-4;i<4;i++){
+  const lane=(i+.5)*city.spacing;
+  for(let n=-13;n<=13;n++){
+   const q=n*13.5;
+   temp.position.set(lane,.09,q);temp.rotation.set(0,0,0);temp.updateMatrix();dashes.setMatrixAt(index++,temp.matrix);
+   temp.position.set(q,.09,lane);temp.rotation.set(0,Math.PI/2,0);temp.updateMatrix();dashes.setMatrixAt(index++,temp.matrix);
+  }
+ }
+ dashes.count=index;scene.add(dashes);
+}
+function addTree(x,z,scale){
+ const group=new T.Group();group.position.set(x,0,z);group.scale.setScalar(scale);
+ const trunk=new T.Mesh(new T.CylinderGeometry(.55,.8,5,6),new T.MeshStandardMaterial({color:0x59483e}));trunk.position.y=2.5;group.add(trunk);
+ const crown=new T.Mesh(new T.IcosahedronGeometry(4.2,1),new T.MeshStandardMaterial({color:0x315e50,roughness:1}));crown.position.y=7;group.add(crown);
+ const crown2=new T.Mesh(new T.IcosahedronGeometry(2.8,1),new T.MeshStandardMaterial({color:0x3c705b,roughness:1}));crown2.position.set(2,8,1);group.add(crown2);
+ scene.add(group);decor.push(group);
+}
+const parks=[[-0,0],[2,-2],[-3,1]];
+function makePark(gx,gz){
+ const x=gx*city.spacing,z=gz*city.spacing;
+ const base=box(68,.3,68,parkMat,x,.03,z);
+ const pathMat=new T.MeshStandardMaterial({color:0x6d7770,roughness:1});
+ box(7,.12,58,pathMat,x,.22,z);box(58,.12,7,pathMat,x,.22,z);
+ for(let i=0;i<11;i++){const a=rand(-26,26),b=rand(-25,25);addTree(x+a,z+b,rand(.65,1.05))}
+ for(let i=0;i<3;i++)box(5,.9,1.5,ventMat,x+rand(-22,22),.8,z+rand(-22,22));
+}
+function makeBuilding(gx,gz){
+ const x=gx*city.spacing,z=gz*city.spacing;
+ const width=rand(43,59),depth=rand(43,60);
+ let height=rand(24,72);
+ const central=Math.abs(gx)+Math.abs(gz)<4;
+ if(central)height+=rand(15,47);
+ if(rnd()<.1)height+=rand(25,42);
+ height=Math.round(height/3)*3;
+ const mat=buildingMats[Math.floor(rand(0,buildingMats.length))];
+ box(width+7,.35,depth+7,sidewalkMat,x,.1,z);
+ const body=box(width,height,depth,mat,x,height/2,z);
+ body.userData.building=true;
+ buildings.push({x:x,z:z,w:width,d:depth,h:height,gx:gx,gz:gz,mesh:body});
+ buildingMeshes.push(body);
+ const roof=new T.Mesh(new T.BoxGeometry(width+.6,.5,depth+.6),roofMat);roof.position.set(x,height+.15,z);scene.add(roof);
+ const floors=Math.max(3,Math.floor(height/3.45)),colsX=Math.max(4,Math.floor(width/6)),colsZ=Math.max(4,Math.floor(depth/6));
+ const count=(floors*colsX*2)+(floors*colsZ*2);
+ const windows=new T.InstancedMesh(windowGeo,windowMat,count);
+ const obj=new T.Object3D();let wi=0;
+ const setWindow=(px,py,pz,rot)=>{
+  obj.position.set(px,py,pz);obj.rotation.set(0,rot,0);obj.updateMatrix();windows.setMatrixAt(wi,obj.matrix);
+  const lit=rnd()<.31;
+  windows.setColorAt(wi,new T.Color(lit?(rnd()<.55?0xffd99b:0x9bdcea):0x344858));wi++;
+ };
+ for(let f=0;f<floors;f++){
+  const py=3.0+f*3.35;
+  for(let c=0;c<colsX;c++){
+   const px=-width/2+5+c*((width-10)/Math.max(1,colsX-1));
+   setWindow(px,py,depth/2+.08,0);setWindow(px,py,-depth/2-.08,Math.PI);
+  }
+  for(let c=0;c<colsZ;c++){
+   const pz=-depth/2+5+c*((depth-10)/Math.max(1,colsZ-1));
+   setWindow(width/2+.08,py,pz,Math.PI/2);setWindow(-width/2-.08,py,pz,-Math.PI/2);
+  }
+ }
+ windows.count=wi;windows.position.set(x,0,z);scene.add(windows);
+ const rooftop=box(rand(5,10),rand(2.5,5),rand(5,10),ventMat,x+rand(-width*.24,width*.24),height+1.5,z+rand(-depth*.24,depth*.24));
+ if(rnd()<.65){
+  const tank=new T.Mesh(new T.CylinderGeometry(2.3,2.3,4.3,10),new T.MeshStandardMaterial({color:0x667981,metalness:.45,roughness:.55}));tank.position.set(x+rand(-width*.3,width*.3),height+2.5,z+rand(-depth*.3,depth*.3));scene.add(tank);
+ }
+ const mast=new T.Mesh(new T.CylinderGeometry(.12,.18,rand(5,11),6),antennaMat);mast.position.set(x+width*.32,height+rand(3,5),z-depth*.28);scene.add(mast);
+ const lamp=new T.Mesh(new T.SphereGeometry(.65,8,6),new T.MeshBasicMaterial({color:0xf45b64}));lamp.position.set(mast.position.x,height+rand(6,10),mast.position.z);scene.add(lamp);
+ anchors.push(new T.Vector3(x-width/2+3,height+1,z-depth/2+3));
+ anchors.push(new T.Vector3(x+width/2-3,height+1,z-depth/2+3));
+ anchors.push(new T.Vector3(x-width/2+3,height+1,z+depth/2-3));
+ anchors.push(new T.Vector3(x+width/2-3,height+1,z+depth/2-3));
+ anchors.push(new T.Vector3(x,height+1,z));
+ return buildings[buildings.length-1];
+}
+function buildCity(){
+ addRoads();
+ for(let gx=-city.limit;gx<=city.limit;gx++){
+  for(let gz=-city.limit;gz<=city.limit;gz++){
+   if(parks.some(p=>p[0]===gx&&p[1]===gz)){makePark(gx,gz);continue}
+   makeBuilding(gx,gz);
+  }
+ }
+}
+buildCity();
+const spawnBuilding=buildings.find(b=>b.gx===-3&&b.gz===3)||buildings[0];
+const spawn=new T.Vector3(spawnBuilding.x,spawnBuilding.h+1.75,spawnBuilding.z);
+const candidates=buildings.filter(b=>b!==spawnBuilding);
+const distanceFromSpawn=b=>Math.hypot(b.x-spawn.x,b.z-spawn.z);
+candidates.sort((a,b)=>distanceFromSpawn(a)-distanceFromSpawn(b));
+const nodeFractions=[.16,.34,.52,.70,.86];
+const signalGeo=new T.TorusGeometry(2.1,.22,8,24);
+const signalMat=new T.MeshStandardMaterial({color:0xffd47c,emissive:0xffa938,emissiveIntensity:1.8,metalness:.2,roughness:.3});
+const signalCoreMat=new T.MeshBasicMaterial({color:0xfff1c3});
+function makeSignal(b,index){
+ const group=new T.Group();group.position.set(b.x,b.h+3.8,b.z);
+ const ring=new T.Mesh(signalGeo,signalMat);ring.rotation.x=Math.PI/2;group.add(ring);
+ const core=new T.Mesh(new T.OctahedronGeometry(1.0,0),signalCoreMat);core.position.y=.5;group.add(core);
+ const stem=new T.Mesh(new T.CylinderGeometry(.08,.08,2.5,6),new T.MeshBasicMaterial({color:0xffc45e}));stem.position.y=-1.3;group.add(stem);
+ scene.add(group);nodes.push({group:group,baseY:b.h+3.8,got:false,index:index});
+}
+nodeFractions.forEach((f,i)=>makeSignal(candidates[Math.floor((candidates.length-1)*f)],i));
+const exitBuilding=candidates[candidates.length-1];
+const exitGroup=new T.Group();exitGroup.position.set(exitBuilding.x,exitBuilding.h+4,exitBuilding.z);
+const exitRing=new T.Mesh(new T.TorusGeometry(4.1,.32,10,36),new T.MeshStandardMaterial({color:0x71e7fa,emissive:0x2bb9d1,emissiveIntensity:1.8}));
+exitRing.rotation.x=Math.PI/2;exitGroup.add(exitRing);
+const exitPillar=new T.Mesh(new T.CylinderGeometry(.25,.25,7,8),new T.MeshBasicMaterial({color:0x71e7fa}));exitPillar.position.y=-3;exitGroup.add(exitPillar);
+exitGroup.visible=false;scene.add(exitGroup);
+const player={pos:spawn.clone(),vel:new T.Vector3(),grounded:true};
+const EYE=1.72;
+let yaw=0,pitch=-.05,started=false,paused=false,finished=false,zipActive=false,zipDestination=null;
+let tetherActive=false,anchor=null,ropeLength=0,jumpQueued=false,mouseHeld=false,dragLook=false,prevMouseX=0,prevMouseY=0;
+let bestSpeed=0,clock=0,lastFrame=performance.now(),hudTimer=0,toastTimer=0;
 const keys=new Set();
-let levelIndex=0,phase='dawn',got=new Set(),camera=0,last=0,toastTimer=0,lockedToast=0,transition=false,win=false;
-let jumpQueued=false,particles=[];
-const player={x:65,y:420,w:25,h:36,vx:0,vy:0,grounded:false,face:1,step:0,checkpoint:65};
-const stars=Array.from({length:95},(_,i)=>({x:(i*173.7)%1900,y:(i*71.3)%440,r:.5+(i%4)*.32,a:.25+(i%6)*.1}));
-function world(){return levels[levelIndex]}
-function notify(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>$('toast').classList.remove('show'),1700)}
-function updateHud(){
- $('levelNumber').textContent='LEVEL 0'+(levelIndex+1);
- $('levelName').textContent=world().name;
- $('fragmentCount').textContent=got.size+' / 3';
- $('phaseName').textContent=phase.toUpperCase()+' PHASE';
- $('phaseChip').classList.toggle('dusk',phase==='dusk');
- $('phaseButton').classList.toggle('dusk',phase==='dusk');
- $('statusText').textContent=got.size===3?'THE GATE IS OPEN — GET TO THE END':'FIND '+(3-got.size)+' MORE FRAGMENT'+(3-got.size===1?'':'S')+' TO OPEN THE GATE';
+const raycaster=new T.Raycaster();raycaster.far=220;
+const screenCenter=new T.Vector2(0,0);
+const ropePoints=Array.from({length:18},()=>new T.Vector3());
+const ropeGeometry=new T.BufferGeometry();
+ropeGeometry.setFromPoints(ropePoints);
+const ropeMaterial=new T.LineBasicMaterial({color:0x71e7fa,transparent:true,opacity:.95});
+const ropeLine=new T.Line(ropeGeometry,ropeMaterial);ropeLine.frustumCulled=false;ropeLine.visible=false;scene.add(ropeLine);
+const ropeTip=new T.Mesh(new T.SphereGeometry(.45,10,8),new T.MeshBasicMaterial({color:0xa6f6ff}));ropeTip.visible=false;scene.add(ropeTip);
+const aimMark=new T.Mesh(new T.SphereGeometry(.48,10,8),new T.MeshBasicMaterial({color:0x71e7fa}));aimMark.visible=false;scene.add(aimMark);
+function notify(message){
+ const el=$("toast");el.textContent=message;el.classList.add("show");
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),1500);
 }
-function setPhase(){if(transition||win)return;phase=phase==='dawn'?'dusk':'dawn';updateHud();burst(player.x+player.w/2,player.y+player.h/2,phase==='dawn'?'#64e5c2':'#b69aff',9);notify(phase.toUpperCase()+' PHASE')}
-function burst(x,y,color,count){for(let i=0;i<count;i++){const a=Math.PI*2*i/count;particles.push({x,y,vx:Math.cos(a)*(1+Math.random()*2.4),vy:Math.sin(a)*(1+Math.random()*2.4),life:26,max:26,color})}}
-function restart(){if(transition)return;got=new Set();phase='dawn';player.x=65;player.y=420;player.vx=0;player.vy=0;player.grounded=false;camera=0;particles=[];win=false;$('overlay').classList.remove('show');updateHud();notify('LEVEL RESET')}
-function startLevel(index){levelIndex=index;got=new Set();phase='dawn';player.x=65;player.y=420;player.vx=0;player.vy=0;player.grounded=false;camera=0;particles=[];transition=false;win=false;$('overlay').classList.remove('show');updateHud();notify('LEVEL 0'+(index+1)+' — '+world().name)}
-function completeLevel(){if(transition||win)return;transition=true;if(levelIndex===levels.length-1){win=true;$('overlayTag').textContent='ALL THREE LEVELS CLEARED';$('overlayTitle').textContent='You made it through';$('overlayText').textContent='Every fragment recovered — the two worlds are back in sync';$('overlayButton').textContent='PLAY AGAIN ↻'}else{$('overlayTag').textContent='LEVEL COMPLETE';$('overlayTitle').textContent='Gate unlocked';$('overlayText').textContent='Fragments recovered — the next stretch is waiting';$('overlayButton').textContent='NEXT LEVEL ↗'}$('overlay').classList.add('show')}
-function activePlatform(p){return p.p==='both'||p.p===phase}
-function jump(){jumpQueued=true}
-function update(){
- if(transition||win)return;
- const left=keys.has('left'),right=keys.has('right');
- const oldBottom=player.y+player.h;
- if(left!==right){player.vx+=(right?1:-1)*.85;player.vx=Math.max(-4.7,Math.min(4.7,player.vx));player.face=right?1:-1}else player.vx*=.78;
- if(Math.abs(player.vx)<.08)player.vx=0;
- if(jumpQueued&&player.grounded){player.vy=-12.2;player.grounded=false;burst(player.x+player.w/2,player.y+player.h,'#d8e9e4',5)}
- jumpQueued=false;
- player.vy=Math.min(14,player.vy+.58);
- player.x+=player.vx;player.y+=player.vy;
- player.x=Math.max(0,Math.min(world().world-player.w,player.x));
+function hideScreen(id){$(id).classList.remove("active")}
+function showScreen(id){$(id).classList.add("active")}
+function requestLock(){if(canvas.requestPointerLock){try{const p=canvas.requestPointerLock();if(p&&p.catch)p.catch(()=>{})}catch(e){}}}
+function enterGame(){
+ started=true;paused=false;hideScreen("titleScreen");hideScreen("pauseScreen");requestLock();$("lockHint").classList.add("show");
+ notify("Find the five rooftop relays");
+}
+function pauseGame(){
+ if(!started||finished)return;paused=true;keys.clear();releaseTether(false);zipActive=false;showScreen("pauseScreen");
+ if(document.pointerLockElement)document.exitPointerLock();
+}
+document.addEventListener("pointerlockchange",()=>{
+ const locked=document.pointerLockElement===canvas;
+ if(locked){$("lockHint").classList.remove("show");if(started&&!finished){paused=false;hideScreen("pauseScreen")}}
+ else if(started&&!paused&&!finished){pauseGame()}
+});
+function updateCamera(){
+ camera.position.copy(player.pos);
+ camera.rotation.y=yaw;camera.rotation.x=pitch;camera.rotation.z=0;
+ camera.updateMatrixWorld();
+}
+function aimTarget(){
+ updateCamera();
+ raycaster.setFromCamera(screenCenter,camera);raycaster.far=220;
+ const hits=raycaster.intersectObjects(buildingMeshes,false);
+ if(hits.length){
+  const hit=hits[0];const normal=hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
+  return {point:hit.point.clone(),normal:normal,distance:hit.distance};
+ }
+ const dir=new T.Vector3();camera.getWorldDirection(dir);
+ let best=null,bestScore=Infinity;
+ for(const p of anchors){
+  const to=p.clone().sub(camera.position);const dist=to.length();if(dist>190||dist<5)continue;
+  const dot=dir.dot(to.normalize());if(dot<.28)continue;
+  const score=dist+(1-dot)*85;
+  if(score<bestScore){bestScore=score;best={point:p.clone(),normal:camera.position.clone().sub(p).normalize(),distance:dist}}
+ }
+ return best;
+}
+function attachTether(){
+ if(paused||!started||finished)return;
+ const target=aimTarget();
+ if(!target){notify("No rooftop in range");return}
+ anchor=target.point.clone();const d=player.pos.distanceTo(anchor);
+ ropeLength=Math.max(9,d*.78);tetherActive=true;zipActive=false;
+ ropeLine.visible=true;ropeTip.visible=true;
+ notify("LINE ATTACHED");
+}
+function releaseTether(boost){
+ if(tetherActive&&boost){
+  const forward=new T.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
+  player.vel.addScaledVector(forward,5.5);player.vel.y+=1.6;
+ }
+ tetherActive=false;
+ if(!zipActive){ropeLine.visible=false;ropeTip.visible=false}
+ anchor=null;
+}
+function startZip(){
+ if(paused||!started||finished)return;
+ const target=aimTarget();
+ if(!target){notify("No building in range");return}
+ anchor=target.point.clone();
+ const away=player.pos.clone().sub(anchor);away.y*=.25;
+ if(away.lengthSq()<.01)away.set(0,0,1);
+ away.normalize();
+ zipDestination=anchor.clone().addScaledVector(away,7).add(new T.Vector3(0,1.8,0));
+ zipActive=true;tetherActive=false;ropeLine.visible=true;ropeTip.visible=true;
+ notify("ZIP LINE");
+}
+function jump(){
+ if(paused||!started||finished)return;
+ if(zipActive){zipActive=false;anchor=null;ropeLine.visible=false;ropeTip.visible=false;player.vel.y=7;return}
+ if(tetherActive){releaseTether(true);player.vel.y=Math.max(player.vel.y,8);return}
+ if(player.grounded){jumpQueued=true}
+}
+function respawn(){
+ player.pos.copy(spawn);player.vel.set(0,0,0);player.grounded=true;
+ zipActive=false;anchor=null;releaseTether(false);ropeLine.visible=false;ropeTip.visible=false;
+ notify("BACK ON THE ROOF");
+}
+function finishRun(){
+ if(finished)return;finished=true;zipActive=false;releaseTether(false);showScreen("finishScreen");if(document.pointerLockElement)document.exitPointerLock();
+}
+function startAgain(){
+ nodes.forEach(n=>{n.got=false;n.group.visible=true});
+ exitGroup.visible=false;finished=false;player.pos.copy(spawn);player.vel.set(0,0,0);player.grounded=true;clock=0;
+ $("relayCount").textContent="0/5";$("objective").textContent="Restore the rooftop relay network";
+ hideScreen("finishScreen");paused=false;requestLock();
+}
+function collectRelays(){
+ for(const n of nodes){
+  if(n.got)continue;
+  const d=player.pos.distanceTo(n.group.position);
+  if(d<4.1){
+   n.got=true;n.group.visible=false;
+   const count=nodes.filter(x=>x.got).length;
+   $("relayCount").textContent=count+"/5";
+   notify("RELAY "+count+" / 5 RESTORED");
+   if(count===5){
+    exitGroup.visible=true;
+    $("objective").textContent="Reach the extraction ring";
+    notify("ALL RELAYS ONLINE — FIND THE EXTRACTION RING");
+   }
+  }
+ }
+ if(nodes.every(n=>n.got)&&player.pos.distanceTo(exitGroup.position)<7.2)finishRun();
+}
+function collide(oldFeet){
+ const feet=player.pos.y-EYE;
  player.grounded=false;
- for(const p of world().platforms){if(!activePlatform(p))continue;if(player.vy>=0&&oldBottom<=p.y+9&&player.y+player.h>=p.y&&player.x+player.w>p.x+3&&player.x<p.x+p.w-3){player.y=p.y-player.h;player.vy=0;player.grounded=true}}
- if(player.y>H+120){player.x=65;player.y=390;player.vx=0;player.vy=0;notify('Back to the start — try another route')}
- for(let i=0;i<world().shards.length;i++){if(got.has(i))continue;const s=world().shards[i];if(s.p!=='both'&&s.p!==phase)continue;const dx=player.x+player.w/2-s.x,dy=player.y+player.h/2-s.y;if(Math.hypot(dx,dy)<27){got.add(i);burst(s.x,s.y,'#ffd27a',18);updateHud();notify('LIGHT FRAGMENT FOUND')}}
- const gateX=world().gate;
- if(player.x+player.w>gateX&&player.x<gateX+45&&player.y+player.h>390&&player.y<480){
-  if(got.size===3)completeLevel();
-  else if(lockedToast<0){notify('THE GATE NEEDS ALL 3 FRAGMENTS');lockedToast=80}
+ if(feet<=0){player.pos.y=EYE;player.vel.y=Math.max(0,player.vel.y);player.grounded=true}
+ for(const b of buildings){
+  const dx=player.pos.x-b.x,dz=player.pos.z-b.z;
+  const inside=Math.abs(dx)<b.w/2+.25&&Math.abs(dz)<b.d/2+.25;
+  if(!inside)continue;
+  const nowFeet=player.pos.y-EYE;
+  if(oldFeet>=b.h-.06&&nowFeet<=b.h&&player.vel.y<=0){
+   player.pos.y=b.h+EYE;player.vel.y=0;player.grounded=true;continue;
+  }
+  if(nowFeet<b.h-.35){
+   const overlapX=b.w/2+.8-Math.abs(dx),overlapZ=b.d/2+.8-Math.abs(dz);
+   if(overlapX<overlapZ){player.pos.x=b.x+(dx>=0?1:-1)*(b.w/2+.85);player.vel.x=0}
+   else{player.pos.z=b.z+(dz>=0?1:-1)*(b.d/2+.85);player.vel.z=0}
+  }
  }
- lockedToast--;
- player.step+=Math.abs(player.vx)*.08;
- camera=Math.max(0,Math.min(world().world-W,player.x-300));
- particles=particles.filter(p=>p.life-->0);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vx*=.96;p.vy*=.96});
+ player.pos.x=T.MathUtils.clamp(player.pos.x,-410,410);
+ player.pos.z=T.MathUtils.clamp(player.pos.z,-410,410);
 }
-function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
-function drawBackground(t){
- const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#111d32');g.addColorStop(1,phase==='dawn'?'#1a3b4b':'#282b4b');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
- for(const s of stars){const x=((s.x-camera*.18)%W+W)%W;ctx.globalAlpha=s.a*(.7+.3*Math.sin(t*.001+s.x));ctx.fillStyle='#d8f3ee';ctx.beginPath();ctx.arc(x,s.y,s.r,0,Math.PI*2);ctx.fill()}
- ctx.globalAlpha=1;
- const moonX=760-camera*.08;ctx.fillStyle=phase==='dawn'?'#75d8c5':'#b69aff';ctx.globalAlpha=.15;ctx.beginPath();ctx.arc(moonX,125,74,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
- ctx.strokeStyle=phase==='dawn'?'#64e5c2':'#b69aff';ctx.globalAlpha=.12;ctx.lineWidth=1;
- for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(moonX,125,88+i*20,0,Math.PI*2);ctx.stroke()}
- ctx.globalAlpha=1;
-}
-function drawPlatforms(){
- ctx.save();ctx.translate(-camera,0);
- for(const p of world().platforms){
-  const active=activePlatform(p),isBoth=p.p==='both';
-  const color=isBoth?'#7894a0':p.p==='dawn'?'#64e5c2':'#b69aff';
-  ctx.globalAlpha=active?1:.22;
-  if(active){ctx.shadowBlur=16;ctx.shadowColor=color}
-  ctx.fillStyle=isBoth?'#344b60':p.p==='dawn'?'#1b645f':'#554674';
-  rr(p.x,p.y,p.w,p.h,5);ctx.fill();
-  ctx.shadowBlur=0;ctx.fillStyle=color;rr(p.x,p.y,p.w,4,2);ctx.fill();
-  ctx.fillStyle='#ffffff';ctx.globalAlpha=active?.18:.05;
-  for(let x=p.x+12;x<p.x+p.w-7;x+=22){ctx.fillRect(x,p.y+8,9,2)}
-  ctx.globalAlpha=1;
+function update(dt){
+ if(!started||paused||finished)return;
+ clock+=dt;
+ const oldFeet=player.pos.y-EYE;
+ const forward=new T.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
+ const right=new T.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+ const wish=new T.Vector3();
+ if(keys.has("KeyW")||keys.has("ArrowUp"))wish.add(forward);
+ if(keys.has("KeyS")||keys.has("ArrowDown"))wish.sub(forward);
+ if(keys.has("KeyD")||keys.has("ArrowRight"))wish.add(right);
+ if(keys.has("KeyA")||keys.has("ArrowLeft"))wish.sub(right);
+ const moving=wish.lengthSq()>.001;
+ if(moving)wish.normalize();
+ if(zipActive&&zipDestination){
+  const delta=zipDestination.clone().sub(player.pos);const dist=delta.length();
+  if(dist<5.5){
+   zipActive=false;anchor=null;ropeLine.visible=false;ropeTip.visible=false;
+   const launch=forward.clone().multiplyScalar(8);player.vel.copy(launch);player.vel.y=3.5;
+   notify("ZIP COMPLETE");
+  }else{
+   const desired=delta.normalize().multiplyScalar(Math.min(42,24+dist*.12));
+   player.vel.lerp(desired,Math.min(1,9*dt));
+   player.pos.addScaledVector(player.vel,dt);
+  }
+ }else{
+  const accel=player.grounded?34:17;
+  if(moving)player.vel.addScaledVector(wish,accel*dt);
+  else{const drag=player.grounded?.78:.992;player.vel.x*=Math.pow(drag,dt*60);player.vel.z*=Math.pow(drag,dt*60)}
+  const maxSpeed=keys.has("ShiftLeft")||keys.has("ShiftRight")?23:14;
+  const horizontal=Math.hypot(player.vel.x,player.vel.z);
+  const cap=tetherActive?Math.max(maxSpeed,39):maxSpeed;
+  if(horizontal>cap){const f=cap/horizontal;player.vel.x*=f;player.vel.z*=f}
+  if(jumpQueued&&player.grounded){player.vel.y=11.4;player.grounded=false;notify("JUMP")}
+  jumpQueued=false;
+  if(!player.grounded)player.vel.y-=24*dt;
+  else if(player.vel.y<0)player.vel.y=0;
+  player.pos.addScaledVector(player.vel,dt);
+  if(tetherActive&&anchor){
+   const fromAnchor=player.pos.clone().sub(anchor);const dist=fromAnchor.length();
+   if(dist>ropeLength){
+    const direction=fromAnchor.normalize();
+    player.pos.copy(anchor.clone().addScaledVector(direction,ropeLength));
+    const outward=player.vel.dot(direction);if(outward>0)player.vel.addScaledVector(direction,-outward);
+   }
+  }
  }
- ctx.restore();
+ collide(oldFeet);
+ collectRelays();
+ if(player.pos.y< -35){respawn();notify("MISSED THE ROOF — RECALLED")}
+ const horizontalSpeed=Math.hypot(player.vel.x,player.vel.z);
+ bestSpeed=Math.max(bestSpeed,horizontalSpeed*3.6);
+ updateCamera();
+ if(tetherActive&&anchor){
+  const start=player.pos,end=anchor;
+  const dist=start.distanceTo(end);
+  for(let i=0;i<ropePoints.length;i++){
+   const t=i/(ropePoints.length-1);
+   ropePoints[i].copy(start).lerp(end,t);
+   ropePoints[i].y-=Math.sin(Math.PI*t)*Math.max(.2,(dist-ropeLength)*.035);
+  }
+  ropeGeometry.setFromPoints(ropePoints);ropeTip.position.copy(end);ropeLine.visible=true;ropeTip.visible=true;
+ }else if(zipActive&&anchor){
+  ropeGeometry.setFromPoints([player.pos,anchor]);ropeTip.position.copy(anchor);ropeLine.visible=true;ropeTip.visible=true;
+ }
+ for(const n of nodes)if(!n.got){n.group.position.y=n.baseY+Math.sin(clock*2.1+n.index)*.35;n.group.rotation.y=clock*.5}
+ if(exitGroup.visible){exitGroup.rotation.y=clock*.35;exitGroup.position.y=exitBuilding.h+4+Math.sin(clock*1.7)*.3}
+ if(performance.now()-hudTimer>120){
+  hudTimer=performance.now();
+  const kmh=Math.round(horizontalSpeed*3.6);
+  $("speed").innerHTML=kmh+" <small>km/h</small>";$("speedNumber").textContent=kmh;
+  $("height").innerHTML=Math.max(0,Math.round(player.pos.y-EYE))+" <small>m</small>";
+  $("speedFill").style.width=Math.min(100,kmh/160*100)+"%";
+  if(nodes.every(n=>n.got))$("objective").textContent="Reach the extraction ring";
+  else $("objective").textContent="Restore the rooftop relay network";
+ }
 }
-function drawShard(s,i,t){
- const active=s.p==='both'||s.p===phase;
- if(!active){ctx.globalAlpha=.16}
- const pulse=1+Math.sin(t*.004+i*2)*.12;
- ctx.save();ctx.translate(s.x,s.y);ctx.rotate(t*.0015+i);ctx.scale(pulse,pulse);
- ctx.shadowBlur=active?20:0;ctx.shadowColor='#ffd27a';ctx.fillStyle='#ffd27a';ctx.beginPath();ctx.moveTo(0,-13);ctx.lineTo(9,0);ctx.lineTo(0,13);ctx.lineTo(-9,0);ctx.closePath();ctx.fill();
- ctx.fillStyle='#fff5ce';ctx.beginPath();ctx.moveTo(0,-7);ctx.lineTo(4,0);ctx.lineTo(0,7);ctx.lineTo(-4,0);ctx.closePath();ctx.fill();ctx.restore();ctx.globalAlpha=1;
+function drawMap(){
+ const w=mapCanvas.width,h=mapCanvas.height,scale=w/900;
+ mapCtx.clearRect(0,0,w,h);mapCtx.fillStyle="#101d29";mapCtx.fillRect(0,0,w,h);
+ mapCtx.strokeStyle="#384c5a";mapCtx.lineWidth=8;
+ for(let i=-4;i<4;i++){
+  const lane=(i+.5)*city.spacing+450;
+  mapCtx.beginPath();mapCtx.moveTo(lane,0);mapCtx.lineTo(lane,h);mapCtx.stroke();
+  mapCtx.beginPath();mapCtx.moveTo(0,lane);mapCtx.lineTo(w,lane);mapCtx.stroke();
+ }
+ for(const b of buildings){
+  const x=(b.x-b.w/2+450)*scale,z=(b.z-b.d/2+450)*scale;
+  mapCtx.fillStyle="#637784";mapCtx.fillRect(x,z,b.w*scale,b.d*scale);
+ }
+ for(const n of nodes){
+  if(n.got)continue;
+  const x=(n.group.position.x+450)*scale,z=(n.group.position.z+450)*scale;
+  mapCtx.fillStyle="#ffd47c";mapCtx.beginPath();mapCtx.arc(x,z,3.8,0,Math.PI*2);mapCtx.fill();
+ }
+ if(exitGroup.visible){
+  const x=(exitBuilding.x+450)*scale,z=(exitBuilding.z+450)*scale;
+  mapCtx.strokeStyle="#71e7fa";mapCtx.lineWidth=2;mapCtx.beginPath();mapCtx.arc(x,z,5,0,Math.PI*2);mapCtx.stroke();
+ }
+ const px=(player.pos.x+450)*scale,pz=(player.pos.z+450)*scale;
+ mapCtx.fillStyle="#f45b64";mapCtx.beginPath();mapCtx.arc(px,pz,5,0,Math.PI*2);mapCtx.fill();
+ const fx=-Math.sin(yaw)*8,fz=-Math.cos(yaw)*8;
+ mapCtx.strokeStyle="#ffffff";mapCtx.lineWidth=2;mapCtx.beginPath();mapCtx.moveTo(px,pz);mapCtx.lineTo(px+fx,pz+fz);mapCtx.stroke();
+ mapCtx.strokeStyle="#8aa0ae";mapCtx.lineWidth=2;mapCtx.strokeRect(1,1,w-2,h-2);
 }
-function drawGate(){
- const x=world().gate,open=got.size===3;
- ctx.save();ctx.translate(-camera,0);
- ctx.shadowBlur=open?28:8;ctx.shadowColor=open?'#ffd27a':'#6f8590';
- ctx.strokeStyle=open?'#ffd27a':'#71838b';ctx.lineWidth=7;
- ctx.beginPath();ctx.moveTo(x,470);ctx.lineTo(x,421);ctx.quadraticCurveTo(x,382,x+23,382);ctx.quadraticCurveTo(x+46,382,x+46,421);ctx.lineTo(x+46,470);ctx.stroke();
- ctx.shadowBlur=0;ctx.fillStyle=open?'#ffd27a':'#64727b';ctx.globalAlpha=open?.32:.14;ctx.beginPath();ctx.ellipse(x+23,431,14,34,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
- if(open){ctx.fillStyle='#fff0c1';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('EXIT',x+23,368)}else{ctx.fillStyle='#9aa9ae';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('LOCKED',x+23,368)}
- ctx.restore();
+function render(t){
+ const now=performance.now();const dt=Math.min(.033,(now-lastFrame)/1000||.016);lastFrame=now;
+ update(dt);drawMap();
+ const target=started&&!paused&&!finished?aimTarget():null;
+ if(target&&!tetherActive&&!zipActive){aimMark.position.copy(target.point);aimMark.visible=true}
+ else aimMark.visible=false;
+ renderer.render(scene,camera);
+ requestAnimationFrame(render);
 }
-function drawPlayer(t){
- const x=player.x-camera,y=player.y,run=Math.sin(player.step)*3;
- ctx.save();ctx.translate(x+player.w/2,y+player.h/2);ctx.scale(player.face,1);
- ctx.fillStyle='#00000055';ctx.beginPath();ctx.ellipse(0,player.h/2+5,16,4,0,0,Math.PI*2);ctx.fill();
- ctx.strokeStyle='#dce9ea';ctx.lineWidth=5;ctx.lineCap='round';
- ctx.beginPath();ctx.moveTo(-5,9);ctx.lineTo(-6+run,17);ctx.moveTo(6,9);ctx.lineTo(7-run,17);ctx.stroke();
- ctx.fillStyle=phase==='dawn'?'#64e5c2':'#b69aff';rr(-10,-6,20,19,6);ctx.fill();
- ctx.fillStyle='#dfe9e6';rr(-11,-17,22,18,8);ctx.fill();
- ctx.fillStyle='#263b4c';rr(-7,-13,14,9,4);ctx.fill();
- ctx.fillStyle='#fff';ctx.fillRect(1,-11,3,3);
- ctx.strokeStyle=phase==='dawn'?'#64e5c2':'#b69aff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-9,-3);ctx.quadraticCurveTo(-19,2,-15,9);ctx.stroke();
- ctx.restore();
+function onResize(){
+ camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));renderer.setSize(window.innerWidth,window.innerHeight);
 }
-function draw(t){
- ctx.clearRect(0,0,W,H);drawBackground(t);drawPlatforms();
- ctx.save();ctx.translate(-camera,0);
- world().shards.forEach((s,i)=>{if(!got.has(i))drawShard(s,i,t)});
- ctx.restore();
- drawGate();drawPlayer(t);
- for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/p.max);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x-camera,p.y,2.5,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
- ctx.fillStyle='#e6f0ec';ctx.globalAlpha=.55;ctx.font='9px monospace';ctx.textAlign='left';ctx.fillText('X '+String(Math.floor(player.x)).padStart(4,'0'),17,25);ctx.globalAlpha=1;
-}
-function frame(t){const dt=Math.min(32,t-last||16);last=t;if(!transition&&!win)update(dt);draw(t);requestAnimationFrame(frame)}
-function actionKey(k,down){
- if(k==='left'||k==='right'){if(down)keys.add(k);else keys.delete(k)}
- if(down&&k==='jump')jump();
-}
-window.addEventListener('keydown',e=>{
- const k=e.key.toLowerCase();
- if(['arrowleft','arrowright','arrowup',' ','a','d','w','e','r'].includes(k))e.preventDefault();
- if(k==='arrowleft'||k==='a')actionKey('left',true);
- if(k==='arrowright'||k==='d')actionKey('right',true);
- if((k===' '||k==='arrowup'||k==='w')&&!e.repeat)jump();
- if(k==='e'&&!e.repeat)setPhase();
- if(k==='r'&&!e.repeat)restart();
+window.addEventListener("resize",onResize);
+document.addEventListener("mousemove",e=>{
+ if(document.pointerLockElement===canvas){yaw-=e.movementX*.0021;pitch-=e.movementY*.0018}
+ else if(dragLook){yaw-=(e.clientX-prevMouseX)*.004;pitch-=(e.clientY-prevMouseY)*.003;prevMouseX=e.clientX;prevMouseY=e.clientY}
+ pitch=T.MathUtils.clamp(pitch,-1.35,1.35);
 });
-window.addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k==='arrowleft'||k==='a')actionKey('left',false);if(k==='arrowright'||k==='d')actionKey('right',false)});
-window.addEventListener('blur',()=>{keys.clear()});
-document.querySelectorAll('[data-hold]').forEach(btn=>{
- const k=btn.dataset.hold;
- const down=e=>{e.preventDefault();btn.classList.add('held');actionKey(k,true);try{btn.setPointerCapture(e.pointerId)}catch(_){}};
- const up=e=>{btn.classList.remove('held');actionKey(k,false)};
- btn.addEventListener('pointerdown',down);btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);btn.addEventListener('lostpointercapture',up);
+canvas.addEventListener("pointerdown",e=>{
+ if(!started||paused||finished)return;
+ if(!document.pointerLockElement){dragLook=true;prevMouseX=e.clientX;prevMouseY=e.clientY;requestLock()}
+ if(e.button===0){mouseHeld=true;attachTether()}
+ if(e.button===2){startZip()}
 });
-document.querySelectorAll('[data-action="jump"]').forEach(btn=>btn.addEventListener('pointerdown',e=>{e.preventDefault();jump();btn.classList.add('held')}));document.querySelectorAll('[data-action="jump"]').forEach(btn=>['pointerup','pointercancel','lostpointercapture'].forEach(ev=>btn.addEventListener(ev,()=>btn.classList.remove('held'))));
-$('phaseButton').addEventListener('click',setPhase);$('mobilePhase').addEventListener('click',setPhase);
-$('overlayButton').addEventListener('click',()=>{if(win){startLevel(0)}else startLevel(levelIndex+1)});
-canvas.addEventListener('pointerdown',()=>canvas.focus());
-startLevel(0);requestAnimationFrame(frame);
+window.addEventListener("pointerup",e=>{
+ if(e.button===0){mouseHeld=false;releaseTether(true)}
+ if(e.button===2)zipActive=zipActive;
+ dragLook=false;
+});
+canvas.addEventListener("contextmenu",e=>e.preventDefault());
+window.addEventListener("keydown",e=>{
+ if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();
+ if(e.code==="Escape")return;
+ keys.add(e.code);
+ if(e.code==="Space"&&!e.repeat)jump();
+ if(e.code==="KeyE"&&!e.repeat)startZip();
+ if(e.code==="KeyR"&&!e.repeat)respawn();
+});
+window.addEventListener("keyup",e=>keys.delete(e.code));
+window.addEventListener("blur",()=>{keys.clear();mouseHeld=false;releaseTether(false)});
+$("startButton").addEventListener("click",enterGame);
+$("resumeButton").addEventListener("click",()=>{paused=false;hideScreen("pauseScreen");requestLock()});
+$("recallButton").addEventListener("click",()=>{respawn();paused=false;hideScreen("pauseScreen");requestLock()});
+$("freeRoamButton").addEventListener("click",()=>{finished=false;hideScreen("finishScreen");requestLock();notify("FREE ROAM")});
+$("againButton").addEventListener("click",startAgain);
+document.querySelectorAll("[data-key]").forEach(btn=>{
+ const code=btn.dataset.key;
+ btn.addEventListener("pointerdown",e=>{e.preventDefault();keys.add(code);btn.setPointerCapture(e.pointerId)});
+ const up=()=>keys.delete(code);
+ btn.addEventListener("pointerup",up);btn.addEventListener("pointercancel",up);btn.addEventListener("lostpointercapture",up);
+});
+document.querySelectorAll("[data-mobile]").forEach(btn=>{
+ btn.addEventListener("pointerdown",e=>{e.preventDefault();if(btn.dataset.mobile==="jump")jump();if(btn.dataset.mobile==="web")attachTether();if(btn.dataset.mobile==="zip")startZip()});
+ const up=()=>{if(btn.dataset.mobile==="web")releaseTether(true)};
+ btn.addEventListener("pointerup",up);btn.addEventListener("pointercancel",up);btn.addEventListener("lostpointercapture",up);
+});
+updateCamera();drawMap();requestAnimationFrame(render);
 })();
 </script>
 </body>
