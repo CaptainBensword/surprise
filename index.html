@@ -3,232 +3,284 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#e9e4d2">
-<meta name="description" content="A hand-drawn field atlas of the western shelf">
-<title>Brine — The Western Shelf</title>
+<meta name="theme-color" content="#090e12">
+<meta name="description" content="A small interactive radio receiver">
+<title>SPECTRUM — Open Receiver</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap');
-:root{--paper:#e9e4d2;--paper-light:#f4f0e3;--ink:#1d302e;--muted:#718079;--line:#c8c4b1;--sea:#c4d6cd;--sea-deep:#9dbbb0;--red:#c84f36;--yellow:#e1b65c;--dark:#1c302f;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--serif:'Fraunces',serif}
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--black:#090e12;--panel:#10191e;--panel2:#142127;--line:#283941;--white:#e7eee9;--muted:#7f9292;--green:#b8ff59;--green-dim:#8cbf4c;--orange:#ff986b;--purple:#b9a4ff;--mono:'DM Mono',monospace;--sans:'Space Grotesk',sans-serif;--display:'Barlow Condensed',sans-serif}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
-button,textarea{font:inherit}
-button{color:inherit}
-::selection{background:var(--red);color:white}
-.topbar{height:67px;padding:0 5.5vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:relative;z-index:3}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font:600 13px var(--mono);letter-spacing:.18em}
-.brand-mark{width:26px;height:26px;border:1px solid var(--red);border-radius:50%;display:grid;place-items:center;color:var(--red);font-size:18px;line-height:1;animation:slow-spin 22s linear infinite}
-.top-meta,.top-right{font:9px var(--mono);letter-spacing:.13em;color:#78847b}
-.top-meta{display:flex;align-items:center;gap:10px}
-.live{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px #c84f361c}
-.top-right{display:flex;align-items:center;gap:22px}
-.top-right span:last-child{color:var(--red)}
-main{max-width:1380px;margin:auto;padding:0 5.5vw}
-.masthead{padding:58px 0 37px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px}
-.kicker,.micro,.section-tag{font:9px var(--mono);letter-spacing:.16em;text-transform:uppercase}
-.kicker{color:var(--red);display:flex;align-items:center;gap:9px}
-.kicker:before{content:"";width:24px;height:1px;background:var(--red)}
-h1{font:500 clamp(51px,7vw,88px)/.9 var(--serif);letter-spacing:-.055em;margin:18px 0 0;max-width:700px}
-h1 span{color:var(--red);font-style:italic}
-.mast-note{max-width:190px;border-left:1px solid var(--line);padding:3px 0 3px 17px;color:#6d7b73;font:10px/1.7 var(--mono);letter-spacing:.04em;margin-bottom:5px}
-.mast-note strong{color:var(--ink);font-weight:500;display:block;margin-bottom:7px}
-.atlas-shell{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(315px,.78fr);gap:14px;align-items:stretch}
-.map-card{background:var(--paper-light);border:1px solid #c9c5b3;padding:21px;position:relative;overflow:hidden;box-shadow:0 12px 30px #33443a0c}
-.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.section-tag{color:#8b9588}
-.card-head h2,.report-head h2,.log-head h2{font:500 25px var(--serif);letter-spacing:-.035em;margin:6px 0 0}
-.map-coords{text-align:right;color:#879087;font:9px/1.65 var(--mono);letter-spacing:.08em}
-.map-window{margin-top:17px;position:relative;background:var(--sea);overflow:hidden;border:1px solid #aebfb2}
-.map-window:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 4px,#ffffff08 5px 6px);mix-blend-mode:soft-light}
-.map-svg{width:100%;height:auto;display:block}
-.sea-grid{fill:none;stroke:#e8f0df;stroke-width:1;opacity:.42}
-.coast{fill:#d5cfac;stroke:#9b9e7f;stroke-width:2.2;stroke-linejoin:round}
-.coast-shadow{fill:#a9b8a0;opacity:.65}
-.contour{fill:none;stroke:#9da58a;stroke-width:1;opacity:.65}
-.shore{fill:none;stroke:#f4edcf;stroke-width:2;opacity:.9}
-.route{fill:none;stroke:var(--red);stroke-width:2.7;stroke-linecap:round;stroke-dasharray:7 9;animation:route-flow 22s linear infinite}
-.map-label{font:10px var(--mono);letter-spacing:2px;fill:#647c70;opacity:.85}
-.map-small{font:8px var(--mono);letter-spacing:1.2px;fill:#7e8e7d}
-.map-pin{cursor:pointer;outline:none}
-.map-pin .ring{fill:#f4f0e3;stroke:var(--red);stroke-width:2.2;transition:transform .3s,fill .3s}
-.map-pin .core{fill:var(--red)}
-.map-pin .pulse{fill:none;stroke:var(--red);stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:pin-pulse 2.8s ease-out infinite}
-.map-pin.active .ring,.map-pin:focus .ring{fill:var(--red);transform:scale(1.13)}
-.map-pin.active .core,.map-pin:focus .core{fill:var(--paper-light)}
-.map-pin text{font:9px var(--mono);letter-spacing:1.1px;fill:#2e4540}
-.map-pin:hover text,.map-pin.active text{fill:var(--red)}
-.map-cloud{fill:#f2f0df;opacity:.48;animation:cloud-drift 34s ease-in-out infinite alternate}
-.map-boat{animation:boat-drift 4s ease-in-out infinite}
-.compass-rose{transform-origin:690px 82px;animation:compass-wander 12s ease-in-out infinite}
-.compass-rose circle{fill:#eae4d0;stroke:#aab39f;stroke-width:1}
-.compass-rose path{fill:var(--red)}
-.compass-rose text{font:9px var(--mono);fill:#566d62;text-anchor:middle}
-.map-caption{position:absolute;left:13px;bottom:12px;display:flex;gap:14px;color:#4e7167;font:8px var(--mono);letter-spacing:.1em}
-.map-caption span{display:flex;align-items:center;gap:6px}
-.map-caption i{width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block}
-.map-caption .route-key{width:16px;height:0;border-top:2px dashed var(--red);border-radius:0}
-.map-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
-.place-tabs{display:flex;flex-wrap:wrap;gap:7px}
-.place-tab{border:1px solid var(--line);background:transparent;padding:9px 11px;color:#66776e;font:9px var(--mono);letter-spacing:.05em;cursor:pointer;transition:background .2s,color .2s,border .2s,transform .2s}
-.place-tab:hover{transform:translateY(-2px);border-color:var(--red);color:var(--red)}
-.place-tab.active{background:var(--ink);border-color:var(--ink);color:var(--paper-light)}
-.place-tab b{font-weight:400;color:var(--red);margin-right:5px}
-.scale{font:8px var(--mono);letter-spacing:.1em;color:#92988a;white-space:nowrap}
-.report{background:var(--dark);color:var(--paper-light);padding:22px;position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:100%}
-.report:before{content:"";position:absolute;width:260px;height:260px;border:1px solid #dce4ca15;border-radius:50%;right:-130px;top:80px;box-shadow:0 0 0 25px #dce4ca08,0 0 0 51px #dce4ca06,0 0 0 78px #dce4ca04;pointer-events:none}
-.report-head{display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1}
-.report .section-tag{color:#a8b8a7}
-.report-head h2{font-size:29px}
-.report-index{font:9px var(--mono);color:#a9b8a5;border:1px solid #708478;padding:6px 8px}
-.specimen{height:151px;margin:20px 0 17px;position:relative;overflow:hidden;background:linear-gradient(140deg,#45685f,#8ca18a 55%,#d0bd91)}
-.specimen:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,#ffffff12,transparent 45%,#132f2a20)}
-.spec-sun{position:absolute;width:45px;height:45px;border-radius:50%;background:#e6c578;top:20px;right:20%;box-shadow:0 0 35px #f4d78d77;animation:sun-breathe 6s ease-in-out infinite}
-.spec-hill{position:absolute;bottom:20px;width:120%;height:88px;border-radius:50% 50% 0 0}
-.spec-hill.one{background:#627d69;left:-28%;transform:rotate(-8deg)}
-.spec-hill.two{background:#304d46;right:-38%;bottom:0;transform:rotate(8deg)}
-.spec-water{position:absolute;bottom:0;left:0;right:0;height:32px;background:repeating-linear-gradient(0deg,#244b49 0 2px,#3e6860 2px 4px);animation:water-shift 9s linear infinite}
-.spec-tower{position:absolute;left:28%;bottom:31px;width:17px;height:64px;background:#efe1bc;clip-path:polygon(23% 0,77% 0,100% 100%,0 100%)}
-.spec-tower:before{content:"";position:absolute;left:1px;top:0;width:15px;height:12px;background:#c84f36}
-.spec-label{position:absolute;left:12px;bottom:10px;color:#f0e8cf;font:8px var(--mono);letter-spacing:.12em;text-shadow:0 1px 4px #122724}
-.place-copy{font-size:12px;line-height:1.75;color:#bec9b8;min-height:63px;margin:0 0 14px;max-width:390px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #52645c;border-bottom:1px solid #52645c;padding:13px 0;margin-top:auto}
-.stat{display:flex;flex-direction:column;gap:7px}.stat span{font:8px var(--mono);letter-spacing:.1em;color:#8fa295}.stat strong{font:500 12px var(--sans);color:#f0ead7}
-.findings{padding:15px 0 13px}
-.findings-title{font:8px var(--mono);letter-spacing:.15em;color:#9eb09e;margin-bottom:9px}
-.find-item{display:flex;align-items:center;gap:9px;padding:6px 0;color:#d3d8c9;font-size:10px}
-.find-icon{color:var(--yellow);font-size:13px;width:13px}
-.find-item small{margin-left:auto;font:8px var(--mono);letter-spacing:.08em;color:#91a291}
-.find-item.found{color:var(--yellow)}
-.search-button{background:var(--yellow);border:0;color:#263632;text-align:left;padding:13px 14px;font:600 10px var(--mono);letter-spacing:.07em;cursor:pointer;transition:transform .2s,background .2s}
-.search-button:hover{transform:translateY(-2px);background:#f0cb79}
-.search-button span{float:right;font-size:16px;line-height:10px}
-.report-hint{text-align:center;color:#92a397;font:8px var(--mono);letter-spacing:.04em;margin:9px 0 0;min-height:11px}
-.logbook{margin:14px 0 0;background:#e2ddca;border:1px solid #c9c4b1;padding:22px}
-.log-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
-.log-head h2{font-size:29px}
-.log-count{color:#8b9386;font:9px var(--mono);letter-spacing:.12em}
-.log-content{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;margin-top:22px}
-.log-list{min-height:100px}
-.empty-log{display:flex;flex-direction:column;gap:6px;color:#76837a}
-.empty-log b{font:500 18px var(--serif);color:var(--ink)}
-.empty-log span{font:9px var(--mono);letter-spacing:.08em}
-.log-entry{padding:12px 0;border-top:1px solid #c5c0ad}
-.log-entry:first-child{border-top:0;padding-top:0}
-.log-entry-head{display:flex;justify-content:space-between;gap:12px;color:var(--red);font:8px var(--mono);letter-spacing:.1em;margin-bottom:6px}
-.log-entry p{margin:0;color:#41544c;font-size:12px;line-height:1.65;overflow-wrap:anywhere}
-.note-form{border-left:1px solid #c5c0ad;padding-left:25px;display:flex;flex-direction:column}
-.note-form label{font:8px var(--mono);letter-spacing:.14em;color:#65776d;margin-bottom:10px}
-.note-form textarea{min-height:76px;background:#f0ecdd;border:1px solid #c9c4b1;padding:11px;color:var(--ink);resize:vertical;font:11px var(--sans);outline:none}
-.note-form textarea:focus{border-color:var(--red)}
-.note-form textarea::placeholder{color:#9a9f91}
-.note-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-.note-actions small{color:#899185;font:8px var(--mono)}
-.note-actions button{border:0;background:none;color:var(--red);font:9px var(--mono);letter-spacing:.1em;cursor:pointer;padding:5px 0}
-footer{max-width:1380px;margin:auto;padding:24px 5.5vw 32px;display:flex;justify-content:space-between;gap:12px;color:#899084;font:8px var(--mono);letter-spacing:.12em}
-footer span:last-child{color:var(--red)}
-.toast{position:fixed;bottom:22px;left:50%;z-index:10;transform:translate(-50%,18px);background:var(--red);color:#fff6e5;padding:11px 16px;font:9px var(--mono);letter-spacing:.07em;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;box-shadow:0 7px 24px #1d302e24}
+body{margin:0;min-height:100vh;background:var(--black);color:var(--white);font-family:var(--sans);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:4;pointer-events:none;opacity:.11;background:repeating-linear-gradient(0deg,transparent 0 3px,#b8ff5910 4px 5px)}
+button,input{font:inherit}
+button{cursor:pointer}
+::selection{background:var(--green);color:var(--black)}
+.topbar{height:68px;padding:0 5vw;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:relative;z-index:5;background:#090e12d9}
+.brand{display:flex;align-items:center;gap:11px;color:var(--white);text-decoration:none;font:500 11px var(--mono);letter-spacing:.18em}
+.brand-mark{width:27px;height:27px;border:1px solid var(--green);border-radius:50%;display:grid;place-items:center;color:var(--green);font-size:15px;box-shadow:0 0 16px #b8ff5920;position:relative}
+.brand-mark:after{content:"";position:absolute;width:4px;height:4px;background:var(--green);border-radius:50%}
+.top-center{font:9px var(--mono);letter-spacing:.13em;color:#869796;display:flex;align-items:center;gap:10px}
+.status-light{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 9px var(--green);animation:blink 2s ease-in-out infinite}
+.top-right{color:var(--muted);font:9px var(--mono);letter-spacing:.11em}
+.top-right b{color:var(--green);font-weight:400;margin-left:8px}
+main{max-width:1380px;margin:auto;padding:0 5vw}
+.hero{padding:54px 0 32px;display:flex;align-items:flex-end;justify-content:space-between;gap:25px}
+.eyebrow{font:9px var(--mono);letter-spacing:.17em;color:var(--green);display:flex;align-items:center;gap:9px}
+.eyebrow:before{content:"";width:20px;height:1px;background:var(--green)}
+h1{font:700 clamp(55px,8vw,105px)/.82 var(--display);letter-spacing:.005em;text-transform:uppercase;margin:18px 0 0}
+h1 span{color:var(--green)}
+.hero-note{max-width:210px;margin-bottom:3px;color:#849392;font:10px/1.75 var(--mono);letter-spacing:.025em}
+.hero-note strong{display:block;color:var(--white);font-weight:400;letter-spacing:.11em;margin-bottom:6px}
+.console-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.75fr);gap:13px;align-items:stretch}
+.console{background:var(--panel);border:1px solid var(--line);position:relative;overflow:hidden}
+.main-console{padding:23px 24px 22px}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}
+.panel-label{font:9px var(--mono);letter-spacing:.15em;color:#92a4a0}
+.panel-head h2{font:600 19px var(--sans);letter-spacing:-.04em;margin:6px 0 0}
+.device-id{font:9px var(--mono);letter-spacing:.1em;color:#748787;border:1px solid var(--line);padding:6px 8px}
+.wave-wrap{height:195px;position:relative;margin:20px 0 13px;background:#0a1317;border:1px solid #25383b;overflow:hidden}
+#wave{width:100%;height:100%;display:block}
+.wave-top{position:absolute;top:11px;left:13px;right:13px;display:flex;justify-content:space-between;pointer-events:none;color:#6e8580;font:8px var(--mono);letter-spacing:.13em}
+.wave-bottom{position:absolute;bottom:10px;left:13px;right:13px;display:flex;justify-content:space-between;pointer-events:none;color:#6e8580;font:8px var(--mono);letter-spacing:.1em}
+.sweep-beam{position:absolute;top:0;bottom:0;width:2px;left:-3px;background:var(--green);box-shadow:0 0 13px 2px #b8ff5980;opacity:0}
+.wave-wrap.scanning .sweep-beam{opacity:1;animation:sweep 1.7s cubic-bezier(.2,.6,.2,1) forwards}
+.frequency-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
+.frequency-readout{display:flex;align-items:baseline;gap:8px}
+.frequency{font:600 clamp(58px,7vw,84px)/.9 var(--display);letter-spacing:.015em;color:var(--green);font-variant-numeric:tabular-nums;text-shadow:0 0 25px #b8ff5917;min-width:205px}
+.unit{font:10px var(--mono);color:#82948e;letter-spacing:.12em}
+.signal-meter{width:min(210px,34%);padding-bottom:5px}
+.meter-label{display:flex;justify-content:space-between;color:#80928d;font:8px var(--mono);letter-spacing:.12em;margin-bottom:8px}
+.meter-track{height:5px;background:#253337;display:flex;gap:3px;padding:1px}
+.meter-track i{display:block;flex:1;background:#30413f;transition:background .12s}
+.meter-track i.on{background:var(--green);box-shadow:0 0 6px #b8ff5960}
+.tune-labels{display:flex;justify-content:space-between;margin-top:18px;color:#738783;font:8px var(--mono);letter-spacing:.09em}
+input[type=range]{appearance:none;width:100%;height:25px;margin:4px 0 0;background:transparent;cursor:ew-resize}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(90deg,#3b5148,#b8ff59 50%,#3b5148)}
+input[type=range]::-moz-range-track{height:2px;background:linear-gradient(90deg,#3b5148,#b8ff59 50%,#3b5148)}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:15px;height:15px;margin-top:-7px;background:var(--green);border:3px solid #14201d;border-radius:50%;box-shadow:0 0 0 1px var(--green),0 0 14px #b8ff5980}
+input[type=range]::-moz-range-thumb{width:10px;height:10px;background:var(--green);border:3px solid #14201d;border-radius:50%;box-shadow:0 0 0 1px var(--green),0 0 14px #b8ff5980}
+.tuner-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px}
+.tune-state{display:flex;align-items:center;gap:9px;color:#859891;font:9px var(--mono);letter-spacing:.08em}
+.state-dot{width:7px;height:7px;border-radius:50%;background:#5e716d}
+.state-dot.good{background:var(--green);box-shadow:0 0 9px #b8ff59}
+.state-dot.locked{background:var(--orange);box-shadow:0 0 9px #ff986b}
+.buttons{display:flex;gap:8px}
+.action{border:1px solid #53635c;background:transparent;color:var(--white);padding:11px 14px;font:9px var(--mono);letter-spacing:.1em;transition:background .2s,border .2s,color .2s,transform .2s}
+.action:hover:not(:disabled){transform:translateY(-2px);border-color:var(--green);color:var(--green)}
+.action.primary{background:var(--green);border-color:var(--green);color:#0c1714;font-weight:500}
+.action.primary:hover:not(:disabled){background:#d0ff8d;color:#0c1714}
+.action:disabled{opacity:.28;cursor:not-allowed}
+.side-console{padding:21px;display:flex;flex-direction:column}
+.side-top{display:flex;align-items:center;justify-content:space-between}
+.side-top h2{font:600 19px var(--sans);letter-spacing:-.04em;margin:6px 0 0}
+.counter{font:9px var(--mono);color:var(--green);border:1px solid #486044;padding:6px 8px}
+.signal-list{display:flex;flex-direction:column;margin-top:17px}
+.signal-card{display:grid;grid-template-columns:43px 1fr auto;align-items:center;gap:10px;padding:14px 0;border-top:1px solid #283941;transition:opacity .25s,transform .25s}
+.signal-card:first-child{border-top:0}
+.signal-num{font:500 17px var(--display);color:#53645f}
+.signal-info strong{display:block;font-size:11px;font-weight:500;color:#dce5df;letter-spacing:.015em}
+.signal-info small{display:block;font:8px var(--mono);color:#82938b;margin-top:5px;letter-spacing:.05em}
+.signal-freq{font:9px var(--mono);color:#8d9d93;text-align:right}
+.signal-card.found .signal-num{color:var(--green)}
+.signal-card.active{padding-left:9px;background:linear-gradient(90deg,#b8ff5910,transparent)}
+.signal-card.active .signal-freq{color:var(--green)}
+.tune-link{background:none;border:0;color:var(--green);font:8px var(--mono);letter-spacing:.08em;padding:5px 0 0;cursor:pointer}
+.tune-link:hover{text-decoration:underline}
+.list-footer{margin-top:auto;border-top:1px solid #283941;padding-top:14px;display:flex;justify-content:space-between;color:#687d78;font:8px var(--mono);letter-spacing:.09em}
+.hintline{color:#7e918b;font:9px/1.6 var(--mono);margin:14px 0 0}
+.bottom-strip{display:grid;grid-template-columns:1.1fr .9fr;gap:13px;margin-top:13px}
+.info-tile{background:#0d171c;border:1px solid var(--line);padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:70px}
+.info-tile span{font:8px var(--mono);letter-spacing:.13em;color:#82948e}
+.info-tile strong{display:block;font-size:11px;font-weight:500;margin-top:5px;color:#dbe5dc}
+.info-value{font:9px var(--mono);color:var(--purple);text-align:right;white-space:nowrap}
+.transmission{margin-top:13px;background:#111c22;border:1px solid #34443c;padding:19px 22px;display:none;animation:panel-in .35s ease-out}
+.transmission.visible{display:block}
+.trans-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.trans-label{color:var(--green);font:8px var(--mono);letter-spacing:.15em}
+.trans-close{border:0;background:none;color:#81928c;font:9px var(--mono);cursor:pointer}
+.transmission h3{font:600 21px var(--sans);margin:8px 0;color:var(--white)}
+.transmission p{font:11px/1.8 var(--mono);color:#aebdb2;white-space:pre-line;margin:0;max-width:680px}
+.trans-foot{margin-top:14px;padding-top:11px;border-top:1px solid #2c3e40;color:#70867c;font:8px var(--mono);letter-spacing:.1em}
+footer{max-width:1380px;margin:auto;padding:25px 5vw 34px;display:flex;justify-content:space-between;gap:14px;color:#61726e;font:8px var(--mono);letter-spacing:.12em}
+footer span:last-child{color:#a5bf7a}
+.toast{position:fixed;z-index:9;bottom:22px;left:50%;transform:translate(-50%,18px);opacity:0;pointer-events:none;background:var(--green);color:#0b1511;padding:11px 16px;font:9px var(--mono);letter-spacing:.07em;transition:opacity .25s,transform .25s;box-shadow:0 8px 28px #0008;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.reveal{opacity:0;transform:translateY(15px);animation:rise-in .7s cubic-bezier(.2,.75,.25,1) forwards}
-.reveal.delay{animation-delay:.12s}
-@keyframes rise-in{to{opacity:1;transform:translateY(0)}}
-@keyframes slow-spin{to{transform:rotate(360deg)}}
-@keyframes route-flow{to{stroke-dashoffset:-320}}
-@keyframes pin-pulse{0%{transform:scale(.8);opacity:.8}75%,100%{transform:scale(2.5);opacity:0}}
-@keyframes cloud-drift{to{transform:translateX(34px)}}
-@keyframes boat-drift{0%,100%{transform:translate(0,0) rotate(-2deg)}50%{transform:translate(4px,-5px) rotate(2deg)}}
-@keyframes compass-wander{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
-@keyframes sun-breathe{0%,100%{transform:scale(1);box-shadow:0 0 30px #f4d78d66}50%{transform:scale(1.08);box-shadow:0 0 46px #f4d78daa}}
-@keyframes water-shift{to{background-position:0 24px}}
-@media(max-width:920px){.atlas-shell{grid-template-columns:1fr}.report{min-height:0}.stats{margin-top:0}.place-copy{min-height:0}.specimen{height:180px}.log-content{grid-template-columns:1fr}.note-form{border-left:0;border-top:1px solid #c5c0ad;padding:17px 0 0}}
-@media(max-width:580px){.topbar{padding:0 17px}.top-meta{display:none}.top-right{gap:0}.top-right span:first-child{display:none}main{padding:0 14px}.masthead{padding:43px 0 28px;grid-template-columns:1fr}.masthead h1{font-size:57px}.mast-note{max-width:260px;margin:0;padding-left:12px}.map-card,.report,.logbook{padding:15px}.map-coords{font-size:8px}.map-bottom{align-items:flex-start;flex-direction:column}.place-tabs{width:100%}.place-tab{flex:1;padding:10px 8px}.scale{align-self:flex-end}.card-head h2{font-size:23px}.report-head h2{font-size:27px}.log-head h2{font-size:25px}.log-content{gap:15px}footer{padding:21px 14px;flex-wrap:wrap;font-size:7px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes sweep{0%{left:0}100%{left:100%}}
+@keyframes panel-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.console-grid{grid-template-columns:1fr}.side-console{min-height:310px}.signal-list{display:grid;grid-template-columns:repeat(3,1fr);gap:0 14px}.signal-card{grid-template-columns:30px 1fr;padding:12px 0}.signal-freq{grid-column:2;text-align:left}.side-console .list-footer{margin-top:10px}}
+@media(max-width:600px){.topbar{padding:0 17px}.top-center{display:none}.top-right{font-size:8px}main{padding:0 14px}.hero{padding:42px 0 26px;display:block}.hero h1{font-size:64px}.hero-note{margin-top:18px;max-width:280px}.main-console,.side-console{padding:16px}.panel-head h2,.side-top h2{font-size:17px}.wave-wrap{height:160px}.frequency{font-size:65px;min-width:0}.signal-meter{width:32%}.tuner-controls{align-items:flex-start;flex-direction:column}.buttons{width:100%}.action{flex:1;text-align:center;padding:12px 8px}.signal-list{grid-template-columns:1fr}.signal-card{grid-template-columns:35px 1fr auto}.signal-freq{grid-column:auto;text-align:right}.bottom-strip{grid-template-columns:1fr}.info-tile{min-height:62px}.transmission{padding:16px}footer{padding:22px 14px;flex-wrap:wrap;font-size:7px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header class="topbar">
-<a class="brand" href="#"><span class="brand-mark">✳</span><span>BRINE / ATLAS</span></a>
-<div class="top-meta"><i class="live"></i> WESTERN SHELF&nbsp; / &nbsp;SURVEY 04</div>
-<div class="top-right"><span>EST 06:42</span><span>FIELD COPY</span></div>
+<a class="brand" href="#"><span class="brand-mark">✳</span><span>SPECTRUM / OPEN RECEIVER</span></a>
+<div class="top-center"><i class="status-light"></i> RECEIVER ONLINE</div>
+<div class="top-right">UNIT 04 <b>● READY</b></div>
 </header>
 <main>
-<section class="masthead reveal">
-<div><div class="kicker">Coastal survey / sheet 04</div><h1>Below the <span>last road</span></h1></div>
-<div class="mast-note"><strong>WESTERN SHELF</strong>Three stops past the old coast road<br>Best viewed at low tide</div>
+<section class="hero">
+<div><div class="eyebrow">A little noise from somewhere else</div><h1>FIND THE <span>FREQUENCY</span></h1></div>
+<div class="hero-note"><strong>88 — 108 MHz</strong>Three transmissions are drifting through the band<br>See what you can pick up</div>
 </section>
-<section class="atlas-shell reveal delay">
-<div class="map-card">
-<div class="card-head"><div><div class="section-tag">01 / Survey map</div><h2>The western shelf</h2></div><div class="map-coords">47° 08' N<br>03° 41' W</div></div>
-<div class="map-window">
-<svg class="map-svg" viewBox="0 0 800 470" role="img" aria-label="Illustrated coastal map with three selectable places">
-<defs>
-<pattern id="grid" width="35" height="35" patternUnits="userSpaceOnUse"><path d="M35 0H0V35" class="sea-grid"/></pattern>
-<linearGradient id="water" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ddd1"/><stop offset="1" stop-color="#a8c6ba"/></linearGradient>
-</defs>
-<rect width="800" height="470" fill="url(#water)"/><rect width="800" height="470" fill="url(#grid)"/>
-<path class="coast-shadow" d="M0 0H800V108l-65 9-33 29-57 2-40 41-55 2-26 36-60 9-26 38-49 13-26 42-58 6-27 43-45 5-34 47-58 0-32 40H0Z"/>
-<path class="coast" d="M0 0H800V82l-57 15-24 36-61 9-33 42-59 4-24 37-58 6-26 39-53 8-23 42-60 6-29 43-48 5-37 41-49 0-28 55H0Z"/>
-<path class="shore" d="M0 0H800"/>
-<path class="contour" d="M18 52c111 18 152-12 235 8s123 24 207-1 177-11 294 9M0 103c98 11 155-7 229 17s145 20 219-8 171-11 352 5M0 163c111 7 173-7 247 17s142 20 222-8 177-7 331 12M0 233c101 5 172-10 250 16s149 19 223-6 160-8 327 12M0 305c110-4 172-12 246 13s141 25 225 0 168-8 329 15"/>
-<path class="route" d="M130 335Q205 293 300 300T470 223T650 139"/>
-<path class="route" d="M300 300Q370 378 480 375T685 324" style="opacity:.35"/>
-<path class="map-cloud" d="M510 83c9-13 29-13 38-1 14-8 29 0 30 12h-83c0-5 6-10 15-11z"/>
-<path class="map-cloud" d="M90 190c7-10 22-10 29-1 10-6 22 0 23 9H78c0-4 4-8 12-8z" style="animation-delay:-12s"/>
-<g class="map-label"><text x="62" y="72">OLD COAST ROAD</text><text x="500" y="66">THE UPPER BANK</text><text x="570" y="430">OPEN WATER</text><text x="65" y="430">MUD FLATS</text></g>
-<g class="map-small"><text x="365" y="115">SHOAL / 2M</text><text x="585" y="270">KELP LINE</text><text x="175" y="252">SALT MARSH</text><text x="370" y="420">DEEP CHANNEL</text></g>
-<g class="map-boat" transform="translate(555 340)"><path d="M-12 0L14 0 8 8-7 8Z" fill="#f4f0e3" stroke="#647b70"/><path d="M0-2V-20L10-2Z" fill="#c84f36"/></g>
-<g class="compass-rose" transform="translate(700 82)"><circle r="28"/><path d="M0-20L5 0 0 20-5 0Z"/><text y="-36">N</text></g>
-<g class="map-pin active" data-place="bell" tabindex="0" role="button" aria-label="The Bellhouse" transform="translate(130 335)"><circle class="pulse" r="13"/><circle class="ring" r="10"/><circle class="core" r="3"/><text x="18" y="4">THE BELLHOUSE</text></g>
-<g class="map-pin" data-place="needle" tabindex="0" role="button" aria-label="Needle Point" transform="translate(470 223)"><circle class="pulse" r="13"/><circle class="ring" r="10"/><circle class="core" r="3"/><text x="18" y="4">NEEDLE POINT</text></g>
-<g class="map-pin" data-place="wreck" tabindex="0" role="button" aria-label="Wreck Garden" transform="translate(480 375)"><circle class="pulse" r="13"/><circle class="ring" r="10"/><circle class="core" r="3"/><text x="18" y="4">WRECK GARDEN</text></g>
-</svg>
-<div class="map-caption"><span><i></i> SURVEY MARKER</span><span><i class="route-key"></i> OLD FOOTPATH</span></div>
+<section class="console-grid">
+<div class="console main-console">
+<div class="panel-head"><div><div class="panel-label">01 / MANUAL TUNER</div><h2>Receiver control</h2></div><div class="device-id">RX-04 / ANALOG</div></div>
+<div class="wave-wrap" id="waveWrap">
+<canvas id="wave" aria-label="Animated radio signal visualization"></canvas>
+<div class="sweep-beam"></div>
+<div class="wave-top"><span>LIVE INPUT / CH 01</span><span id="waveStatus">NO CARRIER</span></div>
+<div class="wave-bottom"><span>NOISE FLOOR&nbsp; -72 DB</span><span id="waveDb">SNR&nbsp; 00</span></div>
 </div>
-<div class="map-bottom"><div class="place-tabs" role="group" aria-label="Choose a survey point">
-<button class="place-tab active" data-place="bell"><b>01</b> Bellhouse</button>
-<button class="place-tab" data-place="needle"><b>02</b> Needle Point</button>
-<button class="place-tab" data-place="wreck"><b>03</b> Wreck Garden</button>
-</div><div class="scale">1 GRID = 200M</div></div>
+<div class="frequency-row">
+<div class="frequency-readout"><div class="frequency" id="frequency">96.0</div><div class="unit">MHz</div></div>
+<div class="signal-meter"><div class="meter-label"><span>SIGNAL STRENGTH</span><span id="signalPct">00%</span></div><div class="meter-track" id="meter"></div></div>
 </div>
-<aside class="report">
-<div class="report-head"><div><div class="section-tag">02 / Field report</div><h2 id="placeTitle">The Bellhouse</h2></div><div class="report-index" id="reportIndex">SPOT 01</div></div>
-<div class="specimen" id="specimen"><div class="spec-sun"></div><div class="spec-hill one"></div><div class="spec-hill two"></div><div class="spec-water"></div><div class="spec-tower"></div><div class="spec-label" id="specLabel">WEST LIGHT / LOW TIDE</div></div>
-<p class="place-copy" id="placeCopy">A keeper's tower with its stairs swallowed by grass<br>The bell still moves when the wind comes in</p>
-<div class="stats"><div class="stat"><span>WALK</span><strong id="walk">08 MIN</strong></div><div class="stat"><span>TIDE</span><strong id="tide">LOW</strong></div><div class="stat"><span>FOUND</span><strong id="foundCount">0 / 2</strong></div></div>
-<div class="findings" id="findings"><div class="findings-title">THINGS IN THE AREA</div></div>
-<button class="search-button" id="searchButton">Search this spot <span>↗</span></button>
-<div class="report-hint" id="reportHint">Two things are marked on this survey</div>
+<div class="tune-labels"><span>88.0 MHz</span><span>98.0 MHz</span><span>108.0 MHz</span></div>
+<input id="dial" type="range" min="880" max="1080" step="1" value="960" aria-label="Tune radio frequency">
+<div class="tuner-controls">
+<div class="tune-state"><i class="state-dot" id="stateDot"></i><span id="stateText">SEARCHING THE BAND</span></div>
+<div class="buttons"><button class="action" id="sweepButton">SWEEP BAND ↗</button><button class="action primary" id="lockButton" disabled>LOCK SIGNAL</button></div>
+</div>
+</div>
+<aside class="console side-console">
+<div class="side-top"><div><div class="panel-label">02 / DETECTED CARRIERS</div><h2>On this band</h2></div><div class="counter" id="carrierCount">0 / 3</div></div>
+<div class="hintline" id="listHint">Sweep the dial to reveal transmissions in range</div>
+<div class="signal-list" id="signalList">
+<div class="signal-card"><div class="signal-num">—</div><div class="signal-info"><strong>UNIDENTIFIED</strong><small>AWAITING BAND SWEEP</small></div><div class="signal-freq">--.-</div></div>
+<div class="signal-card"><div class="signal-num">—</div><div class="signal-info"><strong>UNIDENTIFIED</strong><small>AWAITING BAND SWEEP</small></div><div class="signal-freq">--.-</div></div>
+<div class="signal-card"><div class="signal-num">—</div><div class="signal-info"><strong>UNIDENTIFIED</strong><small>AWAITING BAND SWEEP</small></div><div class="signal-freq">--.-</div></div>
+</div>
+<div class="list-footer"><span>SCAN RANGE / FULL BAND</span><span id="scanState">IDLE</span></div>
 </aside>
 </section>
-<section class="logbook reveal">
-<div class="log-head"><div><div class="section-tag">03 / Pocket log</div><h2>Things brought back</h2></div><div class="log-count" id="logCount">0 NOTES</div></div>
-<div class="log-content">
-<div class="log-list" id="logList"><div class="empty-log"><b>Nothing in the pockets yet</b><span>SEARCH A SPOT TO FIND SOMETHING</span></div></div>
-<form class="note-form" id="noteForm"><label for="noteInput">WRITE IN THE MARGIN</label><textarea id="noteInput" maxlength="180" placeholder="A mark, a sound, a strange detail"></textarea><div class="note-actions"><small id="charCount">0 / 180</small><button type="submit">PIN NOTE ↗</button></div></form>
-</div>
+<section class="bottom-strip">
+<div class="info-tile"><div><span>RECEIVER LOCATION</span><strong>UNKNOWN / OPEN CHANNEL</strong></div><div class="info-value">NO GPS</div></div>
+<div class="info-tile"><div><span>LAST INTERCEPT</span><strong id="lastIntercept">Nothing captured yet</strong></div><div class="info-value" id="captureCount">00 / 03</div></div>
+</section>
+<section class="transmission" id="transmission">
+<div class="trans-head"><div class="trans-label">03 / DECODED TRANSMISSION</div><button class="trans-close" id="closeTransmission">CLOSE ×</button></div>
+<h3 id="transTitle">Transmission title</h3>
+<p id="transBody"></p>
+<div class="trans-foot" id="transFoot">SIGNAL STORED LOCALLY / RX-04</div>
 </section>
 </main>
-<footer><span>BRINE / WESTERN SHELF</span><span>FIELD COPY 04 — KEEP DRY</span><span>END OF SURVEY</span></footer>
+<footer><span>SPECTRUM / RECEIVER 04</span><span>KEEP THE DIAL MOVING</span><span>END OF TRANSMISSION</span></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
-const places={
-bell:{title:"The Bellhouse",walk:"08 MIN",tide:"LOW",caption:"WEST LIGHT / LOW TIDE",copy:"A keeper's tower with its stairs swallowed by grass<br>The bell still moves when the wind comes in",finds:["A cracked brass clapper","Keeper's tide chart"],notes:["A brass clapper split clean down the middle, green with salt and still faintly warm","A tide chart marked in pencil, with tomorrow's low water crossed out twice"]},
-needle:{title:"Needle Point",walk:"17 MIN",tide:"RISING",caption:"WINDWARD SIDE / SPRAY",copy:"A narrow tooth of rock sticking into the channel<br>At high water the path disappears completely",finds:["A blue bottle shard","Three notch marks"],notes:["A blue glass shard worn smooth enough to look poured rather than broken","Three fresh notches cut into the stone, all facing inland"]},
-wreck:{title:"Wreck Garden",walk:"23 MIN",tide:"FALLING",caption:"SOUTH REEF / CLEARING",copy:"The ribs of an old boat sit between the kelp beds<br>Small white flowers grow where the deck used to be",finds:["A ship's wooden button","A flower pressed in sailcloth"],notes:["A dark wooden button with four holes and a thread still caught in one","A tiny white flower pressed flat inside a scrap of sailcloth"]}
-};
-let current="bell";
-const discovered={bell:[],needle:[],wreck:[]};
-const log=[];
+(function(){
+'use strict';
+const stations=[
+{id:'a',number:'01',name:'THE WEATHER BUOY',kind:'PACIFIC RELAY / AUTOMATED',freq:923,title:'Buoy 17 — hourly report',body:'Wind from the west at six knots\nCloud cover breaking over the ridge\nNo vessels on the channel\n\nNext report in one hour',foot:'AUTOMATED RELAY / LOOP 17'},
+{id:'b',number:'02',name:'NIGHT WINDOW',kind:'COMMUNITY RADIO / LOW POWER',freq:987,title:'A note for whoever is listening',body:'If you are still awake, the sky is clear tonight\nThere is a meteor shower after two\nBring a coat if you go outside\n\nThis is Night Window, signing off',foot:'COMMUNITY BAND / NIGHT WINDOW'},
+{id:'c',number:'03',name:'MUSEUM AFTER DARK',kind:'SHORT RANGE / RECORDED',freq:1046,title:'The east wing is still lit',body:'Closing announcement for the late gallery\nThe paper exhibition stays open through Sunday\nSomeone left a little blue umbrella by the front desk\n\nEnd of recording',foot:'LOCAL LOOP / ARCHIVE 08'}
+];
+const found=new Set();
+const captured=new Set();
+let scanning=false;
+let activeStation=null;
+let toastTimer=null;
+let animationFrame=0;
 const $=id=>document.getElementById(id);
-function notify(message){$("toast").textContent=message;$("toast").classList.add("show");clearTimeout(notify.timer);notify.timer=setTimeout(()=>$("toast").classList.remove("show"),2200)}
-function renderFindings(){const p=places[current];$("findings").innerHTML='<div class="findings-title">THINGS IN THE AREA</div>'+p.finds.map((item,i)=>{const done=discovered[current].includes(i);return '<div class="find-item '+(done?'found':'')+'"><span class="find-icon">'+(done?'✳':'◌')+'</span>'+item+'<small>'+(done?'IN POCKET':'NOT FOUND')+'</small></div>'}).join('')}
-function choosePlace(id){current=id;const p=places[id];$("placeTitle").textContent=p.title;$("reportIndex").textContent="SPOT 0"+(Object.keys(places).indexOf(id)+1);$("walk").textContent=p.walk;$("tide").textContent=p.tide;$("specLabel").textContent=p.caption;$("placeCopy").innerHTML=p.copy;$("foundCount").textContent=discovered[id].length+" / 2";document.querySelectorAll("[data-place]").forEach(el=>{el.classList.toggle("active",el.dataset.place===id)});renderFindings();$("reportHint").textContent=discovered[id].length===2?"This spot has given up everything":"Two things are marked on this survey";$("specimen").animate([{opacity:.35,transform:"translateY(5px)"},{opacity:1,transform:"translateY(0)"}],{duration:380,easing:"ease-out"})}
-function escapeText(value){return value.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function renderLog(){$("logCount").textContent=log.length+" "+(log.length===1?"NOTE":"NOTES");$("logList").innerHTML=log.length?log.map(entry=>'<article class="log-entry"><div class="log-entry-head"><span>'+entry.kind+' / '+entry.place.toUpperCase()+'</span><span>'+entry.number+'</span></div><p>'+escapeText(entry.text)+'</p></article>').join(''):'<div class="empty-log"><b>Nothing in the pockets yet</b><span>SEARCH A SPOT TO FIND SOMETHING</span></div>'}
-document.querySelectorAll("[data-place]").forEach(el=>{el.addEventListener("click",()=>choosePlace(el.dataset.place));el.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();choosePlace(el.dataset.place)}})});
-$("searchButton").addEventListener("click",()=>{const p=places[current],remaining=[0,1].filter(i=>!discovered[current].includes(i));if(!remaining.length){notify("Nothing left at this spot");$("reportHint").textContent="Try one of the other markers";return}const i=remaining[Math.floor(Math.random()*remaining.length)];discovered[current].push(i);log.unshift({kind:"FOUND",place:p.title,text:p.notes[i],number:String(log.length+1).padStart(2,"0")});$("foundCount").textContent=discovered[current].length+" / 2";$("reportHint").textContent="Added to the pocket log";renderFindings();renderLog();notify("POCKETED — "+p.finds[i].toUpperCase());$("searchButton").animate([{transform:"scale(.98)"},{transform:"scale(1)"}],{duration:220})});
-$("noteInput").addEventListener("input",event=>$("charCount").textContent=event.target.value.length+" / 180");
-$("noteForm").addEventListener("submit",event=>{event.preventDefault();const text=$("noteInput").value.trim();if(!text)return;log.unshift({kind:"MARGIN NOTE",place:places[current].title,text:text,number:String(log.length+1).padStart(2,"0")});$("noteInput").value="";$("charCount").textContent="0 / 180";renderLog();notify("NOTE PINNED TO THE LOG")});
-choosePlace("bell");
+const dial=$('dial');
+const canvas=$('wave');
+const ctx=canvas.getContext('2d');
+const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+for(let i=0;i<18;i++){const el=document.createElement('i');$('meter').appendChild(el)}
+function freq(){return Number(dial.value)/10}
+function nearest(){let best=null,dist=Infinity;stations.forEach(s=>{const d=Math.abs(freq()-s.freq/10);if(d<dist){dist=d;best=s}});return {station:best,distance:dist}}
+function strength(){const n=nearest();return Math.max(0,Math.min(100,Math.round((1-n.distance/3.8)*100)))}
+function isLocked(){return strength()>=94}
+function update(){
+ const f=freq(),s=strength(),locked=isLocked(),n=nearest();
+ $('frequency').textContent=f.toFixed(1);
+ $('signalPct').textContent=String(s).padStart(2,'0')+'%';
+ $('waveStatus').textContent=locked?'CARRIER LOCKED':s>20?'SIGNAL DETECTED':'NO CARRIER';
+ $('waveDb').textContent='SNR '+String(Math.max(0,Math.round(s*.38))).padStart(2,'0');
+ $('stateDot').className='state-dot'+(locked?' locked':s>20?' good':'');
+ $('stateText').textContent=locked?'CLEAR SIGNAL / READY TO DECODE':s>20?'WEAK CARRIER / KEEP TUNING':'SEARCHING THE BAND';
+ $('lockButton').disabled=!locked||!found.has(n.station.id)||captured.has(n.station.id);
+ $('lockButton').textContent=captured.has(n.station.id)?'ALREADY CAPTURED':locked?'DECODE TRANSMISSION':'LOCK SIGNAL';
+ Array.from($('meter').children).forEach((el,i)=>el.classList.toggle('on',i<Math.round(s/100*18)));
+ document.querySelectorAll('.signal-card[data-id]').forEach(el=>el.classList.toggle('active',n.station.id===el.dataset.id));
+ drawWave(s);
+}
+function drawWave(s){
+ const rect=canvas.getBoundingClientRect();
+ const dpr=Math.min(window.devicePixelRatio||1,2);
+ const w=Math.max(1,rect.width),h=Math.max(1,rect.height);
+ if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ ctx.strokeStyle='#1d3434';ctx.lineWidth=1;
+ for(let x=0;x<w;x+=35){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+ for(let y=0;y<h;y+=27){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+ ctx.beginPath();ctx.setLineDash([3,7]);ctx.strokeStyle='#304640';ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();ctx.setLineDash([]);
+ const amp=4+s*.43;
+ const t=reduced?0:performance.now()/850;
+ const n=nearest();
+ const carrier=n.distance<2.8;
+ ctx.beginPath();ctx.lineWidth=2;ctx.strokeStyle=carrier?'#b8ff59':'#75918a';ctx.shadowBlur=carrier?10:0;ctx.shadowColor='#b8ff59';
+ for(let x=0;x<=w;x+=2){
+  const p=x/w*Math.PI*12;
+  const noise=Math.sin(x*1.73+t*2.8)*2.2+Math.sin(x*.39-t*1.6)*1.6;
+  const signal=carrier?Math.sin(p*1.4+t*4)*amp*Math.max(.12,1-n.distance/3.9):0;
+  const y=h/2+noise+signal;
+  if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+ }
+ ctx.stroke();ctx.shadowBlur=0;
+ ctx.fillStyle='#b8ff59';ctx.globalAlpha=.55;
+ if(carrier){const x=w*(.48+Math.sin(t)*.04);ctx.beginPath();ctx.arc(x,h/2,2.2,0,Math.PI*2);ctx.fill()}
+ ctx.globalAlpha=1;
+}
+function renderList(){
+ $('carrierCount').textContent=found.size+' / 3';
+ if(!found.size){$('signalList').innerHTML='<div class="signal-card"><div class="signal-num">—</div><div class="signal-info"><strong>UNIDENTIFIED</strong><small>AWAITING BAND SWEEP</small></div><div class="signal-freq">--.-</div></div><div class="signal-card"><div class="signal-num">—</div><div class="signal-info"><strong>UNIDENTIFIED</strong><small>AWAITING BAND SWEEP</small></div><div class="signal-freq">--.-</div></div><div class="signal-card"><div class="signal-num">—</div><div class="signal-info"><strong>UNIDENTIFIED</strong><small>AWAITING BAND SWEEP</small></div><div class="signal-freq">--.-</div></div>';return}
+ $('signalList').innerHTML=stations.filter(s=>found.has(s.id)).map(s=>{
+ const done=captured.has(s.id);
+ return '<div class="signal-card found" data-id="'+s.id+'"><div class="signal-num">'+s.number+'</div><div class="signal-info"><strong>'+s.name+'</strong><small>'+(done?'TRANSMISSION STORED':s.kind)+'</small><button class="tune-link" data-tune="'+s.freq+'">TUNE IN ↗</button></div><div class="signal-freq">'+(s.freq/10).toFixed(1)+'<br>MHz</div></div>'
+ }).join('');
+ $('signalList').querySelectorAll('[data-tune]').forEach(button=>button.addEventListener('click',()=>{dial.value=button.dataset.tune;update();notify('TUNED TO '+(Number(button.dataset.tune)/10).toFixed(1)+' MHZ')}));
+ update();
+}
+function notify(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2100)}
+function sweep(){
+ if(scanning)return;
+ scanning=true;
+ $('sweepButton').disabled=true;$('sweepButton').textContent='SWEEPING…';$('scanState').textContent='SCANNING';
+ $('listHint').textContent='Sweeping the full band for clear carriers';
+ $('waveWrap').classList.remove('scanning');void $('waveWrap').offsetWidth;$('waveWrap').classList.add('scanning');
+ stations.forEach((s,i)=>setTimeout(()=>{found.add(s.id);renderList()},320+i*390));
+ setTimeout(()=>{
+  scanning=false;$('sweepButton').disabled=false;$('sweepButton').textContent='SWEEP AGAIN ↗';$('scanState').textContent='3 CARRIERS FOUND';
+  $('listHint').textContent='Three clear transmissions found in range';
+  $('waveWrap').classList.remove('scanning');notify('BAND SWEEP COMPLETE — 3 CARRIERS FOUND');
+ },1650);
+}
+function decode(){
+ const n=nearest(),s=n.station;
+ if(!s||!found.has(s.id)||!isLocked()||captured.has(s.id))return;
+ captured.add(s.id);
+ $('transTitle').textContent=s.title;
+ $('transBody').textContent=s.body;
+ $('transFoot').textContent=s.foot+' / '+(s.freq/10).toFixed(1)+' MHZ';
+ $('transmission').classList.add('visible');
+ $('lastIntercept').textContent=s.name;
+ $('captureCount').textContent=String(captured.size).padStart(2,'0')+' / 03';
+ $('transmission').scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'});
+ notify('TRANSMISSION DECODED');
+ renderList();update();
+}
+dial.addEventListener('input',()=>{update();$('transmission').classList.remove('visible')});
+$('sweepButton').addEventListener('click',sweep);
+$('lockButton').addEventListener('click',decode);
+$('closeTransmission').addEventListener('click',()=>$('transmission').classList.remove('visible'));
+function animate(){if(!reduced){drawWave(strength());animationFrame=requestAnimationFrame(animate)}}
+window.addEventListener('resize',()=>drawWave(strength()));
+if(!reduced)animate();else drawWave(strength());
+update();
+})();
 </script>
 </body>
 </html>
