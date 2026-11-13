@@ -1,21 +1,30 @@
-# PHASEBOUND — A Two-World Platform Game
+# THREADLINE — Rooftop District
 
-A small browser platform game with three short levels
+A first-person 3D traversal game set across a large, procedurally arranged city.
+
+## Play
+
+Open the GitHub Pages site, or serve this repository from its root. There is no build step and no asset folder to manage. The page loads Three.js from jsDelivr.
 
 ## Controls
 
-- **A / D** or **Left / Right** — move
-- **Space** or **W / Up** — jump
-- **E** — switch between Dawn and Dusk phases
-- **R** — restart the current level
+| Input | Action |
+|---|---|
+| W / A / S / D | Move |
+| Mouse | Look around |
+| Hold left mouse | Fire a line and swing |
+| Right mouse or E | Quick-zip toward a building |
+| Space | Jump, or release a line with a boost |
+| Shift | Sprint |
+| R | Recall to the starting rooftop |
+| Esc | Pause |
 
-Collect all three light fragments in each level to open the exit gate
-Some platforms only exist in one phase, so switch worlds to find your route
+On touch screens, use the on-screen movement and action controls.
 
-On touch screens, use the on-screen movement, jump, and phase buttons
+## Objective
 
-The game is a single `index.html` file with no build step or external game engine
+Restore all five rooftop relays, then reach the extraction ring. After finishing the route, keep exploring the district or run it again.
 
 ## GitHub Pages
 
-Open **Settings → Pages**, choose **Deploy from a branch**, then select **main** and **/(root)**
+In **Settings → Pages**, select **Deploy from a branch**, choose **main**, and set the folder to **/(root)**.
