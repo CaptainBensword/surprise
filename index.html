@@ -112,7 +112,7 @@ function update(){
  player.grounded=false;
  for(const p of world().platforms){if(!activePlatform(p))continue;if(player.vy>=0&&oldBottom<=p.y+9&&player.y+player.h>=p.y&&player.x+player.w>p.x+3&&player.x<p.x+p.w-3){player.y=p.y-player.h;player.vy=0;player.grounded=true}}
  if(player.y>H+120){player.x=65;player.y=390;player.vx=0;player.vy=0;notify('Back to the start — try another route')}
- for(let i=0;i<world().shards.length;i++){if(got.has(i))continue;const s=world().shards[i];const dx=player.x+player.w/2-s.x,dy=player.y+player.h/2-s.y;if(Math.hypot(dx,dy)<27){got.add(i);burst(s.x,s.y,'#ffd27a',18);updateHud();notify('LIGHT FRAGMENT FOUND')}}
+ for(let i=0;i<world().shards.length;i++){if(got.has(i))continue;const s=world().shards[i];if(s.p!=='both'&&s.p!==phase)continue;const dx=player.x+player.w/2-s.x,dy=player.y+player.h/2-s.y;if(Math.hypot(dx,dy)<27){got.add(i);burst(s.x,s.y,'#ffd27a',18);updateHud();notify('LIGHT FRAGMENT FOUND')}}
  const gateX=world().gate;
  if(player.x+player.w>gateX&&player.x<gateX+45&&player.y+player.h>390&&player.y<480){
   if(got.size===3)completeLevel();
