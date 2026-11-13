@@ -60,7 +60,7 @@
  <div class="panel">
   <div class="eyebrow">CITY NETWORK / FIELD TEST 01</div>
   <h1>THREAD<span class="title-accent">LINE</span></h1>
-  <p class="intro">A whole district of rooftops, towers, and shortcuts. Restore the relay network, then find the extraction point. The fastest route is usually the one you make.</p>
+  <p class="intro">The district is open. Restore five rooftop relays, then reach the extraction point.</p>
   <div class="controls">
    <div class="control"><span class="keys">W A S D</span><span>Move through the city</span></div>
    <div class="control"><span class="keys">MOUSE</span><span>Look around</span></div>
@@ -72,12 +72,12 @@
    <div class="control"><span class="keys">ESC</span><span>Pause the run</span></div>
   </div>
   <button class="start" id="startButton">ENTER THE DISTRICT</button>
-  <div class="fine">NO DOWNLOADS · NO BUILD STEP · JUST THE CITY</div>
+  <div class="fine">BROWSER GAME · NO INSTALLATION</div>
  </div>
 </div>
 <div class="screen" id="pauseScreen">
  <div class="panel pause-panel">
-  <div class="eyebrow">RUN PAUSED</div><h2>Take a breather.</h2><p>Your relay progress is saved for this run. The rooftops will still be there.</p>
+  <div class="eyebrow">RUN PAUSED</div><h2>Paused.</h2><p>Your relay progress stays collected for this run.</p>
   <div class="pause-actions"><button id="resumeButton">BACK TO THE CITY</button><button id="recallButton">RECALL</button></div>
  </div>
 </div>
@@ -258,7 +258,7 @@ const player={pos:spawn.clone(),vel:new T.Vector3(),grounded:true};
 const EYE=1.72;
 let yaw=0,pitch=-.05,started=false,paused=false,finished=false,zipActive=false,zipDestination=null;
 let tetherActive=false,anchor=null,ropeLength=0,jumpQueued=false,mouseHeld=false,dragLook=false,prevMouseX=0,prevMouseY=0;
-let bestSpeed=0,clock=0,lastFrame=performance.now(),hudTimer=0,toastTimer=0;
+let bestSpeed=0,clock=0,lastFrame=performance.now(),hudTimer=0,toastTimer=0,completedOnce=false;
 const keys=new Set();
 const raycaster=new T.Raycaster();raycaster.far=220;
 const screenCenter=new T.Vector2(0,0);
@@ -281,7 +281,7 @@ function enterGame(){
  notify("Find the five rooftop relays");
 }
 function pauseGame(){
- if(!started||finished)return;paused=true;keys.clear();releaseTether(false);zipActive=false;showScreen("pauseScreen");
+ if(!started||finished)return;paused=true;keys.clear();zipActive=false;releaseTether(false);ropeLine.visible=false;ropeTip.visible=false;showScreen("pauseScreen");
  if(document.pointerLockElement)document.exitPointerLock();
 }
 document.addEventListener("pointerlockchange",()=>{
@@ -354,11 +354,11 @@ function respawn(){
  notify("BACK ON THE ROOF");
 }
 function finishRun(){
- if(finished)return;finished=true;zipActive=false;releaseTether(false);showScreen("finishScreen");if(document.pointerLockElement)document.exitPointerLock();
+ if(finished||completedOnce)return;finished=true;completedOnce=true;zipActive=false;releaseTether(false);showScreen("finishScreen");if(document.pointerLockElement)document.exitPointerLock();
 }
 function startAgain(){
  nodes.forEach(n=>{n.got=false;n.group.visible=true});
- exitGroup.visible=false;finished=false;player.pos.copy(spawn);player.vel.set(0,0,0);player.grounded=true;clock=0;
+ exitGroup.visible=false;finished=false;completedOnce=false;player.pos.copy(spawn);player.vel.set(0,0,0);player.grounded=true;clock=0;
  $("relayCount").textContent="0/5";$("objective").textContent="Restore the rooftop relay network";
  hideScreen("finishScreen");paused=false;requestLock();
 }
