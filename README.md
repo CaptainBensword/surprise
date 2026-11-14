@@ -1,29 +1,32 @@
-# THREADLINE — Rooftop District
+# WORLDMAKER — A Living World Sandbox
 
-A first-person 3D traversal game set across a large, procedurally arranged city.
+WORLDMAKER is a browser-based 3D world-building and civilization sandbox. Sculpt an island, paint biomes, place nature and buildings, introduce villagers and wildlife, and watch a small settlement gradually take shape.
 
 ## Play
 
-Open the GitHub Pages site, or serve this repository from its root. There is no build step and no asset folder to manage. The page loads Three.js from jsDelivr.
+Open the GitHub Pages site, or serve this repository from its root. The project is a single-page browser game and loads Three.js from jsDelivr. No build step or asset folder is required.
 
 ## Controls
 
 | Input | Action |
 |---|---|
-| W / A / S / D | Move |
-| Mouse | Look around |
-| Hold left mouse | Fire a line and swing |
-| Right mouse or E | Quick-zip toward a building |
-| Space | Jump, or release a line with a boost |
-| Shift | Sprint |
-| R | Recall to the starting rooftop |
-| Esc | Pause |
+| Left click | Use the selected world tool |
+| Right click + drag | Orbit the camera |
+| Mouse wheel | Zoom |
+| W / A / S / D | Pan the camera |
+| Tool panel | Sculpt, flatten, paint biomes, add water, or erase |
+| Build panel | Place trees, rocks, structures, villagers, and animals |
+| Bottom controls | Pause and change simulation speed |
 
-On touch screens, use the on-screen movement and action controls.
+## World systems
 
-## Objective
-
-Restore all five rooftop relays, then reach the extraction ring. After finishing the route, keep exploring the district or run it again.
+- Procedural terrain with sculpting and biome-painting tools
+- Placeable trees, rocks, crystals, ponds, huts, farms, towers, and bridges
+- Villagers with names, walking animations, wandering goals, and simple resource-gathering behavior
+- Wildlife including rabbits, deer, and wolves
+- Villagers can gradually gather supplies and build shelters when the population and resources allow
+- Weather and day/night simulation controls
+- Local save/load using browser storage
 
 ## GitHub Pages
 
