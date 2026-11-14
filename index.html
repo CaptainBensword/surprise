@@ -114,7 +114,7 @@ scene.add(new T.HemisphereLight(0xd9f1e4,0x425344,2.0));
 const sun=new T.DirectionalLight(0xffe2b5,2.5);sun.position.set(-50,80,30);scene.add(sun);
 const fill=new T.DirectionalLight(0x8bc8e0,.55);fill.position.set(45,30,-50);scene.add(fill);
 let seed=827364;function rnd(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}function rand(a,b){return a+rnd()*(b-a)}function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-const biomeColors={grass:0x82a96a,forest:0x477d55,desert:0xc8ae70,snow:0xd4e0d9,rock:0x858b83,swamp:0x687d58};
+const biomeColors={grass:0x82a96a,forest:0x477d55,desert:0xc8ae70,snow:0xd4e0d9,rock:0x858b83,swamp:0x687d58,water:0x4b9caf};
 const biomeIds=["grass","forest","desert","snow","rock","swamp"];
 const heights=new Float32Array((N+1)*(N+1)),biomes=new Array(N*N).fill("grass");
 const idx=(x,z)=>z*(N+1)+x,cell=(x,z)=>z*N+x;
@@ -267,8 +267,8 @@ function terrainBrush(point){
   if(selectedTool==="flatten"){const target=groundHeight(point.x,point.z);heights[i]+=(target-heights[i])*.25*fall}
  }
  if(selectedTool==="biome"||selectedTool==="water"){
-  for(let z=Math.max(0,Math.floor(gz-r));z<Math.min(N,Math.ceil(gz+r));z++)for(let x=Math.max(0,Math.floor(gx-r));x<Math.min(N,Math.ceil(gx+r));x++){if(Math.hypot(x-gx,z-gz)<=r)biomes[cell(x,z)]=selectedTool==="water"?"swamp":selectedBiome}
-  if(selectedTool==="water"){waterLevel=Math.max(waterLevel,groundHeight(point.x,point.z)+.2);waterMesh.position.y=waterLevel}
+  for(let z=Math.max(0,Math.floor(gz-r));z<Math.min(N,Math.ceil(gz+r));z++)for(let x=Math.max(0,Math.floor(gx-r));x<Math.min(N,Math.ceil(gx+r));x++){if(Math.hypot(x-gx,z-gz)<=r)biomes[cell(x,z)]=selectedTool==="water"?"water":selectedBiome}
+  if(selectedTool==="water"){for(let z=Math.max(0,Math.floor(gz-r));z<=Math.min(N,Math.ceil(gz+r));z++)for(let x=Math.max(0,Math.floor(gx-r));x<=Math.min(N,Math.ceil(gx+r));x++){if(Math.hypot(x-gx,z-gz)<=r){const i=idx(x,z);heights[i]=Math.min(heights[i],waterLevel-.16)}}}
  }
  updateTerrain();
 }
