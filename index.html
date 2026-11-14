@@ -42,6 +42,7 @@
    <button class="tool" data-tool="flatten"><span class="ico">▰</span>Flatten</button>
    <button class="tool" data-tool="biome"><span class="ico">🌿</span>Paint biome</button>
    <button class="tool" data-tool="water"><span class="ico">🌊</span>Water</button>
+   <button class="tool" data-tool="command"><span class="ico">🧭</span>Direct villagers</button>
    <button class="tool" data-tool="erase"><span class="ico">⌫</span>Erase object</button>
   </div>
   <div class="rangehead"><span>Brush radius</span><b id="brushVal">3</b></div><input id="brush" type="range" min="1" max="8" value="3">
@@ -277,6 +278,7 @@ function onWorldClick(e){
  const entity=hitEntity(e);
  if(selectedTool==="inspect"){if(entity&&entity.type==="villager")inspectEntity(entity);else if(entity&&entity.group)inspectObject(entity);return}
  const p=rayHit(e);if(!p)return;
+ if(selectedTool==="command"){const destination=new T.Vector3(p.x,0,p.z);if(selectedEntity&&selectedEntity.type==="villager"){selectedEntity.target=destination;selectedEntity.task="Following your direction";toast(selectedEntity.name+" is heading there")}else{villagers.forEach(v=>{v.target=destination.clone();v.task="Moving to your marker"});toast("VILLAGERS MOVING TO MARKER")}return}
  if(placing){if(placing==="villager"||["rabbit","deer","wolf"].includes(placing)){spawnEntity(placing,p.x,p.z)}else{const o=createObject(placing,p.x,p.z,false);inspectObject(o)}return}
  if(["raise","lower","flatten","biome","water"].includes(selectedTool)){terrainBrush(p);return}
  if(selectedTool==="erase"){
