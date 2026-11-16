@@ -57,8 +57,9 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
  <div class="controls">
   <div class="control"><b>W A S D / ARROWS</b><small>Move through the course</small></div>
   <div class="control"><b>MOUSE</b><small>Look around</small></div>
-  <div class="control"><b>SPACE</b><small>Jump, chain jumps, wall-jump</small></div>
+  <div class="control"><b>SPACE</b><small>Jump, double-jump, wall-jump</small></div>
   <div class="control"><b>SHIFT</b><small>Sprint and build speed</small></div>
+  <div class="control"><b>WALL RUN</b><small>Jump, then hold forward beside a marked wall</small></div>
   <div class="control"><b>R</b><small>Restart the run</small></div>
   <div class="control"><b>ESC</b><small>Pause the game</small></div>
  </div>
@@ -496,7 +497,8 @@ function updatePhysics(dt,t){
   if(p.wall.axis==="x")p.vel.x=along*13.0;else p.vel.z=along*13.0;
   p.vel.y+=2.25*dt;
   p.roll+=(p.wall.side>0?1:-1)*dt*1.8;
-  if(p.wallTime>1.75||!wish.lengthSq()){p.wall=null;p.roll=0;p.wallCooldown=.24}
+  const pastWallEnd=p.wall.axis==="x"?(p.pos.x>p.wall.x+p.wall.w/2+.25||p.pos.x<p.wall.x-p.wall.w/2-.25):(p.pos.z>p.wall.z+p.wall.d/2+.25||p.pos.z<p.wall.z-p.wall.d/2-.25);
+  if(p.wallTime>1.75||!wish.lengthSq()||pastWallEnd){p.wall=null;p.roll=0;p.wallCooldown=.24}
  }else{
   p.roll+=(0-p.roll)*Math.min(1,dt*8);
   p.vel.y-=23.5*dt;
@@ -546,7 +548,7 @@ function updateVisuals(dt,t){
  for(const b of pickups){if(!b.got){b.group.position.y=b.baseY+Math.sin(t*2.1+b.phase)*.22;b.group.rotation.y+=dt*.45;b.group.rotation.z=Math.sin(t+b.phase)*.12}}
  for(const w of wallRuns){w.mesh.material.emissive=new THREE.Color(0x153f4a);w.mesh.material.emissiveIntensity=.18}
  for(const c of colliders){if(c.kind==="moving"){}}
- goal.beacon.rotation.y=t*.7;goal.beacon.position.y=24.3+Math.sin(t*2)*.3;
+ goal.beacon.rotation.y=t*.7;goal.beacon.position.y=goal.y+2.9+Math.sin(t*2)*.3;
 }
 function animate(now){
  requestAnimationFrame(animate);
