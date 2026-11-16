@@ -2,344 +2,102 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101a19">
-<title>WORLDMAKER — A Living World Sandbox</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0b1018">
+<title>AFTERLIGHT — Run the Rift</title>
 <style>
-:root{--ink:#edf2e8;--muted:#a3b2a5;--panel:#172320;--panel2:#202f29;--line:#ffffff20;--lime:#b6e27a;--gold:#f2c879;--blue:#7cc7d7;--red:#e47d6e;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111b19;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button{font:inherit;color:inherit;cursor:pointer}#world{position:fixed;inset:0;width:100%;height:100%;display:block;outline:0}
-.top{position:fixed;z-index:4;left:14px;right:14px;top:12px;display:flex;align-items:center;gap:10px;pointer-events:none}.brand,.topstat,.topbutton{background:#121e1bdf;border:1px solid var(--line);backdrop-filter:blur(12px);border-radius:9px;box-shadow:0 6px 22px #0003}.brand{display:flex;align-items:center;gap:10px;padding:8px 12px}.logo{width:30px;height:30px;border:1px solid var(--lime);color:var(--lime);display:grid;place-items:center;border-radius:8px 8px 8px 2px;font-weight:950;font-size:17px;transform:rotate(-7deg)}.brandname{font-size:12px;letter-spacing:.17em;font-weight:900}.brandsub{font:8px var(--mono);color:var(--muted);letter-spacing:.13em;margin-top:2px}.topstats{display:flex;gap:7px;margin-left:auto}.topstat{min-width:81px;padding:7px 10px}.topstat label{display:block;font:8px var(--mono);letter-spacing:.12em;color:var(--muted)}.topstat b{display:block;font:700 14px var(--mono);margin-top:4px}.topstat b small{font-size:9px;color:var(--muted)}.topbutton{pointer-events:auto;border:1px solid var(--line);padding:9px 12px;font-size:10px;font-weight:750}.topbutton:hover,.tool:hover,.objectbtn:hover{border-color:#b6e27a88;background:#263a30}
-.panel{position:fixed;z-index:3;top:70px;bottom:72px;width:204px;background:#14211ded;border:1px solid var(--line);border-radius:11px;backdrop-filter:blur(14px);box-shadow:0 12px 40px #0004;display:flex;flex-direction:column;overflow:hidden}.left{left:13px}.right{right:13px;width:226px}.panelhead{padding:12px 13px 9px;border-bottom:1px solid var(--line)}.panelhead strong{display:block;font-size:10px;letter-spacing:.12em}.panelhead span{display:block;color:var(--muted);font:8px var(--mono);margin-top:4px;letter-spacing:.08em}.panelbody{padding:10px;overflow:auto;scrollbar-width:thin;scrollbar-color:#546b5e transparent}.sectionlabel{font:8px var(--mono);color:#a5b9a8;letter-spacing:.15em;margin:3px 0 7px}.toolgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tool,.objectbtn{border:1px solid #ffffff1b;background:#1c2a24;border-radius:7px;padding:8px 7px;text-align:left;font-size:9px;color:#dce8dc;min-height:44px}.tool .ico,.objectbtn .ico{display:block;font-size:16px;margin-bottom:4px}.tool.active{border-color:var(--lime);background:#314532;color:#efffdb;box-shadow:inset 0 0 0 1px #b6e27a33}.rangehead{display:flex;justify-content:space-between;font-size:9px;color:#d9e5d8;margin:12px 0 5px}.rangehead b{color:var(--lime);font:10px var(--mono)}input[type=range]{width:100%;accent-color:var(--lime)}.selectrow{display:flex;gap:5px;flex-wrap:wrap}.chip{border:1px solid #ffffff20;background:#1c2a24;border-radius:6px;padding:6px 8px;font-size:8px;color:#c4d2c6}.chip.active{background:#3a5135;border-color:var(--lime);color:#f2ffdf}.objectgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.objectbtn{min-height:52px}.objectbtn .ico{font-size:18px}.widebtn{width:100%;padding:9px 10px;border-radius:7px;border:1px solid #ffffff22;background:#26372e;font-size:9px;font-weight:750;text-align:left;margin-top:6px}.widebtn.primary{background:#b6e27a;color:#172318;border-color:#b6e27a}.widebtn.danger{color:#ffc0b4}.widebtn:hover{filter:brightness(1.1)}
-.inspectorempty{color:#9aab9d;font-size:10px;line-height:1.55;padding:5px 1px}.inspecttitle{font-size:14px;font-weight:850;margin:4px 0}.inspectmeta{font:8px var(--mono);letter-spacing:.09em;color:var(--lime);margin-bottom:10px}.statline{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #ffffff12;font-size:9px;color:#b7c6b9}.statline b{color:#eff4e9;font-family:var(--mono);font-weight:600}.note{margin-top:10px;color:#9eafa1;font-size:9px;line-height:1.5}
-.bottom{position:fixed;z-index:4;left:50%;bottom:12px;transform:translateX(-50%);display:flex;align-items:center;gap:7px;padding:7px;background:#14211deF;border:1px solid var(--line);border-radius:11px;box-shadow:0 8px 30px #0005;backdrop-filter:blur(12px);white-space:nowrap}.bottom button{border:1px solid #ffffff20;background:#203129;border-radius:7px;padding:8px 11px;font-size:9px;font-weight:750}.bottom button.active{background:#415c3d;border-color:var(--lime);color:#f1ffdc}.bottom .play{background:var(--lime);border-color:var(--lime);color:#182318;min-width:63px}.bottom .divider{height:25px;width:1px;background:#ffffff24;margin:0 2px}.speedlabel{font:8px var(--mono);color:var(--muted);padding:0 3px}.toast{position:fixed;z-index:6;left:50%;bottom:74px;transform:translate(-50%,10px);opacity:0;padding:9px 13px;background:#14231ef2;border:1px solid #b6e27a66;border-radius:7px;font:9px var(--mono);letter-spacing:.06em;transition:.2s;pointer-events:none;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
-.eventlog{position:fixed;z-index:2;left:230px;bottom:17px;width:205px;pointer-events:none;display:flex;flex-direction:column;gap:4px}.event{font:8px var(--mono);color:#d2dfd2;background:#15221dcc;border-left:2px solid var(--lime);padding:5px 7px;border-radius:0 5px 5px 0;backdrop-filter:blur(8px);animation:slide .2s ease}.event.dim{opacity:.5}@keyframes slide{from{transform:translateX(-5px);opacity:0}to{transform:translateX(0);opacity:1}}
-#minimap{position:fixed;z-index:2;right:250px;bottom:17px;width:118px;height:118px;border:1px solid #ffffff33;border-radius:8px;background:#14211dcc;pointer-events:none}
-.overlay{position:fixed;z-index:10;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(ellipse at 50% 43%,#344a37d9,#09120ff5 72%);backdrop-filter:blur(12px)}.overlay.show{display:flex}.introcard{width:min(650px,100%);padding:30px;border:1px solid #ffffff2a;border-radius:14px;background:linear-gradient(145deg,#21352cf7,#101d18fa);box-shadow:0 35px 110px #000a}.kicker{font:9px var(--mono);color:var(--lime);letter-spacing:.2em}.introcard h1{font-size:clamp(42px,8vw,72px);line-height:.88;letter-spacing:-.075em;margin:15px 0 12px}.introcard p{max-width:490px;color:#b8c9b8;font-size:12px;line-height:1.7}.introfeatures{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:17px 0 20px}.feature{padding:10px;border:1px solid #ffffff18;background:#14231d;border-radius:7px}.feature b{display:block;font-size:10px;margin-bottom:4px}.feature span{display:block;font-size:9px;line-height:1.45;color:#9fb09f}.introactions{display:flex;gap:8px}.introactions button{flex:1;border-radius:7px;padding:12px;border:1px solid #ffffff26;background:#263a30;font-size:10px;font-weight:800}.introactions .primary{background:var(--lime);border-color:var(--lime);color:#182318}
-@media(max-width:850px){.panel{width:174px}.right{width:190px}.topstat{min-width:66px}.eventlog{display:none}#minimap{right:205px;width:95px;height:95px}.bottom{gap:4px}.bottom button{padding:7px 8px;font-size:8px}}
-@media(max-width:620px){.panel{top:auto;bottom:65px;height:210px;width:calc(50% - 20px)}.left{left:8px}.right{right:8px}.top{left:7px;right:7px;top:7px}.brand{padding:6px 8px}.brandsub{display:none}.brandname{font-size:9px}.logo{width:25px;height:25px}.topstats{gap:4px}.topstat{min-width:47px;padding:6px}.topstat label{font-size:7px}.topstat b{font-size:10px}.topbutton{padding:7px;font-size:8px}.bottom{bottom:7px;width:calc(100% - 14px);justify-content:center;gap:3px}.bottom button{padding:7px 6px;font-size:7px}.speedlabel{display:none}#minimap{right:8px;bottom:282px;width:70px;height:70px}.toast{bottom:275px}.panelhead{padding:8px 10px}.panelbody{padding:7px}.tool,.objectbtn{min-height:37px;padding:6px;font-size:8px}.tool .ico,.objectbtn .ico{font-size:13px}.introcard{padding:19px}.introfeatures{grid-template-columns:1fr}.introcard p{font-size:11px}.introactions{flex-direction:column}}
+:root{color-scheme:dark;--bg:#0b1018;--panel:#111b29;--line:#ffffff20;--muted:#8b9aaf;--cyan:#72f0dc;--gold:#ffd47a;--white:#edf5ff}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--white);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}body{user-select:none}canvas{display:block;width:100%;height:100%;outline:0}
+.hud{position:fixed;inset:0;pointer-events:none;padding:18px;display:flex;justify-content:space-between;align-items:flex-start}.brand{font-size:11px;font-weight:950;letter-spacing:.24em}.brand span{color:var(--cyan)}.sub{font:8px ui-monospace,monospace;letter-spacing:.15em;color:var(--muted);margin-top:5px}.stats{display:flex;gap:8px}.stat{min-width:83px;padding:9px 12px;border:1px solid var(--line);background:#0b1422c9;backdrop-filter:blur(10px);border-radius:8px}.stat label{display:block;color:var(--muted);font:8px ui-monospace,monospace;letter-spacing:.13em}.stat b{display:block;margin-top:4px;font:800 16px ui-monospace,monospace}.stat b small{font-size:9px;color:var(--muted)}.bottom{position:fixed;left:50%;bottom:15px;transform:translateX(-50%);font:9px ui-monospace,monospace;letter-spacing:.08em;color:#a8b6c9;background:#0b1422c9;border:1px solid var(--line);padding:9px 14px;border-radius:7px;white-space:nowrap;pointer-events:none}.bottom strong{color:var(--cyan);font-weight:800}.overlay{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% 42%,#172a3be8,#070b12f5 72%);z-index:5}.overlay.hidden{display:none}.card{width:min(570px,100%);border:1px solid #ffffff24;background:linear-gradient(145deg,#172538f5,#0c1420f5);padding:clamp(22px,5vw,38px);border-radius:14px;box-shadow:0 30px 100px #0009}.eyebrow{font:9px ui-monospace,monospace;color:var(--cyan);letter-spacing:.22em}.card h1{font-size:clamp(48px,10vw,82px);letter-spacing:-.09em;line-height:.82;margin:18px 0 14px}.card h1 span{color:var(--cyan)}.card p{max-width:440px;color:#aebdd0;font-size:12px;line-height:1.75}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0}.feature{border:1px solid #ffffff17;background:#0d1825;padding:11px;border-radius:7px}.feature b{display:block;font-size:10px;margin-bottom:5px}.feature small{display:block;color:var(--muted);font-size:9px;line-height:1.5}.actions{display:flex;gap:8px}.actions button,.result button{flex:1;border:1px solid #ffffff24;background:#1b2b3c;color:var(--white);padding:13px;border-radius:7px;font:800 10px ui-monospace,monospace;letter-spacing:.08em;cursor:pointer}.actions .primary,.result .primary{background:var(--cyan);border-color:var(--cyan);color:#071513}.actions button:hover,.result button:hover{filter:brightness(1.12)}.result{text-align:center}.result h2{font-size:38px;letter-spacing:-.06em;margin:12px 0}.result .score{font:12px ui-monospace,monospace;color:var(--cyan);margin:14px 0 22px}.toast{position:fixed;top:76px;left:50%;transform:translate(-50%,-8px);opacity:0;transition:.2s;z-index:4;background:#0b1724ed;border:1px solid #72f0dc66;padding:9px 13px;border-radius:6px;font:9px ui-monospace,monospace;letter-spacing:.1em;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}.progress{position:fixed;left:18px;right:18px;bottom:57px;height:3px;background:#ffffff20;border-radius:5px;overflow:hidden;pointer-events:none}.progress i{display:block;height:100%;width:0;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}@media(max-width:600px){.hud{padding:10px}.stat{min-width:60px;padding:7px}.stat label{font-size:7px}.stat b{font-size:12px}.brand{font-size:9px}.sub{font-size:7px}.bottom{font-size:7px;bottom:10px}.progress{bottom:43px}.features{grid-template-columns:1fr}.card{padding:22px}.card h1{font-size:54px}}
 </style>
 </head>
 <body>
-<canvas id="world" aria-label="Interactive 3D world building sandbox"></canvas>
-<div class="top">
- <div class="brand"><div class="logo">W</div><div><div class="brandname">WORLDMAKER</div><div class="brandsub">A LIVING WORLD SANDBOX</div></div></div>
- <div class="topstats">
-  <div class="topstat"><label>POPULATION</label><b id="population">0</b></div>
-  <div class="topstat"><label>WOOD</label><b id="wood">0</b></div>
-  <div class="topstat"><label>FOOD</label><b id="food">0</b></div>
-  <div class="topstat"><label>WORLD AGE</label><b id="age">DAY 1</b></div>
- </div>
- <button class="topbutton" id="saveBtn">SAVE WORLD</button>
- <button class="topbutton" id="newBtn">NEW WORLD</button>
-</div>
-<aside class="panel left">
- <div class="panelhead"><strong>WORLD TOOLS</strong><span>SCULPT THE LANDSCAPE</span></div>
- <div class="panelbody">
-  <div class="sectionlabel">TERRAIN</div>
-  <div class="toolgrid">
-   <button class="tool active" data-tool="raise"><span class="ico">⛰️</span>Raise land</button>
-   <button class="tool" data-tool="lower"><span class="ico">🕳️</span>Lower land</button>
-   <button class="tool" data-tool="flatten"><span class="ico">▰</span>Flatten</button>
-   <button class="tool" data-tool="biome"><span class="ico">🌿</span>Paint biome</button>
-   <button class="tool" data-tool="water"><span class="ico">🌊</span>Water</button>
-   <button class="tool" data-tool="command"><span class="ico">🧭</span>Direct villagers</button>
-   <button class="tool" data-tool="erase"><span class="ico">⌫</span>Erase object</button>
-  </div>
-  <div class="rangehead"><span>Brush radius</span><b id="brushVal">3</b></div><input id="brush" type="range" min="1" max="8" value="3">
-  <div class="rangehead"><span>Brush strength</span><b id="strengthVal">1.0</b></div><input id="strength" type="range" min="1" max="20" value="10">
-  <div class="sectionlabel" style="margin-top:13px">BIOME PALETTE</div>
-  <div class="selectrow" id="biomes">
-   <button class="chip active" data-biome="grass">Grass</button><button class="chip" data-biome="forest">Forest</button><button class="chip" data-biome="desert">Desert</button><button class="chip" data-biome="snow">Snow</button><button class="chip" data-biome="rock">Rock</button><button class="chip" data-biome="swamp">Swamp</button>
-  </div>
-  <button class="widebtn" id="generateBtn">✦ Generate new landform</button>
-  <button class="widebtn" id="flattenBtn">□ Flatten entire world</button>
- </div>
-</aside>
-<aside class="panel right">
- <div class="panelhead"><strong>BUILD & POPULATE</strong><span>ADD LIFE TO YOUR WORLD</span></div>
- <div class="panelbody">
-  <div class="sectionlabel">NATURE</div>
-  <div class="objectgrid">
-   <button class="objectbtn" data-object="tree"><span class="ico">🌳</span>Tree</button><button class="objectbtn" data-object="rock"><span class="ico">🪨</span>Rock</button>
-   <button class="objectbtn" data-object="crystal"><span class="ico">💎</span>Crystal</button><button class="objectbtn" data-object="pond"><span class="ico">💧</span>Pond</button>
-  </div>
-  <div class="sectionlabel" style="margin-top:13px">CIVILIZATION</div>
-  <div class="objectgrid">
-   <button class="objectbtn" data-object="hut"><span class="ico">🏠</span>Hut</button><button class="objectbtn" data-object="farm"><span class="ico">🌾</span>Farm</button>
-   <button class="objectbtn" data-object="tower"><span class="ico">🗼</span>Watchtower</button><button class="objectbtn" data-object="bridge"><span class="ico">🌉</span>Bridge</button>
-  </div>
-  <div class="sectionlabel" style="margin-top:13px">INHABITANTS</div>
-  <div class="objectgrid">
-   <button class="objectbtn" data-object="villager"><span class="ico">🧑</span>Villager</button><button class="objectbtn" data-object="rabbit"><span class="ico">🐇</span>Rabbit</button>
-   <button class="objectbtn" data-object="deer"><span class="ico">🦌</span>Deer</button><button class="objectbtn" data-object="wolf"><span class="ico">🐺</span>Wolf</button>
-  </div>
-  <div class="sectionlabel" style="margin-top:13px">WORLD SYSTEMS</div>
-  <button class="widebtn" id="weatherBtn">☁ Change weather</button>
-  <button class="widebtn" id="blessBtn">✧ Bless the land — grow plants</button>
-  <button class="widebtn" id="inspectBtn">⌖ Inspect / select mode</button>
-  <div class="sectionlabel" style="margin-top:13px">SELECTION</div>
-  <div id="inspect" class="inspectorempty">Select an inhabitant or a placed object to see what it is doing.</div>
- </div>
-</aside>
-<canvas id="minimap" width="190" height="190"></canvas>
-<div class="eventlog" id="eventlog"></div>
-<div class="bottom">
- <button id="pauseBtn">Ⅱ PAUSE</button><button class="play active" id="playBtn">▶ 1×</button><button id="speed2">2×</button><button id="speed4">4×</button><div class="divider"></div><span class="speedlabel" id="clockLabel">07:00 · SPRING</span><div class="divider"></div><button id="cameraBtn">CAMERA: ORBIT</button>
-</div>
-<div class="toast" id="toast"></div>
-<div class="overlay show" id="intro">
- <div class="introcard">
-  <div class="kicker">A WORLD IS WAITING</div>
-  <h1>WORLD<br>MAKER<span style="color:var(--lime)">.</span></h1>
-  <p>Shape wild terrain, grow forests, carve rivers, and bring tiny inhabitants into a world of your own. Give them room to explore. Leave the simulation running and see what they build.</p>
-  <div class="introfeatures">
-   <div class="feature"><b>⛰ Shape the land</b><span>Raise mountains, carve valleys, paint biomes, and make lakes.</span></div>
-   <div class="feature"><b>🧑 Bring it to life</b><span>Villagers wander, gather supplies, and gradually build a settlement.</span></div>
-   <div class="feature"><b>🌦 Change the world</b><span>Run time, change weather, grow plants, and watch the ecosystem.</span></div>
-  </div>
-  <div class="introactions"><button class="primary" id="enterBtn">ENTER THIS WORLD</button><button id="emptyBtn">START WITH EMPTY LAND</button></div>
- </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
+<canvas id="game" aria-label="Afterlight platform game"></canvas>
+<div class="hud"><div><div class="brand">TALON <span>///</span> AFTERLIGHT</div><div class="sub">RIFT RUNNER · SECTOR 07</div></div><div class="stats"><div class="stat"><label>SHARDS</label><b id="shards">00 <small>/ 12</small></b></div><div class="stat"><label>TIME</label><b id="time">0:00</b></div><div class="stat"><label>BEST</label><b id="best">0</b></div></div></div>
+<div class="progress"><i id="progress"></i></div><div class="bottom"><strong>A / D</strong> MOVE &nbsp; <strong>SPACE</strong> JUMP &nbsp; <strong>SHIFT</strong> DASH &nbsp; <strong>R</strong> RESTART</div><div class="toast" id="toast"></div>
+<div class="overlay" id="intro"><div class="card"><div class="eyebrow">A TALON ARCADE EXPERIMENT</div><h1>AFTER<br><span>LIGHT.</span></h1><p>The rift is collapsing. Cross the broken skyline, snatch the scattered energy shards, and reach the extraction gate before the whole place folds in.</p><div class="features"><div class="feature"><b>01 / MOVE</b><small>Build momentum. Keep moving.</small></div><div class="feature"><b>02 / AIR</b><small>Jump again in midair. Dash through gaps.</small></div><div class="feature"><b>03 / ESCAPE</b><small>Collect all 12 shards for a clean run.</small></div></div><div class="actions"><button class="primary" id="start">ENTER THE RIFT</button><button id="controls">CONTROLS</button></div></div></div>
+<div class="overlay hidden" id="result"><div class="card result"><div class="eyebrow" id="resultTag">SECTOR CLEARED</div><h2 id="resultTitle">NICE RUN.</h2><p id="resultText">You made it out.</p><div class="score" id="resultScore"></div><div class="actions"><button class="primary" id="again">RUN IT BACK</button><button id="menu">MAIN MENU</button></div></div></div>
 <script>
-(function(){
+(()=>{
 "use strict";
-const $=id=>document.getElementById(id),canvas=$("world"),N=48,SIZE=64,STEP=SIZE/N;
-if(!window.THREE){$("toast").textContent="3D engine did not load. Refresh with an internet connection.";return}
-const T=window.THREE;let renderer;
-try{renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,powerPreference:"high-performance"})}catch(e){$("toast").textContent="WebGL is unavailable in this browser.";return}
-renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.13;
-const scene=new T.Scene();scene.background=new T.Color(0x9ebbb1);scene.fog=new T.FogExp2(0x9ebbb1,.008);
-const camera=new T.PerspectiveCamera(48,innerWidth/innerHeight,.1,500);
-scene.add(new T.HemisphereLight(0xd9f1e4,0x425344,2.0));
-const sun=new T.DirectionalLight(0xffe2b5,2.5);sun.position.set(-50,80,30);scene.add(sun);
-const fill=new T.DirectionalLight(0x8bc8e0,.55);fill.position.set(45,30,-50);scene.add(fill);
-let seed=827364;function rnd(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}function rand(a,b){return a+rnd()*(b-a)}function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-const biomeColors={grass:0x82a96a,forest:0x477d55,desert:0xc8ae70,snow:0xd4e0d9,rock:0x858b83,swamp:0x687d58,water:0x4b9caf};
-const biomeIds=["grass","forest","desert","snow","rock","swamp"];
-const heights=new Float32Array((N+1)*(N+1)),biomes=new Array(N*N).fill("grass");
-const idx=(x,z)=>z*(N+1)+x,cell=(x,z)=>z*N+x;
-let terrainMesh,terrainGeo,waterMesh,waterLevel=0.15,selectedTool="raise",selectedBiome="grass",selectedObject=null,selectedEntity=null,brush=3,strength=1,placing=null,simRunning=true,simSpeed=1,simSeconds=7*3600,weather="Clear",weatherTimer=0,worldStarted=false,camMode="orbit",cameraTheta=-.72,cameraPhi=1.02,cameraDistance=84,cameraTarget=new T.Vector3(0,0,0),pointerDown=false,dragging=false,lastX=0,lastY=0,mouseX=0,mouseY=0;
-const objects=[],villagers=[],animals=[],events=[],raycaster=new T.Raycaster(),mouse=new T.Vector2(),clock=new T.Clock();
-let resources={wood:0,food:0,stone:0};
-const mat=(c,r)=>new T.MeshStandardMaterial({color:c,roughness:r===undefined?.87:r});
-function groundHeight(x,z){const gx=clamp((x+SIZE/2)/STEP,0,N-.001),gz=clamp((z+SIZE/2)/STEP,0,N-.001),ix=Math.floor(gx),iz=Math.floor(gz),fx=gx-ix,fz=gz-iz;const a=heights[idx(ix,iz)],b=heights[idx(ix+1,iz)],c=heights[idx(ix,iz+1)],d=heights[idx(ix+1,iz+1)];return (a*(1-fx)+b*fx)*(1-fz)+(c*(1-fx)+d*fx)*fz}
-function baseLand(empty){
- for(let z=0;z<=N;z++)for(let x=0;x<=N;x++){
-  const wx=(x/N-.5)*SIZE,wz=(z/N-.5)*SIZE,dist=Math.sqrt(wx*wx+wz*wz)/(SIZE*.72);
-  let h=empty?-.18:2.1+Math.sin(wx*.24)*1.2+Math.cos(wz*.19)*.9+Math.sin((wx+wz)*.12)*1.15+Math.cos((wx-wz)*.18)*.7;
-  h+=Math.sin(wx*.68+Math.cos(wz*.3))*Math.cos(wz*.55)*.35;
-  h-=Math.max(0,dist-.63)*18;h=Math.max(-.7,h);
-  heights[idx(x,z)]=h;
- }
- if(!empty){
-  // Broad ridges and an elevated rocky spine create a varied first landscape.
-  for(let z=0;z<=N;z++)for(let x=0;x<=N;x++){const wx=(x/N-.5)*SIZE,wz=(z/N-.5)*SIZE;const ridge=Math.exp(-Math.pow((wx+8+Math.sin(wz*.16)*4)/6,2))*4.6;const peak=Math.exp(-((wx-13)*(wx-13)+(wz+10)*(wz+10))/65)*5.2;heights[idx(x,z)]+=ridge+peak}
- }
- biomes.fill("grass");updateTerrain();
+const canvas=document.getElementById("game"),ctx=canvas.getContext("2d"),$=id=>document.getElementById(id);
+let W=innerWidth,H=innerHeight,DPR=1,cam=0,last=0,elapsed=0,playing=false,dead=false,won=false,toastTimer=0;
+const WORLD=5200,GRAVITY=1900;
+let player,platforms,shards,hazards,particles,checkpoint,got=0,best=Number(localStorage.getItem("afterlight-best")||0);
+$("best").textContent=best;
+const keys={};
+function resize(){W=innerWidth;H=innerHeight;DPR=Math.min(devicePixelRatio||1,2);canvas.width=Math.floor(W*DPR);canvas.height=Math.floor(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0)}
+addEventListener("resize",resize);resize();
+function platform(x,y,w,h,type="solid"){platforms.push({x,y,w,h,type})}
+function orb(x,y){shards.push({x,y,r:9,got:false,phase:Math.random()*6})}
+function hazard(x,y,w,h){hazards.push({x,y,w,h})}
+function build(){
+ platforms=[];shards=[];hazards=[];particles=[];
+ platform(-200,470,620,120);platform(500,430,180,25);platform(770,370,170,25);platform(1010,445,330,100);platform(1400,395,170,25);platform(1660,335,190,25);platform(1950,430,300,90);platform(2350,380,170,25);platform(2600,320,180,25);platform(2860,420,300,90);platform(3260,370,180,25);platform(3520,310,170,25);platform(3780,410,310,90);platform(4170,350,180,25);platform(4430,300,180,25);platform(4680,430,650,120);
+ // floating stepping stones and alternate routes
+ platform(1180,335,100,16,"float");platform(2180,340,100,16,"float");platform(3050,330,100,16,"float");platform(3980,315,100,16,"float");
+ [250,560,830,1080,1215,1460,1710,2030,2200,2400,2660,2920,3090,3330,3580,3840,4010,4230,4480,4750,4930].forEach((x,i)=>orb(x,([405,375,315,390,280,340,280,375,285,325,265,365,275,315,255,355,265,295,245,375,370])[i]));
+ [[680,400,28,30],[930,340,28,30],[1510,360,30,30],[1810,300,30,30],[2460,345,30,30],[2730,285,30,30],[3380,335,30,30],[3650,275,30,30],[4300,315,30,30],[4550,265,30,30]].forEach(a=>hazard(...a));
+ checkpoint={x:2860,y:360,active:false};
+ player={x:70,y:420,vx:0,vy:0,w:25,h:38,on:false,jumps:0,dash:0,dashCd:0,face:1,trail:[]};
+ got=0;elapsed=0;cam=0;dead=false;won=false;updateHud();
 }
-function terrainColor(b,h){const c=new T.Color(biomeColors[b]||biomeColors.grass);const factor=clamp(1+(h-2)*.018,.82,1.12);c.multiplyScalar(factor);return c}
-function updateTerrain(){
- if(!terrainGeo)return;
- const p=terrainGeo.attributes.position.array,colors=terrainGeo.attributes.color.array;
- for(let z=0;z<=N;z++)for(let x=0;x<=N;x++){
-  const i=idx(x,z),v=i*3,wx=x*STEP-SIZE/2,wz=z*STEP-SIZE/2;p[v]=wx;p[v+1]=heights[i];p[v+2]=wz;
-  const cx=clamp(x===N?N-1:x,0,N-1),cz=clamp(z===N?N-1:z,0,N-1),c=terrainColor(biomes[cell(cx,cz)],heights[i]);colors[v]=c.r;colors[v+1]=c.g;colors[v+2]=c.b;
- }
- terrainGeo.attributes.position.needsUpdate=true;terrainGeo.attributes.color.needsUpdate=true;terrainGeo.computeVertexNormals();terrainGeo.computeBoundingSphere();
+function updateHud(){$("shards").innerHTML=String(got).padStart(2,"0")+" <small>/ 12</small>";$("time").textContent=Math.floor(elapsed/60)+":"+String(Math.floor(elapsed%60)).padStart(2,"0");$("progress").style.width=Math.min(100,player?player.x/WORLD*100:0)+"%"}
+function showToast(s){$("toast").textContent=s;$("toast").classList.add("show");toastTimer=1.5}
+function start(){build();playing=true;$("intro").classList.add("hidden");$("result").classList.add("hidden");last=performance.now()}
+function end(win){playing=false;won=win;dead=!win;const t=Math.floor(elapsed/60)+":"+String(Math.floor(elapsed%60)).padStart(2,"0");const score=got*100+Math.max(0,500-Math.floor(elapsed*3));$("resultTag").textContent=win?"SECTOR CLEARED":"SIGNAL LOST";$("resultTitle").textContent=win?(got===12?"PERFECT RUN.":"YOU MADE IT."):"RIFT COLLAPSED."; $("resultText").textContent=win?"Extraction successful. The skyline is behind you.": "The rift caught up. The checkpoint is still there."; $("resultScore").textContent=got+" / 12 SHARDS   ·   "+t+"   ·   SCORE "+score;if(win&&score>best){best=score;localStorage.setItem("afterlight-best",best);$("best").textContent=best} $("result").classList.remove("hidden")}
+function restart(){build();playing=true;$("result").classList.add("hidden");last=performance.now()}
+$("start").onclick=start;$("again").onclick=restart;$("menu").onclick=()=>{$("result").classList.add("hidden");$("intro").classList.remove("hidden")};
+$("controls").onclick=()=>showToast("A/D MOVE · SPACE JUMP · DOUBLE JUMP · SHIFT DASH · R RESTART");
+addEventListener("keydown",e=>{if(["Space","ArrowUp","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.code==="KeyR"&&playing)restart();if(!playing)return;if(e.code==="Space"&&!e.repeat)jump();if((e.code==="ShiftLeft"||e.code==="ShiftRight")&&!e.repeat)dash()});
+addEventListener("keyup",e=>keys[e.code]=false);
+function jump(){if(player.jumps<2){player.vy=-650;player.on=false;player.jumps++;burst(player.x+player.w/2,player.y+player.h,7,"#72f0dc");}}
+function dash(){if(player.dashCd<=0){player.dash=.16;player.dashCd=.72;player.vx=player.face*900;player.vy*=.2;burst(player.x+player.w/2,player.y+18,10,"#8af7e4")}}
+function burst(x,y,n,color){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*260,vy:(Math.random()-.5)*260,life:.35+Math.random()*.35,color})}
+function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
+function respawn(){if(checkpoint.active){player.x=checkpoint.x;player.y=checkpoint.y-50;player.vx=0;player.vy=0;player.jumps=0;player.dashCd=0;showToast("CHECKPOINT RESTORED")}else{player.x=70;player.y=420;player.vx=0;player.vy=0;player.jumps=0;showToast("BACK TO THE START")} }
+function update(dt){
+ if(!playing)return;elapsed+=dt;const p=player;
+ if(keys.KeyA||keys.ArrowLeft){p.vx-=2300*dt;p.face=-1}if(keys.KeyD||keys.ArrowRight){p.vx+=2300*dt;p.face=1}
+ if(!p.dash){p.vx*=Math.pow(p.on?.78:.94,dt*60);p.vx=Math.max(-360,Math.min(360,p.vx))}
+ p.dash=Math.max(0,p.dash-dt);p.dashCd=Math.max(0,p.dashCd-dt);
+ if(!p.dash)p.vy+=GRAVITY*dt;p.vy=Math.min(p.vy,1000);
+ const oldY=p.y;p.x+=p.vx*dt;p.y+=p.vy*dt;p.x=Math.max(0,Math.min(WORLD-p.w,p.x));
+ p.on=false;
+ for(const q of platforms){if(p.x+p.w>q.x&&p.x<q.x+q.w&&oldY+p.h<=q.y+8&&p.y+p.h>=q.y&&p.vy>=0){p.y=q.y-p.h;p.vy=0;p.on=true;p.jumps=0}}
+ if(p.y>H+220){respawn()}
+ for(const h of hazards)if(hit(p,h)){respawn();break}
+ for(const s of shards){s.phase+=dt*3;if(!s.got&&Math.hypot(p.x+p.w/2-s.x,p.y+p.h/2-s.y)<25){s.got=true;got++;burst(s.x,s.y,12,"#ffd47a");updateHud();showToast("SHARD ACQUIRED  +1")}}
+ if(!checkpoint.active&&p.x>checkpoint.x-40){checkpoint.active=true;showToast("CHECKPOINT REACHED")}
+ if(p.x>WORLD-150){if(got>=12)end(true);else showToast("GATE LOCKED · FIND THE REMAINING SHARDS")}
+ p.trail.push({x:p.x+p.w/2,y:p.y+20,life:.22});p.trail.forEach(t=>t.life-=dt);p.trail=p.trail.filter(t=>t.life>0);
+ for(const a of particles){a.x+=a.vx*dt;a.y+=a.vy*dt;a.vx*=.97;a.vy*=.97;a.life-=dt}particles=particles.filter(a=>a.life>0);
+ cam+=(Math.max(0,p.x-W*.34)-cam)*Math.min(1,dt*5);cam=Math.max(0,Math.min(WORLD-W,cam));if(toastTimer>0){toastTimer-=dt;if(toastTimer<=0)$("toast").classList.remove("show")}updateHud();
 }
-function initTerrain(){
- terrainGeo=new T.PlaneGeometry(SIZE,SIZE,N,N);terrainGeo.rotateX(-Math.PI/2);terrainGeo.setAttribute("color",new T.Float32BufferAttribute(new Float32Array((N+1)*(N+1)*3),3));terrainMesh=new T.Mesh(terrainGeo,new T.MeshStandardMaterial({vertexColors:true,roughness:1}));terrainMesh.receiveShadow=true;scene.add(terrainMesh);
- const waterGeo=new T.PlaneGeometry(160,160,1,1);waterGeo.rotateX(-Math.PI/2);waterMesh=new T.Mesh(waterGeo,new T.MeshStandardMaterial({color:0x4f9daf,transparent:true,opacity:.58,roughness:.2,metalness:.1}));waterMesh.position.y=waterLevel;scene.add(waterMesh);
+function roundRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function draw(){
+ ctx.clearRect(0,0,W,H);const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,"#101c2b");sky.addColorStop(.62,"#182b3c");sky.addColorStop(1,"#0a111c");ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ // distant fractured skyline
+ for(let i=0;i<24;i++){const x=((i*251-cam*.22)%(W+300)+W+300)%(W+300)-100;const ht=90+(i*73%190);ctx.fillStyle=i%3===0?"#24384a":"#1a2b3d";ctx.fillRect(x,H-ht-90,34+(i*17%65),ht);ctx.fillStyle="#72f0dc";ctx.globalAlpha=.15;for(let j=0;j<4;j++)ctx.fillRect(x+8+j*13,H-ht-70+(j%2)*26,3,9);ctx.globalAlpha=1}
+ ctx.save();ctx.translate(-cam,0);
+ // far rift ribbons
+ ctx.strokeStyle="#72f0dc";ctx.globalAlpha=.1;ctx.lineWidth=2;for(let i=0;i<7;i++){ctx.beginPath();ctx.moveTo(i*820,0);ctx.bezierCurveTo(i*820+120,180,i*820-100,280,i*820+80,H);ctx.stroke()}ctx.globalAlpha=1;
+ for(const q of platforms){const y=q.y;ctx.fillStyle=q.type==="float"?"#314f60":"#26394b";roundRect(q.x,y,q.w,q.h,5);ctx.fill();ctx.fillStyle=q.type==="float"?"#72f0dc":"#4e7182";ctx.fillRect(q.x+4,y,q.w-8,3);ctx.fillStyle="#0c1723";ctx.fillRect(q.x+8,y+q.h-5,q.w-16,5);for(let x=q.x+15;x<q.x+q.w-8;x+=34){ctx.fillStyle="#40586a";ctx.fillRect(x,y+q.h-18,2,8)}}
+ // checkpoint beacon
+ ctx.fillStyle=checkpoint.active?"#72f0dc":"#68808e";ctx.fillRect(checkpoint.x,checkpoint.y-80,3,80);ctx.fillStyle=checkpoint.active?"#72f0dc":"#8295a2";ctx.beginPath();ctx.arc(checkpoint.x+2,checkpoint.y-83,8,0,Math.PI*2);ctx.fill();
+ for(const h of hazards){ctx.fillStyle="#b84c64";roundRect(h.x,h.y,h.w,h.h,4);ctx.fill();ctx.fillStyle="#ff9b9b";ctx.fillRect(h.x+4,h.y+3,h.w-8,3);ctx.globalAlpha=.3;ctx.fillStyle="#ff5374";ctx.fillRect(h.x-5,h.y+h.h,h.w+10,5);ctx.globalAlpha=1}
+ for(const s of shards){if(s.got)continue;const pulse=1+Math.sin(s.phase)*.15;ctx.save();ctx.translate(s.x,s.y);ctx.rotate(s.phase*.3);ctx.shadowColor="#ffd47a";ctx.shadowBlur=18;ctx.fillStyle="#ffe3a0";ctx.beginPath();ctx.moveTo(0,-10*pulse);ctx.lineTo(7*pulse,0);ctx.lineTo(0,10*pulse);ctx.lineTo(-7*pulse,0);ctx.closePath();ctx.fill();ctx.restore()}
+ for(const a of particles){ctx.globalAlpha=Math.max(0,a.life*2);ctx.fillStyle=a.color;ctx.fillRect(a.x,a.y,3,3)}ctx.globalAlpha=1;
+ for(const t of player.trail){ctx.globalAlpha=t.life/.22*.25;ctx.fillStyle="#72f0dc";ctx.fillRect(t.x-8,t.y-12,16,24)}ctx.globalAlpha=1;
+ const p=player;ctx.save();ctx.translate(p.x+p.w/2,p.y+p.h/2);ctx.scale(p.face,1);ctx.shadowColor="#72f0dc";ctx.shadowBlur=p.dash?25:10;ctx.fillStyle="#d9fff8";roundRect(-10,-17,20,33,6);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle="#72f0dc";roundRect(-8,-12,16,7,3);ctx.fill();ctx.fillStyle="#243c4b";ctx.fillRect(-8,8,6,12);ctx.fillRect(2,8,6,12);ctx.fillStyle="#ffd47a";ctx.fillRect(6,-3,4,3);ctx.restore();
+ // exit gate
+ ctx.strokeStyle=got>=12?"#72f0dc":"#607687";ctx.lineWidth=5;ctx.shadowColor=got>=12?"#72f0dc":"#000";ctx.shadowBlur=got>=12?22:0;ctx.beginPath();ctx.roundRect(WORLD-105,345,64,85,28);ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle="#d7fdf4";ctx.font="9px ui-monospace";ctx.fillText(got>=12?"OPEN":"12 SHARDS",WORLD-117,330);
+ ctx.restore();
+ // subtle vignette
+ const v=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.2,W/2,H/2,Math.max(W,H)*.72);v.addColorStop(0,"#00000000");v.addColorStop(1,"#02060b99");ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
 }
-function addEvent(msg){const el=document.createElement("div");el.className="event";el.textContent=msg;$("eventlog").prepend(el);while($("eventlog").children.length>4)$("eventlog").lastChild.remove();setTimeout(()=>el.classList.add("dim"),5500)}
-function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.id);toast.id=setTimeout(()=>el.classList.remove("show"),1600)}
-function makeTree(x,z,scale){
- const g=new T.Group(),y=groundHeight(x,z);g.position.set(x,y,z);g.scale.setScalar(scale);
- const trunk=new T.Mesh(new T.CylinderGeometry(.12,.2,1.15,7),mat(0x70523a));trunk.position.y=.57;g.add(trunk);
- const leafMat=mat(0x38754c);const crown=new T.Mesh(new T.IcosahedronGeometry(.72,1),leafMat);crown.position.y=1.45;g.add(crown);
- const crown2=new T.Mesh(new T.IcosahedronGeometry(.52,1),mat(0x528a52));crown2.position.set(.35,1.8,.05);g.add(crown2);scene.add(g);return g;
-}
-function makeRock(x,z,scale){
- const g=new T.Group();g.position.set(x,groundHeight(x,z)+.22*scale,z);g.scale.setScalar(scale);const m=new T.Mesh(new T.DodecahedronGeometry(.65,0),mat(0x747b76));m.scale.set(1.2,.8,.95);g.add(m);scene.add(g);return g;
-}
-function makeHouse(x,z,scale,kind){
- const g=new T.Group(),y=groundHeight(x,z);g.position.set(x,y,z);const wood=mat(kind==="tower"?0x75553d:0x8a6848),wall=mat(kind==="tower"?0x85765a:0xc4a77a),roof=mat(kind==="tower"?0x514d44:0x79513b);
- if(kind==="tower"){
-  const stem=new T.Mesh(new T.BoxGeometry(.85,3.8,.85),wood);stem.position.y=1.9;g.add(stem);const top=new T.Mesh(new T.BoxGeometry(1.7,.28,1.7),roof);top.position.y=3.6;g.add(top);const cap=new T.Mesh(new T.ConeGeometry(1.1,.9,4),roof);cap.position.y=4.15;cap.rotation.y=Math.PI/4;g.add(cap);
- }else{
-  const base=new T.Mesh(new T.BoxGeometry(2.3,1.35,1.9),wall);base.position.y=.68;g.add(base);
-  const r=new T.Mesh(new T.ConeGeometry(1.75,1.25,4),roof);r.position.y=1.95;r.rotation.y=Math.PI/4;g.add(r);
-  const door=new T.Mesh(new T.BoxGeometry(.42,.9,.08),wood);door.position.set(0,.47,.99);g.add(door);
-  const window1=new T.Mesh(new T.BoxGeometry(.35,.35,.07),mat(0x8ac4c6));window1.position.set(.72,.85,.99);g.add(window1);
- }
- g.scale.setScalar(scale||1);scene.add(g);return g;
-}
-function makeFarm(x,z){
- const g=new T.Group();g.position.set(x,groundHeight(x,z)+.04,z);
- const soil=mat(0x6c5137);const patch=new T.Mesh(new T.BoxGeometry(3.8,.12,2.8),soil);patch.position.y=.05;g.add(patch);
- for(let row=0;row<4;row++)for(let col=0;col<6;col++){const stem=new T.Mesh(new T.CylinderGeometry(.035,.05,.5,5),mat(0x568044));stem.position.set(-1.45+col*.57,.35,-.9+row*.57);g.add(stem);const leaf=new T.Mesh(new T.SphereGeometry(.12,6,5),mat(0x9bbd54));leaf.position.set(-1.45+col*.57,.55,-.9+row*.57);g.add(leaf)}
- scene.add(g);return g;
-}
-function createObject(type,x,z,auto){
- x=clamp(x,-SIZE/2+1,SIZE/2-1);z=clamp(z,-SIZE/2+1,SIZE/2-1);let group;
- if(type==="tree")group=makeTree(x,z,rand(.8,1.3));
- else if(type==="rock")group=makeRock(x,z,rand(.8,1.7));
- else if(type==="crystal"){group=new T.Group();group.position.set(x,groundHeight(x,z),z);for(let i=0;i<3;i++){const c=new T.Mesh(new T.OctahedronGeometry(rand(.35,.65)),new T.MeshStandardMaterial({color:0x7ed8dc,metalness:.25,roughness:.22,emissive:0x164a51}));c.position.set(rand(-.4,.4),rand(.35,.8),rand(-.4,.4));c.scale.y=1.7;group.add(c)}scene.add(group)}
- else if(type==="pond"){group=new T.Group();group.position.set(x,groundHeight(x,z)+.09,z);const w=new T.Mesh(new T.CircleGeometry(1.8,28),new T.MeshStandardMaterial({color:0x4c9eae,transparent:true,opacity:.83,roughness:.2}));w.rotation.x=-Math.PI/2;w.scale.set(1.2,.8,1);group.add(w);const rim=new T.Mesh(new T.TorusGeometry(1.9,.12,7,32),mat(0x7d9a75));rim.rotation.x=Math.PI/2;group.add(rim);scene.add(group)}
- else if(type==="hut"||type==="tower")group=makeHouse(x,z,1,type);
- else if(type==="farm")group=makeFarm(x,z);
- else if(type==="bridge"){group=new T.Group();group.position.set(x,groundHeight(x,z)+.4,z);const deck=new T.Mesh(new T.BoxGeometry(5,.22,1.2),mat(0x9b7953));group.add(deck);for(let i=0;i<6;i++){const rail=new T.Mesh(new T.BoxGeometry(.16,.65,.16),mat(0x72553b));rail.position.set(-2.2+i*.88,.4,0);group.add(rail)}scene.add(group)}
- const o={type:type,x:x,z:z,group:group,auto:!!auto};objects.push(o);return o;
-}
-const names=["Mira","Tavi","Orin","Nessa","Kellan","Pip","Rowan","Sella","Bram","Ivo","Luma","Ari","Fen","Toma","Edda","Rook","Nilo","Veya","Oren","Moss"];
-let nameIndex=0;
-function makeVillager(x,z,name){
- const g=new T.Group();g.position.set(x,groundHeight(x,z),z);
- const clothes=[0x557e68,0x9a6e54,0x597c9a,0x9b8052,0x81628b,0x9b5f55];const shirt=mat(clothes[Math.floor(rand(0,clothes.length))]);
- const skin=mat(0xd9ad87),hair=mat(0x4b352b);
- const body=new T.Mesh(new T.CapsuleGeometry(.22,.52,3,6),shirt);body.position.y=.72;g.add(body);
- const head=new T.Mesh(new T.SphereGeometry(.22,10,8),skin);head.position.y=1.28;g.add(head);
- const haircap=new T.Mesh(new T.SphereGeometry(.225,8,6,0,Math.PI*2,0,Math.PI*.48),hair);haircap.position.y=1.36;g.add(haircap);
- const legs=[];for(let i=0;i<2;i++){const leg=new T.Mesh(new T.CylinderGeometry(.075,.09,.43,6),mat(0x39434a));leg.position.set(i===0?-.12:.12,.24,0);g.add(leg);legs.push(leg)}
- const arms=[];for(let i=0;i<2;i++){const arm=new T.Mesh(new T.CylinderGeometry(.06,.07,.42,6),skin);arm.position.set(i===0?-.28:.28,.79,0);arm.rotation.z=i===0?-.18:.18;g.add(arm);arms.push(arm)}
- scene.add(g);const n={type:"villager",name:name||names[nameIndex++%names.length],group:g,x:x,z:z,target:null,speed:rand(.65,1.05),phase:rand(0,6),legs:legs,arms:arms,energy:rand(65,100),home:null,task:"Exploring",gather:rand(5,14),autoBuild:rand(18,32)};villagers.push(n);return n;
-}
-function makeAnimal(type,x,z){
- const g=new T.Group();g.position.set(x,groundHeight(x,z),z);const fur=mat(type==="wolf"?0x656d70:type==="deer"?0xa77c4d:0xc9c6ad);
- const body=new T.Mesh(new T.SphereGeometry(type==="deer"?.48:.34,10,8),fur);body.scale.set(1,.72,1.45);body.position.y=.48;g.add(body);
- const head=new T.Mesh(new T.SphereGeometry(type==="deer"?.24:.2,9,7),fur);head.position.set(0,.75,.47);g.add(head);
- if(type==="rabbit"){for(let i=0;i<2;i++){const ear=new T.Mesh(new T.SphereGeometry(.09,7,6),fur);ear.scale.set(.55,2.5,.5);ear.position.set(i?-.12:.12,1.08,.46);g.add(ear)}}
- if(type==="deer"){for(let i=0;i<4;i++){const leg=new T.Mesh(new T.CylinderGeometry(.045,.06,.43,5),fur);leg.position.set(i%2?-.25:.25,.22,i<2?-.3:.3);g.add(leg)}}
- if(type==="wolf"){const snout=new T.Mesh(new T.ConeGeometry(.12,.38,7),fur);snout.rotation.x=Math.PI/2;snout.position.set(0,.72,.72);g.add(snout)}
- scene.add(g);const a={type:type,group:g,x:x,z:z,target:null,speed:type==="wolf"?.72:rand(.45,.8),phase:rand(0,5),task:"Wandering"};animals.push(a);return a;
-}
-function spawnEntity(type,x,z){
- if(type==="villager"){const n=makeVillager(x,z);addEvent(n.name+" arrived in the world");toast(n.name+" joined the world");return n}
- const a=makeAnimal(type,x,z);addEvent("A "+type+" appeared nearby");return a;
-}
-function rebuildWorld(){
- for(const o of objects)scene.remove(o.group);for(const v of villagers)scene.remove(v.group);for(const a of animals)scene.remove(a.group);
- objects.length=0;villagers.length=0;animals.length=0;selectedEntity=null;selectedObject=null;resources={wood:0,food:0,stone:0};simSeconds=7*3600;
- baseLand(false);
- // A handful of natural details give the generated map scale, but it remains editable.
- for(let i=0;i<24;i++){const x=rand(-27,27),z=rand(-27,27);if(Math.hypot(x,z)>29)continue;createObject("tree",x,z)}
- for(let i=0;i<13;i++){const x=rand(-28,28),z=rand(-28,28);createObject("rock",x,z)}
- for(let i=0;i<2;i++)createObject("pond",rand(-18,18),rand(-18,18));
- for(let i=0;i<4;i++)spawnEntity("rabbit",rand(-15,15),rand(-15,15));
- updateHud();addEvent("A new island has emerged");toast("NEW WORLD GENERATED");
-}
-function clearWorld(){
- objects.forEach(o=>scene.remove(o.group));villagers.forEach(v=>scene.remove(v.group));animals.forEach(a=>scene.remove(a.group));objects.length=0;villagers.length=0;animals.length=0;resources={wood:0,food:0,stone:0};baseLand(true);updateHud();addEvent("An untouched world awaits");toast("EMPTY LAND READY");
-}
-function selectTool(t){selectedTool=t;placing=null;document.querySelectorAll("[data-tool]").forEach(b=>b.classList.toggle("active",b.dataset.tool===t));document.querySelectorAll("[data-object]").forEach(b=>b.style.outline="");}
-document.querySelectorAll("[data-tool]").forEach(b=>b.addEventListener("click",()=>selectTool(b.dataset.tool)));
-document.querySelectorAll("[data-biome]").forEach(b=>b.addEventListener("click",()=>{selectedBiome=b.dataset.biome;document.querySelectorAll("[data-biome]").forEach(c=>c.classList.toggle("active",c===b));selectTool("biome")}));
-document.querySelectorAll("[data-object]").forEach(b=>b.addEventListener("click",()=>{placing=b.dataset.object;selectedTool="place";document.querySelectorAll("[data-tool]").forEach(c=>c.classList.remove("active"));document.querySelectorAll("[data-object]").forEach(c=>c.style.outline=c===b?"1px solid #b6e27a":"");toast("CLICK THE WORLD TO PLACE "+placing.toUpperCase())}));
-$("brush").addEventListener("input",e=>{brush=+e.target.value;$("brushVal").textContent=brush});
-$("strength").addEventListener("input",e=>{strength=+e.target.value/10;$("strengthVal").textContent=strength.toFixed(1)});
-$("generateBtn").addEventListener("click",()=>{baseLand(false);toast("LANDSCAPE RE-SHAPED");addEvent("The land shifted beneath the clouds")});
-$("flattenBtn").addEventListener("click",()=>{heights.fill(0.25);updateTerrain();toast("WORLD FLATTENED")});
-$("enterBtn").addEventListener("click",()=>{$("intro").classList.remove("show");worldStarted=true;toast("YOUR WORLD IS READY");addEvent("Welcome, worldmaker")});
-$("emptyBtn").addEventListener("click",()=>{$("intro").classList.remove("show");clearWorld();worldStarted=true});
-$("newBtn").addEventListener("click",()=>{if(confirm("Create a new world? Your current unsaved world will be replaced.")){localStorage.removeItem("worldmaker-save");rebuildWorld()}});
-$("saveBtn").addEventListener("click",saveWorld);
-$("pauseBtn").addEventListener("click",()=>{simRunning=false;updatePlayButtons();toast("SIMULATION PAUSED")});
-$("playBtn").addEventListener("click",()=>{simRunning=true;simSpeed=1;updatePlayButtons()});
-$("speed2").addEventListener("click",()=>{simRunning=true;simSpeed=2;updatePlayButtons()});
-$("speed4").addEventListener("click",()=>{simRunning=true;simSpeed=4;updatePlayButtons()});
-function updatePlayButtons(){$("playBtn").classList.toggle("active",simRunning&&simSpeed===1);$("speed2").classList.toggle("active",simRunning&&simSpeed===2);$("speed4").classList.toggle("active",simRunning&&simSpeed===4)}
-$("cameraBtn").addEventListener("click",()=>{camMode=camMode==="orbit"?"top":"orbit";cameraPhi=camMode==="top"?.2:1.02;$("cameraBtn").textContent="CAMERA: "+camMode.toUpperCase()});
-$("weatherBtn").addEventListener("click",()=>{const all=["Clear","Rain","Fog","Storm","Snow"];weather=all[(all.indexOf(weather)+1)%all.length];weatherTimer=0;applyWeather();toast("WEATHER: "+weather.toUpperCase());addEvent("Weather changed to "+weather.toLowerCase())});
-$("blessBtn").addEventListener("click",()=>{let count=0;for(let i=0;i<12;i++){const x=rand(-28,28),z=rand(-28,28);createObject("tree",x,z);count++}resources.food+=4;updateHud();addEvent("The land burst into new growth");toast("THE LAND IS BLOOMING")});
-$("inspectBtn").addEventListener("click",()=>{placing=null;selectTool("inspect");toast("CLICK AN INHABITANT OR OBJECT")});
-function updateHud(){$("population").textContent=villagers.length;$("wood").textContent=resources.wood;$("food").textContent=resources.food;$("age").textContent="DAY "+(Math.floor(simSeconds/86400)+1)}
-function inspectEntity(v){selectedEntity=v;selectedObject=null;const panel=$("inspect");panel.innerHTML='<div class="inspecttitle">'+v.name+'</div><div class="inspectmeta">VILLAGER · '+v.task.toUpperCase()+'</div><div class="statline"><span>Energy</span><b>'+Math.round(v.energy)+'%</b></div><div class="statline"><span>Movement</span><b>'+v.speed.toFixed(1)+'</b></div><div class="statline"><span>Home</span><b>'+(v.home?"Settled":"Wandering")+'</b></div><div class="note">This inhabitant chooses places to explore and helps gather supplies for the settlement. The world keeps moving while the simulation is running.</div><button class="widebtn danger" id="removeSelected">Remove inhabitant</button>'; $("removeSelected").onclick=()=>{scene.remove(v.group);villagers.splice(villagers.indexOf(v),1);selectedEntity=null;emptyInspector();updateHud()}}
-function inspectObject(o){selectedObject=o;selectedEntity=null;$("inspect").innerHTML='<div class="inspecttitle">'+o.type.charAt(0).toUpperCase()+o.type.slice(1)+'</div><div class="inspectmeta">WORLD OBJECT</div><div class="statline"><span>Position X</span><b>'+o.x.toFixed(1)+'</b></div><div class="statline"><span>Position Z</span><b>'+o.z.toFixed(1)+'</b></div><div class="statline"><span>Placed by</span><b>'+(o.auto?"Inhabitants":"You")+'</b></div><div class="note">Selected object. Remove it or leave it as part of the world.</div><button class="widebtn danger" id="removeSelected">Remove object</button>'; $("removeSelected").onclick=()=>{scene.remove(o.group);if(["rabbit","deer","wolf"].includes(o.type))animals.splice(animals.indexOf(o),1);else objects.splice(objects.indexOf(o),1);selectedObject=null;emptyInspector()}}
-function emptyInspector(){$("inspect").innerHTML='<div class="inspectorempty">Select an inhabitant or a placed object to see what it is doing. You are the worldmaker — the whole landscape is yours to shape.</div>'}
-function rayHit(e){const r=canvas.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObject(terrainMesh,false);return hits.length?hits[0].point:null}
-function hitEntity(e){const r=canvas.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);raycaster.setFromCamera(mouse,camera);const targets=[...villagers.map(v=>v.group),...animals.map(a=>a.group),...objects.map(o=>o.group)];const hits=raycaster.intersectObjects(targets,true);if(!hits.length)return null;let g=hits[0].object;while(g&&!villagers.some(v=>v.group===g)&&!animals.some(a=>a.group===g)&&!objects.some(o=>o.group===g))g=g.parent;if(!g)return null;return villagers.find(v=>v.group===g)||animals.find(v=>v.group===g)||objects.find(o=>o.group===g)}
-function terrainBrush(point){
- const gx=(point.x+SIZE/2)/STEP,gz=(point.z+SIZE/2)/STEP,r=brush;
- for(let z=Math.max(0,Math.floor(gz-r));z<=Math.min(N,Math.ceil(gz+r));z++)for(let x=Math.max(0,Math.floor(gx-r));x<=Math.min(N,Math.ceil(gx+r));x++){
-  const d=Math.hypot(x-gx,z-gz);if(d>r)continue;const fall=1-d/(r+.01),i=idx(x,z);
-  if(selectedTool==="raise")heights[i]+=strength*.22*fall;
-  if(selectedTool==="lower")heights[i]-=strength*.22*fall;
-  if(selectedTool==="flatten"){const target=groundHeight(point.x,point.z);heights[i]+=(target-heights[i])*.25*fall}
- }
- if(selectedTool==="biome"||selectedTool==="water"){
-  for(let z=Math.max(0,Math.floor(gz-r));z<Math.min(N,Math.ceil(gz+r));z++)for(let x=Math.max(0,Math.floor(gx-r));x<Math.min(N,Math.ceil(gx+r));x++){if(Math.hypot(x-gx,z-gz)<=r)biomes[cell(x,z)]=selectedTool==="water"?"water":selectedBiome}
-  if(selectedTool==="water"){for(let z=Math.max(0,Math.floor(gz-r));z<=Math.min(N,Math.ceil(gz+r));z++)for(let x=Math.max(0,Math.floor(gx-r));x<=Math.min(N,Math.ceil(gx+r));x++){if(Math.hypot(x-gx,z-gz)<=r){const i=idx(x,z);heights[i]=Math.min(heights[i],waterLevel-.16)}}}
- }
- updateTerrain();
-}
-function onWorldClick(e){
- if(!worldStarted||e.button!==0||dragging)return;
- const entity=hitEntity(e);
- if(selectedTool==="inspect"){if(entity&&entity.type==="villager")inspectEntity(entity);else if(entity&&entity.group)inspectObject(entity);return}
- const p=rayHit(e);if(!p)return;
- if(selectedTool==="command"){const destination=new T.Vector3(p.x,0,p.z);if(selectedEntity&&selectedEntity.type==="villager"){selectedEntity.target=destination;selectedEntity.task="Following your direction";toast(selectedEntity.name+" is heading there")}else{villagers.forEach(v=>{v.target=destination.clone();v.task="Moving to your marker"});toast("VILLAGERS MOVING TO MARKER")}return}
- if(placing){if(placing==="villager"||["rabbit","deer","wolf"].includes(placing)){spawnEntity(placing,p.x,p.z)}else{const o=createObject(placing,p.x,p.z,false);inspectObject(o)}return}
- if(["raise","lower","flatten","biome","water"].includes(selectedTool)){terrainBrush(p);return}
- if(selectedTool==="erase"){
-  if(entity&&entity.group){scene.remove(entity.group);if(entity.type==="villager")villagers.splice(villagers.indexOf(entity),1);else if(["rabbit","deer","wolf"].includes(entity.type))animals.splice(animals.indexOf(entity),1);else objects.splice(objects.indexOf(entity),1);emptyInspector();updateHud();toast("OBJECT REMOVED")}return
- }
- if(entity&&entity.group){if(entity.type==="villager")inspectEntity(entity);else inspectObject(entity)}
-}
-canvas.addEventListener("pointerdown",e=>{if(e.button===2){dragging=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId);return}if(e.button===0){pointerDown=true;lastX=e.clientX;lastY=e.clientY}});
-canvas.addEventListener("pointermove",e=>{if(dragging){const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;cameraTheta-=dx*.006;cameraPhi=clamp(cameraPhi+dy*.005,.22,1.48);updateCamera()}else if(pointerDown&&!placing&&selectedTool!=="inspect"&&selectedTool!=="erase"){const p=rayHit(e);if(p)terrainBrush(p)}});
-canvas.addEventListener("pointerup",e=>{if(e.button===2){dragging=false;return}if(e.button===0){if(pointerDown)onWorldClick(e);pointerDown=false}});
-canvas.addEventListener("contextmenu",e=>e.preventDefault());
-canvas.addEventListener("wheel",e=>{cameraDistance=clamp(cameraDistance+e.deltaY*.055,18,145);updateCamera()},{passive:true});
-function updateCamera(){const targetY=0;camera.position.set(cameraTarget.x+cameraDistance*Math.sin(cameraPhi)*Math.sin(cameraTheta),cameraDistance*Math.cos(cameraPhi)+targetY,cameraTarget.z+cameraDistance*Math.sin(cameraPhi)*Math.cos(cameraTheta));camera.lookAt(cameraTarget.x,targetY,cameraTarget.z)}
-window.addEventListener("keydown",e=>{if(e.code==="Space"){e.preventDefault();cameraTarget.y=0}const step=2.1;if(e.code==="KeyW")cameraTarget.z-=step;if(e.code==="KeyS")cameraTarget.z+=step;if(e.code==="KeyA")cameraTarget.x-=step;if(e.code==="KeyD")cameraTarget.x+=step;cameraTarget.x=clamp(cameraTarget.x,-30,30);cameraTarget.z=clamp(cameraTarget.z,-30,30);updateCamera()});
-function newTarget(entity){const radius=entity.type==="villager"?13:18;entity.target=new T.Vector3(clamp(entity.x+rand(-radius,radius),-30,30),0,clamp(entity.z+rand(-radius,radius),-30,30));entity.task=entity.type==="villager"?(rand(0,1)>.5?"Exploring":"Gathering supplies"):"Wandering"}
-let buildTimer=22,gatherTimer=0;
-function updatePeople(dt){
- for(const v of villagers){
-  v.phase+=dt*5;if(!v.target||Math.hypot(v.x-v.target.x,v.z-v.target.z)<.65)newTarget(v);
-  const dx=v.target.x-v.x,dz=v.target.z-v.z,d=Math.hypot(dx,dz)||1,step=Math.min(d,v.speed*dt);
-  v.x+=dx/d*step;v.z+=dz/d*step;v.group.position.set(v.x,groundHeight(v.x,v.z),v.z);v.group.rotation.y=Math.atan2(dx,dz);
-  const walking=step>.001;v.legs[0].rotation.x=walking?Math.sin(v.phase)*.55:0;v.legs[1].rotation.x=walking?-Math.sin(v.phase)*.55:0;v.arms[0].rotation.x=walking?-Math.sin(v.phase)*.32:0;v.arms[1].rotation.x=walking?Math.sin(v.phase)*.32:0;
-  v.energy=Math.max(20,v.energy-dt*.05);
- }
- for(const a of animals){a.phase+=dt*4;if(!a.target||Math.hypot(a.x-a.target.x,a.z-a.target.z)<.7)newTarget(a);const dx=a.target.x-a.x,dz=a.target.z-a.z,d=Math.hypot(dx,dz)||1,s=Math.min(d,a.speed*dt);a.x+=dx/d*s;a.z+=dz/d*s;a.group.position.set(a.x,groundHeight(a.x,a.z),a.z);a.group.rotation.y=Math.atan2(dx,dz);a.group.position.y+=Math.abs(Math.sin(a.phase))*.05}
- gatherTimer+=dt;
- if(gatherTimer>10){gatherTimer=0;if(villagers.length){const trees=objects.filter(o=>o.type==="tree").length;resources.wood+=Math.min(villagers.length,Math.max(1,Math.floor(trees/5)));resources.food+=Math.max(1,Math.floor(villagers.length/2));villagers.forEach(v=>v.task=trees?"Gathering supplies":"Exploring");if(resources.wood%10<2)addEvent("Villagers gathered supplies");}}
- buildTimer-=dt;if(buildTimer<=0){buildTimer=26+rand(0,12);if(villagers.length>=3&&resources.wood>=5){const v=villagers[Math.floor(rand(0,villagers.length))];createObject("hut",v.x+rand(-3,3),v.z+rand(-3,3),true);resources.wood-=5;villagers.forEach(x=>x.home="Settlement");addEvent("The villagers built a new shelter");toast("A NEW SHELTER WAS BUILT")}}
-}
-function updateWeather(dt){weatherTimer+=dt;if(weather==="Clear"){scene.fog.density=.008;scene.background.set(0x9ebbb1)}if(weather==="Fog"){scene.fog.density=.025;scene.background.set(0x899d9d)}if(weather==="Rain"||weather==="Storm"){scene.fog.density=.014;scene.background.set(0x71858b)}if(weather==="Snow"){scene.fog.density=.012;scene.background.set(0xb2c4c4)}sun.intensity=weather==="Storm"?.75:weather==="Rain"?1.2:weather==="Fog"?1.4:2.5}
-function applyWeather(){updateWeather(0)}
-function updateSimulation(dt){
- if(!simRunning)return;const scaled=dt*simSpeed;simSeconds+=scaled*60;updatePeople(scaled);updateWeather(scaled);
- const day=(simSeconds%86400)/86400,angle=day*Math.PI*2;sun.position.set(Math.cos(angle)*70,Math.max(8,Math.sin(angle)*85),25);sun.intensity=.7+Math.max(0,Math.sin(angle))*1.9;
- const hours=Math.floor((simSeconds%86400)/3600),mins=Math.floor((simSeconds%3600)/60);const seasons=["SPRING","SUMMER","AUTUMN","WINTER"],season=seasons[Math.floor(simSeconds/86400/8)%4];$("clockLabel").textContent=String(hours).padStart(2,"0")+":"+String(mins).padStart(2,"0")+" · "+season;
- updateHud();
-}
-function drawMini(){const c=$("minimap"),ctx=c.getContext("2d"),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.fillStyle="#1b2c25";ctx.fillRect(0,0,w,h);
- for(let z=0;z<N;z++)for(let x=0;x<N;x++){ctx.fillStyle="#"+biomeColors[biomes[cell(x,z)]].toString(16).padStart(6,"0");ctx.fillRect(x/N*w,z/N*h,w/N+1,h/N+1)}
- ctx.fillStyle="#d3efb0";for(const v of villagers){const x=(v.x+SIZE/2)/SIZE*w,z=(v.z+SIZE/2)/SIZE*h;ctx.fillRect(x-1,z-1,3,3)}
- ctx.fillStyle="#f0d08b";for(const o of objects){if(["hut","farm","tower"].includes(o.type)){const x=(o.x+SIZE/2)/SIZE*w,z=(o.z+SIZE/2)/SIZE*h;ctx.fillRect(x-1,z-1,3,3)}}
-}
-function saveWorld(){
- const data={heights:Array.from(heights),biomes:biomes,objects:objects.map(o=>({type:o.type,x:o.x,z:o.z,auto:o.auto})),villagers:villagers.map(v=>({x:v.x,z:v.z,name:v.name})),animals:animals.map(a=>({type:a.type,x:a.x,z:a.z})),resources:resources,simSeconds:simSeconds};
- try{localStorage.setItem("worldmaker-save",JSON.stringify(data));toast("WORLD SAVED ON THIS DEVICE");addEvent("World saved locally")}catch(e){toast("SAVE FAILED — STORAGE MAY BE FULL")}
-}
-function loadWorld(){
- try{const raw=localStorage.getItem("worldmaker-save");if(!raw)return false;const d=JSON.parse(raw);if(!d.heights||d.heights.length!==heights.length)return false;
- heights.set(d.heights);if(d.biomes&&d.biomes.length===biomes.length)for(let i=0;i<biomes.length;i++)biomes[i]=d.biomes[i];updateTerrain();
- objects.forEach(o=>scene.remove(o.group));villagers.forEach(v=>scene.remove(v.group));animals.forEach(a=>scene.remove(a.group));objects.length=0;villagers.length=0;animals.length=0;
- (d.objects||[]).forEach(o=>createObject(o.type,o.x,o.z,o.auto));(d.villagers||[]).forEach(v=>makeVillager(v.x,v.z,v.name));(d.animals||[]).forEach(a=>makeAnimal(a.type,a.x,a.z));resources=d.resources||resources;simSeconds=d.simSeconds||simSeconds;updateHud();return true
- }catch(e){return false}
-}
-function animate(){
- requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05);updateSimulation(dt);drawMini();renderer.render(scene,camera)
-}
-function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(innerWidth,innerHeight)}
-window.addEventListener("resize",resize);
-initTerrain();baseLand(false);for(let i=0;i<20;i++)createObject("tree",rand(-26,26),rand(-26,26));for(let i=0;i<10;i++)createObject("rock",rand(-28,28),rand(-28,28));for(let i=0;i<2;i++)createObject("pond",rand(-16,16),rand(-16,16));updateCamera();
-if(!loadWorld())addEvent("The first landform is ready");
-updateHud();emptyInspector();animate();
+function frame(now){const dt=Math.min((now-last)/1000||0,.033);last=now;update(dt);draw();requestAnimationFrame(frame)}
+build();last=performance.now();requestAnimationFrame(frame);
 })();
 </script>
 </body>
