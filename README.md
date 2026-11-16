@@ -1,32 +1,28 @@
-# WORLDMAKER — A Living World Sandbox
+# AFTERLIGHT — Rift Runner
 
-WORLDMAKER is a browser-based 3D world-building and civilization sandbox. Sculpt an island, paint biomes, place nature and buildings, introduce villagers and wildlife, and watch a small settlement gradually take shape.
+A fast, keyboard-driven platform game built as a single HTML file. Cross a fractured skyline, collect energy shards, hit the checkpoint, and reach the extraction gate.
 
 ## Play
 
-Open the GitHub Pages site, or serve this repository from its root. The project is a single-page browser game and loads Three.js from jsDelivr. No build step or asset folder is required.
+Open the GitHub Pages site. The game runs directly in the browser with no build step, external libraries, or asset downloads.
 
 ## Controls
 
 | Input | Action |
 |---|---|
-| Left click | Use the selected world tool |
-| Right click + drag | Orbit the camera |
-| Mouse wheel | Zoom |
-| W / A / S / D | Pan the camera |
-| Tool panel | Sculpt, flatten, paint biomes, add water, or erase |
-| Build panel | Place trees, rocks, structures, villagers, and animals |
-| Bottom controls | Pause and change simulation speed |
+| A / D or ← / → | Move |
+| Space | Jump (press again in the air for a double jump) |
+| Shift | Dash |
+| R | Restart the run |
 
-## World systems
+## Features
 
-- Procedural terrain with sculpting and biome-painting tools
-- Placeable trees, rocks, crystals, ponds, huts, farms, towers, and bridges
-- Villagers with names, walking animations, wandering goals, and simple resource-gathering behavior
-- Wildlife including rabbits, deer, and wolves
-- Villagers can gradually gather supplies and build shelters when the population and resources allow
-- Weather and day/night simulation controls
-- Local save/load using browser storage
+- Side-scrolling platform course with multiple routes and floating platforms
+- Momentum-based movement, double jump, and dash
+- 21 collectible energy shards; collect at least 12 to unlock extraction
+- Hazards, a checkpoint, particle effects, and a moving camera
+- Timer, progress bar, shard counter, and locally saved best score
+- Responsive canvas rendering with no external dependencies
 
 ## GitHub Pages
 
