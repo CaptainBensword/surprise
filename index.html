@@ -3,70 +3,72 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#8bdcff">
-<title>UNDER THE BEAN SKY</title>
+<meta name="theme-color" content="#19072f">
+<title>PSYCHEDELIC — 3D PARKOUR</title>
 <style>
-:root{--ink:#172b40;--paper:#f5fbff;--blue:#70d4f5;--gold:#ffd36e;--line:#ffffff55}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#8bdcff;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}canvas{position:fixed;inset:0;z-index:0;display:block;width:100%;height:100%;outline:0}
+:root{--ink:#f7eaff;--paper:#170b2b;--blue:#44f2e6;--gold:#ffed55;--line:#ff74e755}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#160726;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}canvas{position:fixed;inset:0;z-index:0;display:block;width:100%;height:100%;outline:0}
 #hud{position:fixed;z-index:2;inset:0;pointer-events:none;padding:18px;display:flex;justify-content:space-between;align-items:flex-start}
 .brand{font-size:12px;letter-spacing:.18em;font-weight:1000;color:#183750;text-shadow:0 1px 0 #fff8}.brand span{color:#e45e73}.tag{font:9px ui-monospace,monospace;letter-spacing:.16em;color:#28516b;margin-top:5px}
-.stats{display:flex;gap:8px}.stat{min-width:82px;padding:9px 12px;border:1px solid #fff9;background:#eaf8ffb8;backdrop-filter:blur(10px);border-radius:9px;box-shadow:0 5px 18px #38759a1c}.stat label{display:block;font:8px ui-monospace,monospace;letter-spacing:.13em;color:#58788d}.stat b{display:block;margin-top:4px;font:900 16px ui-monospace,monospace;color:#17344d}.stat b small{font-size:9px;color:#62869d}
-#hint{z-index:2;position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 14px;border:1px solid #ffffffaa;background:#e8f8ffd9;backdrop-filter:blur(9px);border-radius:8px;font:9px ui-monospace,monospace;letter-spacing:.06em;color:#234d68;white-space:nowrap;pointer-events:none}
+.stats{display:flex;gap:8px}.stat{min-width:82px;padding:9px 12px;border:1px solid #fff9;background:#21103be8;backdrop-filter:blur(10px);border-radius:9px;box-shadow:0 5px 18px #38759a1c}.stat label{display:block;font:8px ui-monospace,monospace;letter-spacing:.13em;color:#58788d}.stat b{display:block;margin-top:4px;font:900 16px ui-monospace,monospace;color:#fff0ff}.stat b small{font-size:9px;color:#62869d}
+#hint{z-index:2;position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 14px;border:1px solid #ffffffaa;background:#241044e8;backdrop-filter:blur(9px);border-radius:8px;font:9px ui-monospace,monospace;letter-spacing:.06em;color:#f3dfff;white-space:nowrap;pointer-events:none}
 #hint strong{color:#d34e69}
-#crosshair{z-index:2;position:fixed;left:50%;top:50%;width:6px;height:6px;margin:-3px;border:1px solid #fff;box-shadow:0 0 4px #16415b;transform:rotate(45deg);opacity:.8;pointer-events:none}
-#toast{z-index:30;position:fixed;left:50%;top:76px;transform:translate(-50%,-8px);opacity:0;transition:.22s;padding:9px 14px;border:1px solid #fff;background:#f3fbffe8;border-radius:7px;font:10px ui-monospace,monospace;letter-spacing:.1em;color:#21445c;pointer-events:none}
+#crosshair{z-index:2;position:fixed;left:50%;top:50%;width:7px;height:7px;margin:-3px;border:1px solid #65fff3;box-shadow:0 0 8px #ff4de9;transform:rotate(45deg);opacity:.8;pointer-events:none}
+#toast{z-index:30;position:fixed;left:50%;top:76px;transform:translate(-50%,-8px);opacity:0;transition:.22s;padding:9px 14px;border:1px solid #fff;background:#260f45ef;border-radius:7px;font:10px ui-monospace,monospace;letter-spacing:.1em;color:#f9e9ff;pointer-events:none}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 #flowWrap{position:fixed;left:18px;bottom:64px;width:140px;height:5px;border-radius:8px;background:#fff8;overflow:hidden;pointer-events:none}
-#flow{height:100%;width:0;background:#e75b75;box-shadow:0 0 12px #e75b75;transition:width .08s}
-.overlay{position:fixed;inset:0;z-index:20;pointer-events:auto;display:grid;place-items:center;padding:20px;background:linear-gradient(145deg,#bcecffd9,#f3d7d4cf);backdrop-filter:blur(8px)}
+#flow{height:100%;width:0;background:linear-gradient(90deg,#ff3fd0,#45f6ff,#f8ef42);box-shadow:0 0 14px #e64dff;transition:width .08s}
+.overlay{position:fixed;inset:0;z-index:20;pointer-events:auto;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 15% 15%,#52207eea,#18072ff2 56%,#080311fa);backdrop-filter:blur(8px)}
 .overlay.hidden{display:none}
-.card{width:min(620px,100%);padding:clamp(22px,5vw,40px);border:1px solid #fff;background:linear-gradient(150deg,#f8fdffef,#e8f7ffed);border-radius:16px;box-shadow:0 24px 90px #22577b35}
-.eyebrow{font:900 9px ui-monospace,monospace;letter-spacing:.22em;color:#d64d67}
-h1{margin:17px 0 10px;font-size:clamp(42px,10vw,76px);line-height:.82;letter-spacing:-.09em;color:#193851}
+.card{width:min(620px,100%);padding:clamp(22px,5vw,40px);border:1px solid #fff;background:linear-gradient(145deg,#32125aef,#160a2bed);border:1px solid #fa72ff88;border-radius:16px;box-shadow:0 24px 90px #22577b35}
+.eyebrow{font:900 9px ui-monospace,monospace;letter-spacing:.22em;color:#4df6e5}
+h1{margin:17px 0 10px;font-size:clamp(42px,10vw,76px);line-height:.82;letter-spacing:-.09em;color:#fff0ff}
 h1 span{color:#df5b72}
-.card p{max-width:490px;font-size:13px;line-height:1.7;color:#496c82}
-.beanline{display:flex;gap:9px;align-items:center;margin:19px 0 22px}
-.bean{width:17px;height:25px;border-radius:60% 45% 55% 45%;transform:rotate(30deg);box-shadow:inset -4px -3px 0 #00000012}
-.bean:nth-child(1){background:#e85e7b}.bean:nth-child(2){background:#ffcf66}.bean:nth-child(3){background:#66cdb9}.bean:nth-child(4){background:#9e8be8}.bean:nth-child(5){background:#f39c62}
+.card p{max-width:490px;font-size:13px;line-height:1.7;color:#cfb8e8}
 .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:21px 0}
-.control{border:1px solid #cee8f5;background:#ffffffa8;padding:10px;border-radius:8px}
-.control b{display:block;font:900 10px ui-monospace,monospace;color:#20465f;margin-bottom:4px}.control small{font-size:9px;color:#65869a;line-height:1.5}
+.control{border:1px solid #9146c7;background:#250e43;padding:10px;border-radius:8px}
+.control b{display:block;font:900 10px ui-monospace,monospace;color:#f6dbff;margin-bottom:4px}.control small{font-size:9px;color:#bc9bd9;line-height:1.5}
 .actions{display:flex;gap:9px}
-button{position:relative;z-index:21;pointer-events:auto;touch-action:manipulation;border:1px solid #b5dbea;background:#e2f3fb;color:#234861;padding:13px 16px;border-radius:8px;font:900 10px ui-monospace,monospace;letter-spacing:.1em;cursor:pointer}
-button.primary{background:#e95d76;color:white;border-color:#e95d76;box-shadow:0 6px 16px #e95d763b}
+button{position:relative;z-index:21;pointer-events:auto;touch-action:manipulation;border:1px solid #8e5cc2;background:#281246;color:#f6eaff;padding:13px 16px;border-radius:8px;font:900 10px ui-monospace,monospace;letter-spacing:.1em;cursor:pointer}
+button.primary{background:linear-gradient(100deg,#f23fc8,#743cff);color:white;border-color:#f06bff;box-shadow:0 0 20px #e73cff69}
 button:hover{filter:brightness(1.04);transform:translateY(-1px)}
 .actions button{flex:1}
 #endTitle{font-size:42px;letter-spacing:-.07em;margin:10px 0;color:#193851}
-#endStats{font:11px ui-monospace,monospace;color:#d64d67;margin:18px 0 22px}
+#endStats{font:11px ui-monospace,monospace;color:#55f6e5;margin:18px 0 22px}
+
+.level-card{width:min(940px,100%);max-height:94vh;overflow:auto}
+.level-card h1{font-size:clamp(48px,8vw,82px);letter-spacing:-.095em;background:linear-gradient(90deg,#ff4bd8,#8b66ff,#4cf5ed,#ffef55);background-clip:text;-webkit-background-clip:text;color:transparent;text-shadow:0 0 28px #d64cff55}.level-card h1 span{color:inherit}.level-card .eyebrow{color:#5ff6e6}
+.level-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin:20px 0 14px}
+.level-tile{min-height:90px;padding:11px 9px;text-align:left;display:flex;flex-direction:column;gap:5px;border:1px solid #8454bd;background:linear-gradient(145deg,#3a155d,#1b0c32);color:#f8eaff;border-radius:10px;box-shadow:inset 0 0 18px #a43aff1c;letter-spacing:.02em}
+.level-tile b{font:900 19px ui-monospace,monospace;color:#54f6eb}.level-tile strong{font:900 9px ui-monospace,monospace;letter-spacing:.06em}.level-tile small{font:9px ui-monospace,monospace;color:#bd9bdc}.level-tile em{margin-top:auto;font:8px ui-monospace,monospace;color:#ff65d8;font-style:normal;letter-spacing:.14em}
+.level-tile.tutorial{border-color:#5bfff0;box-shadow:0 0 18px #38ffea35,inset 0 0 20px #38ffea20}.level-tile:hover{border-color:#fff36b;box-shadow:0 0 18px #f94cff50;filter:brightness(1.2)}button:disabled{opacity:.42;cursor:not-allowed;filter:grayscale(.5)}
+@media(max-width:760px){.level-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.level-card{padding:18px;max-height:96vh}.level-tile{min-height:73px}.level-card .controls{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){#hud{padding:10px}.stat{min-width:58px;padding:7px}.stat label{font-size:7px}.stat b{font-size:12px}.brand{font-size:9px}.tag{font-size:7px}#hint{bottom:9px;font-size:7px}#flowWrap{bottom:42px}.controls{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 <div id="hud">
- <div><div class="brand">UNDER THE <span>BEAN</span> SKY</div><div class="tag">A VERY SERIOUS PARKOUR EXPEDITION</div></div>
- <div class="stats"><div class="stat"><label>LEVEL</label><b id="level">01 <small>/ 03</small></b></div><div class="stat"><label>BEANS</label><b id="beans">00 <small>/ 24</small></b></div><div class="stat"><label>TIME</label><b id="time">0:00</b></div><div class="stat"><label>BEST</label><b id="best">—</b></div></div>
+ <div><div class="brand">PSYCHEDELIC</div><div class="tag" id="levelName">TUTORIAL // FIND YOUR FLOW</div></div>
+ <div class="stats"><div class="stat"><label>LEVEL</label><b id="level">01 <small>/ 10</small></b></div><div class="stat"><label>TIME</label><b id="time">0:00</b></div><div class="stat"><label>BEST</label><b id="best">—</b></div></div>
 </div>
 <div id="flowWrap"><div id="flow"></div></div><div id="crosshair"></div>
-<div id="hint"><strong>WASD</strong> MOVE &nbsp; <strong>MOUSE</strong> LOOK &nbsp; <strong>SPACE</strong> JUMP / WALL JUMP &nbsp; <strong>SHIFT</strong> SPRINT</div>
-<div id="toast"></div>
-<div class="overlay" id="intro"><div class="card">
- <div class="eyebrow">THE CLOUDS ARE FULL OF THEM</div>
- <h1>UNDER THE<br><span>BEAN SKY</span></h1>
- <p>A strange little world hangs above the clouds. Clear three different parkour courses, build speed, wall-run across gaps, hit the bounce pads, and collect the sky beans. There is absolutely no explanation for the beans.</p>
- <div class="beanline"><i class="bean"></i><i class="bean"></i><i class="bean"></i><i class="bean"></i><i class="bean"></i></div>
- <div class="controls">
-  <div class="control"><b>W A S D / ARROWS</b><small>Move through the course</small></div>
-  <div class="control"><b>MOUSE</b><small>Look around</small></div>
-  <div class="control"><b>SPACE</b><small>Jump, double-jump, wall-jump</small></div>
-  <div class="control"><b>SHIFT</b><small>Sprint and build speed</small></div>
-  <div class="control"><b>WALL RUN</b><small>Jump, then hold forward beside a marked wall</small></div>
-  <div class="control"><b>R</b><small>Restart the run</small></div>
-  <div class="control"><b>ESC</b><small>Pause the game</small></div>
+<div id="hint"><strong>WASD</strong> MOVE &nbsp; <strong>MOUSE</strong> LOOK &nbsp; <strong>SPACE</strong> JUMP &nbsp; <strong>SHIFT</strong> SPRINT &nbsp; <strong>R</strong> RESTART</div><div id="toast"></div>
+<div class="overlay" id="intro"><div class="card level-card">
+ <div class="eyebrow">TEN WORLDS // ONE MOVEMENT SYSTEM</div><h1>PSYCHE<span>DELIC</span></h1>
+ <p>Choose a course. Learn the movement in the tutorial, then take on nine increasingly strange parkour runs through neon worlds, shifting platforms, wall-runs, and impossible-looking skies.</p>
+ <div class="level-grid">
+  <button class="level-tile tutorial primary" id="level1"><b>01</b><strong>TUTORIAL</strong><small>Learn the moves</small></button>
+  <button class="level-tile" id="level2"><b>02</b><strong>CHROMA CIRCUIT</strong><small>Neon first steps</small></button><button class="level-tile" id="level3"><b>03</b><strong>PRISM ASCENT</strong><small>High-altitude flow</small></button>
+  <button class="level-tile" id="level4"><b>04</b><strong>VIOLET VOID</strong><small>Wall-run gauntlet</small></button><button class="level-tile" id="level5"><b>05</b><strong>ACID GARDEN</strong><small>Moving platforms</small></button>
+  <button class="level-tile" id="level6"><b>06</b><strong>LASER LAGOON</strong><small>Long jumps</small></button><button class="level-tile" id="level7"><b>07</b><strong>FRACTAL FIELDS</strong><small>Precision route</small></button>
+  <button class="level-tile" id="level8"><b>08</b><strong>NEON MAZE</strong><small>Keep your line</small></button><button class="level-tile" id="level9"><b>09</b><strong>STATIC STORM</strong><small>Fast and tricky</small></button>
+  <button class="level-tile" id="level10"><b>10</b><strong>THE AFTERGLOW</strong><small>Final course</small></button>
  </div>
- <div class="actions"><button class="primary" id="start">ENTER THE BEAN SKY</button><button id="how">MOVEMENT TIPS</button></div>
+ <div class="controls"><div class="control"><b>W A S D / ARROWS</b><small>Move</small></div><div class="control"><b>MOUSE</b><small>Look around</small></div><div class="control"><b>SPACE</b><small>Jump / double-jump / wall-jump</small></div><div class="control"><b>SHIFT</b><small>Sprint</small></div><div class="control"><b>WALL RUN</b><small>Jump beside a neon wall and keep moving along it</small></div><div class="control"><b>ESC / R</b><small>Pause / restart level</small></div></div>
+ <div class="actions"><button id="how">MOVEMENT TIPS</button></div>
 </div></div>
-<div class="overlay hidden" id="pause"><div class="card"><div class="eyebrow">TAKE A BREATHER</div><h1>PAUSED<span>.</span></h1><p>Your beans are right where you left them.</p><div class="actions"><button class="primary" id="resume">BACK TO IT</button><button id="restartPause">RESTART RUN</button></div></div></div>
-<div class="overlay hidden" id="finish"><div class="card"><div class="eyebrow">THE SKY BEANS SALUTE YOU</div><h2 id="endTitle">COURSE CLEARED</h2><p>You made it to the top of the sky. The beans have witnessed your achievement.</p><div id="endStats"></div><div class="actions"><button class="primary" id="again">RUN IT AGAIN</button><button id="menu">MAIN MENU</button></div></div></div>
+<div class="overlay hidden" id="pause"><div class="card"><div class="eyebrow">YOUR RUN IS STILL HERE</div><h1>PAUSED<span>.</span></h1><p>Take a second, then get back into the flow.</p><div class="actions"><button class="primary" id="resume">RESUME</button><button id="restartPause">RESTART LEVEL</button><button id="levelMenu">LEVEL SELECT</button></div></div></div>
+<div class="overlay hidden" id="finish"><div class="card"><div class="eyebrow">COURSE COMPLETE</div><h2 id="endTitle">LEVEL CLEARED</h2><p>You made it through the course. Pick the next one when you're ready.</p><div id="endStats"></div><div class="actions"><button class="primary" id="nextLevel">NEXT LEVEL</button><button id="again">REPLAY</button><button id="menu">LEVEL SELECT</button></div></div></div>
 <script>
 (() => {
   const handlers = Object.create(null);
@@ -89,7 +91,7 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
     again: () => { document.getElementById("finish").classList.add("hidden"); intro().classList.remove("hidden"); },
     menu: () => { document.getElementById("finish").classList.add("hidden"); intro().classList.remove("hidden"); }
   };
-  window.BeanSkyUI = {
+  window.PsychedelicUI = {
     bind(map) {
       Object.assign(handlers, map);
       ready = true;
@@ -126,10 +128,10 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
     }
   }, true);
   window.addEventListener("error", event => {
-    if (event.message) window.BeanSkyUI.fail("The game hit a loading error. Refresh the page to retry. " + event.message.slice(0, 110));
+    if (event.message) window.PsychedelicUI.fail("The game hit a loading error. Refresh the page to retry. " + event.message.slice(0, 110));
   });
   window.addEventListener("unhandledrejection", event => {
-    window.BeanSkyUI.fail("The game could not load its 3D engine. Refresh the page to retry.");
+    window.PsychedelicUI.fail("The game could not load its 3D engine. Refresh the page to retry.");
   });
 })();
 </script>
@@ -141,22 +143,22 @@ try {
   try {
     THREE = await import("https://unpkg.com/three@0.160.0/build/three.module.js");
   } catch (secondError) {
-    window.BeanSkyUI?.fail("Could not load the 3D engine from either backup source. Check your connection and refresh.");
+    window.PsychedelicUI?.fail("Could not load the 3D engine from either backup source. Check your connection and refresh.");
     throw secondError;
   }
 }
 
 const $=id=>document.getElementById(id);
 const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x91dafa);
-scene.fog=new THREE.FogExp2(0x9bdef5,0.0065);
+scene.background=new THREE.Color(0x18082b);
+scene.fog=new THREE.FogExp2(0x28104a,0.0022);
 const camera=new THREE.PerspectiveCamera(76,innerWidth/innerHeight,0.08,260);
 camera.rotation.order="YXZ";
 let renderer;
 try {
  renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
 } catch (error) {
- window.BeanSkyUI?.fail("Your browser could not create a WebGL 3D view. Try enabling hardware acceleration, then reload.");
+ window.PsychedelicUI?.fail("Your browser could not create a WebGL 3D view. Try enabling hardware acceleration, then reload.");
  throw error;
 }
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
@@ -168,28 +170,31 @@ renderer.toneMapping=THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=1.12;
 document.body.insertBefore(renderer.domElement,document.body.firstChild);
 
-scene.add(new THREE.HemisphereLight(0xe5f8ff,0x638ba5,2.0));
-const sun=new THREE.DirectionalLight(0xfff4d8,3.0);sun.position.set(-18,35,22);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-45;sun.shadow.camera.right=45;sun.shadow.camera.top=45;sun.shadow.camera.bottom=-45;scene.add(sun);
-const fill=new THREE.DirectionalLight(0xc4eaff,1.1);fill.position.set(20,12,-24);scene.add(fill);
+scene.add(new THREE.HemisphereLight(0xffc8ff,0x38204f,2.1));
+const sun=new THREE.DirectionalLight(0xff78d7,2.6);sun.position.set(-18,35,22);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-45;sun.shadow.camera.right=45;sun.shadow.camera.top=45;sun.shadow.camera.bottom=-45;scene.add(sun);
+const fill=new THREE.DirectionalLight(0x55ffe7,1.8);fill.position.set(20,12,-24);scene.add(fill);
 
-const mat=(color,rough=.72,metal=0)=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal});
+const mat=(color,rough=.72,metal=0)=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,emissive:color,emissiveIntensity:.22});
 const mats={
- island:[mat(0x5d9fba),mat(0x70b7c8),mat(0x7da7c9),mat(0x8c9dcc),mat(0x6eaf9f)],
- top:mat(0xd5f1e9,.85),white:mat(0xf2fbff),gold:mat(0xffd16b,.42),pink:mat(0xe96980,.45),
- cloud:mat(0xeaf8ff,.95),cloudShade:mat(0xc4e8f5,.95),dark:mat(0x35556d),mint:mat(0x5dceb4,.55),
- beanFace:mat(0x42384a,.75),beanPalette:[mat(0xef6c83,.43),mat(0xffc65f,.43),mat(0x65cdb7,.43),mat(0x9e8ce2,.43),mat(0xf39b69,.43),mat(0x64b9e3,.43)]
+ island:[mat(0x6c36d8,.48,.16),mat(0x123fce,.42,.18),mat(0xd21aaa,.43,.12),mat(0x08a99d,.46,.16),mat(0x8fce13,.44,.12),mat(0xff4f96,.4,.16),mat(0x3bc7ee,.4,.15),mat(0x6535a8,.42,.18),mat(0xf28d18,.42,.12),mat(0x2bba75,.42,.15)],
+ top:mat(0x30115e,.42,.2),white:mat(0xf6cfff,.28,.25),gold:mat(0xffed38,.28,.25),pink:mat(0xff39be,.3,.22),
+ cloud:mat(0x583b84,.95),cloudShade:mat(0x241345,.95),dark:mat(0x1a0b35,.55,.2),mint:mat(0x35ffe0,.3,.25),
+ wall:mat(0x41f5dd,.35,.2),accent:[mat(0xff38b8,.28,.25),mat(0x44e9ff,.28,.25),mat(0xffed3b,.28,.25),mat(0x8d4cff,.28,.25),mat(0x51ff8f,.28,.25)]
 };
-const colliders=[],wallRuns=[],pickups=[],moving=[];
-const levelGoals=[null,null,null];
+const psyMaterials=[...mats.island,mats.top,mats.gold,mats.pink,mats.mint,mats.wall,...mats.accent];
+const psyDecor=[];
+};
+const colliders=[],wallRuns=[],moving=[];
+const levelGoals=Array(10).fill(null);
 const levelSpawns=[
- {x:-8,y:.04,z:0,yaw:-Math.PI/2},
- {x:237,y:21.46,z:5,yaw:-Math.PI/2},
- {x:430,y:39.56,z:4,yaw:-Math.PI/2}
+ {x:-8,y:.04,z:0,yaw:-Math.PI/2},{x:237,y:21.46,z:5,yaw:-Math.PI/2},{x:430,y:39.56,z:4,yaw:-Math.PI/2},
+ {x:642,y:65.06,z:8,yaw:-Math.PI/2},{x:782,y:77.06,z:-5,yaw:-Math.PI/2},{x:922,y:89.06,z:4,yaw:-Math.PI/2},
+ {x:1062,y:101.06,z:-7,yaw:-Math.PI/2},{x:1202,y:113.06,z:5,yaw:-Math.PI/2},{x:1342,y:125.06,z:-3,yaw:-Math.PI/2},{x:1482,y:137.06,z:8,yaw:-Math.PI/2}
 ];
 const levelCheckpoints=[
- {x:125,y:9.1,z:4},
- {x:339,y:29.6,z:-3},
- {x:533,y:51.5,z:-4}
+ {x:125,y:9.1,z:4},{x:339,y:29.6,z:-3},{x:533,y:51.5,z:-4},
+ {x:733,y:74,z:2},{x:873,y:86,z:-11},{x:1013,y:98,z:-2},
+ {x:1153,y:110,z:-13},{x:1293,y:122,z:-1},{x:1433,y:134,z:-9},{x:1573,y:146,z:2}
 ];
 let currentLevel=1,buildingLevel=1;
 const boxGeo=new THREE.BoxGeometry(1,1,1);
@@ -206,22 +211,11 @@ function platform(x,top,z,w,d,color,thick=0.8,kind=""){
  return body;
 }
 function wall(x,y,z,w,h,d,axis){
- const mesh=box(x,y,z,w,h,d,mat(0x487b91,.72),false);
- const stripe=box(x,y+h*.5-.2,z,w*.94,.12,d*.94,mats.mint,false);
+ const mesh=box(x,y,z,w,h,d,mats.wall,false);
+ const stripe=box(x,y+h*.5-.2,z,w*.94,.12,d*.94,mats.accent[0],false);
  wallRuns.push({mesh,x,z,w,d,minY:y-h/2,maxY:y+h/2,axis,side:axis==="x"?(z<0?-1:1):(x<0?-1:1)});
  // stripe purely decorative, store
  return mesh;
-}
-function bean(x,y,z,size=1,colorIndex=Math.floor(Math.random()*mats.beanPalette.length),collectible=false){
- const group=new THREE.Group();group.position.set(x,y,z);
- const body=new THREE.Mesh(new THREE.SphereGeometry(.31*size,18,14),mats.beanPalette[colorIndex]);body.scale.set(.78,1.14,.68);body.rotation.z=-.28;body.castShadow=true;group.add(body);
- // tiny face on the forward side (+z)
- const eyeGeo=new THREE.SphereGeometry(.025*size,8,6);
- for(const side of [-1,1]){const eye=new THREE.Mesh(eyeGeo,mats.beanFace);eye.position.set(side*.075*size,.035*size,.195*size);group.add(eye)}
- const blush=new THREE.Mesh(new THREE.SphereGeometry(.022*size,8,6),mat(0xfff0dc));blush.position.set(0,-.035*size,.203*size);group.add(blush);
- scene.add(group);
- if(collectible)pickups.push({group,baseY:y,phase:Math.random()*6,got:false,level:buildingLevel});
- return group;
 }
 function cloud(x,y,z,s=1){
  const g=new THREE.Group();g.position.set(x,y,z);
@@ -235,13 +229,15 @@ function hoop(x,y,z,rot=0){
 function makeSky(){
  // distant soft cloud banks
  for(let i=0;i<30;i++){const x=-22+(i%10)*17,y=-3+(i%4)*5,z=(Math.floor(i/10)-1)*34-18;cloud(x,y,z,1.6+(i%3)*.45)}
- // drifting bean-shaped cloud mascots, way out in the distance
- for(let i=0;i<46;i++){
-  const x=-18+(i*13.7)%155,y=7+(i*7.13)%28,z=(i%2?1:-1)*(15+(i*9.7)%38);
-  const b=bean(x,y,z,1.25+(i%3)*.25,i%6,false);b.rotation.z=(i%5)*.18;
+ // drifting neon orbs and tilted prism rings
+ for(let i=0;i<48;i++){
+  const x=-18+(i*13.7)%155,y=7+(i*7.13)%30,z=(i%2?1:-1)*(15+(i*9.7)%38),hue=(i*.137)%1;
+  const orb=new THREE.Mesh(new THREE.IcosahedronGeometry(.65+(i%4)*.24,1),new THREE.MeshStandardMaterial({color:new THREE.Color().setHSL(hue,.92,.58),emissive:new THREE.Color().setHSL(hue,.95,.28),emissiveIntensity:.8,roughness:.25,metalness:.18}));
+  orb.position.set(x,y,z);orb.rotation.set(i*.7,i*.39,i*.21);scene.add(orb);psyDecor.push({mesh:orb,phase:i*.7,speed:.25+(i%4)*.08});
+  if(i%3===0){const ring=new THREE.Mesh(new THREE.TorusGeometry(1.7+(i%3)*.5,.07,8,42),new THREE.MeshBasicMaterial({color:new THREE.Color().setHSL((hue+.28)%1,.95,.65)}));ring.position.set(x,y+1,z-1);ring.rotation.set(i*.3,i*.45,.5+i*.1);scene.add(ring);psyDecor.push({mesh:ring,phase:i*.4,speed:.18});}
  }
  // soft sun and rings
- const sunBall=new THREE.Mesh(new THREE.SphereGeometry(5,28,20),new THREE.MeshBasicMaterial({color:0xffefbd}));sunBall.position.set(45,32,-65);scene.add(sunBall);
+ const sunBall=new THREE.Mesh(new THREE.SphereGeometry(6,28,20),new THREE.MeshBasicMaterial({color:0xff45cb}));sunBall.position.set(45,32,-65);scene.add(sunBall);
 }
 function buildWorld(){
  makeSky();
@@ -267,7 +263,7 @@ function buildWorld(){
  // high jump section
  platform(138,11.2,1.5,7,6,mats.island[3]);
  platform(147,13.1,-3,7,6,mats.island[0]);
- // bean ring section
+ // prism ring section
  platform(157,14.8,-.5,8,8,mats.island[1]);
  hoop(163,17,-.5,.0);
  platform(169,13.9,4.2,7,7,mats.island[2]);
@@ -287,17 +283,7 @@ function buildWorld(){
  // trampoline pad that launches the player
  const pad=box(124,9.23,4,3.2,.16,3.2,mats.gold,false);pad.material=mat(0xffca66,.4);
  springPads.push({x:124,z:4,y:9.3,w:2.2,d:2.2,cooldown:0});
- // Collectibles placed along the course, plus a few optional high beans.
- const spots=[
- [2,2.0,0],[13,3.2,-3],[22,4.5,1.5],[31,6.2,5],[40,5.6,1.5],
- [50,5.8,-3.15],[55,5.8,3.15],[60,5.2,0],[69,6.5,-4.3],[78,7,1.8],
- [88,8,5],[98,7,1],[106,8.7,-3.4],[114,10.2,-.4],[125,11,4],
- [138,12.8,1.5],[147,14.7,-3],[157,16.5,-.5],[163,20,-.5],[169,15.5,4.2],
- [179,17.6,0],[190,20,-4],[200,21.8,1],[212,23.2,5]
- ];
- spots.forEach((s,i)=>bean(s[0],s[1],s[2],.72,i%6,true));
- // extra beans drifting beside the playable route (not required)
- for(let i=0;i<20;i++){const b=bean(8+i*10,5+(i%4)*2.3,(i%2?1:-1)*(9+(i%3)*2),.55+(i%3)*.16,(i+2)%6,false);b.userData.decor=true;}
+
 }
 const obstacles=[],springPads=[];
 let goal={x:217,y:21.4,z:5,beacon:null};
@@ -333,8 +319,7 @@ function buildLevelTwo(){
  const beacon2=new THREE.Mesh(new THREE.TorusGeometry(1.4,.15,12,48),mats.gold);beacon2.position.set(419,43,4);scene.add(beacon2);
  box(419,42,4,.16,5,.16,mats.white,false);box(420,43.4,4,2.5,1.1,.12,mats.pink,false);
  levelGoals[1]={x:419,y:39.5,z:4,beacon:beacon2};
- const spots=[[242,23,5],[253,24.5,-1],[263,25.8,-7],[275,28,-8.8],[286,25.5,-7],[296,27,-1],[306,28,5],[317,30,9],[328,31,3],[339,32,-3],[362,35,-2],[373,36.5,5],[395,39,4],[419,42,4]];
- spots.forEach((p,i)=>bean(p[0],p[1],p[2],.72,(i+1)%6,true));
+
 }
 function buildLevelThree(){
  buildingLevel=3;
@@ -364,22 +349,47 @@ function buildLevelThree(){
  const beacon3=new THREE.Mesh(new THREE.TorusGeometry(1.45,.16,12,48),mats.gold);beacon3.position.set(627,68.8,8);scene.add(beacon3);
  box(627,67.5,8,.16,5,.16,mats.white,false);box(628,69,8,2.5,1.1,.12,mats.pink,false);
  levelGoals[2]={x:627,y:65,z:8,beacon:beacon3};
- const spots=[[435,41,4],[447,42.7,-2],[457,44,-8],[469,47,-9.8],[480,44.2,-8],[490,46,-2],[500,47.5,4],[511,51,9],[522,52.5,3],[533,54,-4],[557,56.8,-4],[579,59.4,9],[602,63,-3],[627,67,8]];
- spots.forEach((p,i)=>bean(p[0],p[1],p[2],.72,(i+3)%6,true));
+
 }
 buildLevelTwo();
 buildLevelThree();
+function buildPsyLevel(level){
+ const spawn=levelSpawns[level-1],base=spawn.x+3,top=spawn.y,palette=(level-1)%mats.island.length;
+ const colors=mats.island,accent=mats.accent[(level-1)%mats.accent.length];
+ const land=(dx,dy,dz,w=7,d=7)=>{
+  const x=base+dx,y=top+dy,z=spawn.z+dz;
+  platform(x,y,z,w,d,colors[(palette+Math.floor(dx/22))%colors.length],.9);
+  const c=colliders[colliders.length-1];c.cap.material=accent;c.seam.material=mats.dark;
+ };
+ land(0,0,0,14,12);land(11,1.2,-5);land(22,2.4,-9);
+ wall(base+34,top+3.1,spawn.z-10.8,12,8,.42,"x");wall(base+34,top+3.1,spawn.z-7.2,12,8,.42,"x");
+ land(45,2.8,-9,8,8);land(56,4.1,-3);land(67,5.4,3);
+ const lift=platform(base+78,top+7.0,spawn.z+8,6,5,colors[(palette+3)%colors.length],.8,"moving");
+ const liftCol=colliders[colliders.length-1];liftCol.cap.material=mats.gold;
+ moving.push({mesh:lift,collider:liftCol,base:spawn.z+8,amp:2.6,rate:1.0+(level%3)*.12,phase:level*.8});
+ land(89,8.1,2,14,12);
+ box(base+89,top+8.22,spawn.z+2,3.1,.16,3.1,mats.gold,false);
+ springPads.push({x:base+89,z:spawn.z+2,y:top+8.3,w:2.2,d:2.2,cooldown:0});
+ land(101,9.7,-4);land(113,11.3,2,15,13);
+ const hurdle=box(base+101,top+10.3,spawn.z-4,1.0,1.3,6,accent,false);hurdle.rotation.z=level%2?.13:-.13;
+ obstacles.push({mesh:hurdle,x:base+101,z:spawn.z-4,w:1.2,d:6,bottom:top+9.6,top:top+11});
+ const hoopMesh=new THREE.Mesh(new THREE.TorusGeometry(2.0,.14,10,48),new THREE.MeshBasicMaterial({color:accent.color}));hoopMesh.position.set(base+58,top+7.5,spawn.z-1);hoopMesh.rotation.y=.35;scene.add(hoopMesh);psyDecor.push({mesh:hoopMesh,phase:level,speed:.45});
+ const beacon=new THREE.Mesh(new THREE.TorusGeometry(1.5,.16,12,48),mats.gold);beacon.position.set(base+113,top+14.3,spawn.z+2);scene.add(beacon);
+ box(base+113,top+13,spawn.z+2,.18,4,.18,mats.white,false);box(base+114,top+14.2,spawn.z+2,2.3,.9,.12,accent,false);
+ levelGoals[level-1]={x:base+113,y:top+11.3,z:spawn.z+2,beacon};
+}
+for(let level=4;level<=10;level++)buildPsyLevel(level);
 buildingLevel=1;
 
 const player={pos:new THREE.Vector3(levelSpawns[0].x,levelSpawns[0].y,levelSpawns[0].z),vel:new THREE.Vector3(),yaw:levelSpawns[0].yaw,pitch:0,grounded:false,lastGround:0,jumps:0,wall:null,wallTime:0,wallCooldown:0,wallNormal:new THREE.Vector3(),roll:0,flow:1,checkpoint:false};
-const keys={};let locked=false,active=false,paused=false,finished=false,elapsed=0,beanCount=0,best=Number(localStorage.getItem("bean-sky-best")||0),toastTimer=0,fallLock=0;
-$("best").textContent=best?formatTime(best):"—";
+const levelNames=["Tutorial","Chroma Circuit","Prism Ascent","Violet Void","Acid Garden","Laser Lagoon","Fractal Fields","Neon Maze","Static Storm","The Afterglow"];
+const keys={};let locked=false,active=false,paused=false,finished=false,elapsed=0,best=0,toastTimer=0,fallLock=0;
+function loadBest(){best=Number(localStorage.getItem("psychedelic-best-"+currentLevel)||0);$("best").textContent=best?formatTime(best):"—";}
 function formatTime(n){return Math.floor(n/60)+":"+String(Math.floor(n%60)).padStart(2,"0")}
 function showToast(txt){$("toast").textContent=txt;$("toast").classList.add("show");toastTimer=1.35}
 function updateHud(){
- const total=pickups.filter(b=>b.level===currentLevel).length;
- $("level").innerHTML=String(currentLevel).padStart(2,"0")+" <small>/ 03</small>";
- $("beans").innerHTML=String(beanCount).padStart(2,"0")+" <small>/ "+total+"</small>";
+ $("level").innerHTML=String(currentLevel).padStart(2,"0")+" <small>/ 10</small>";
+ $("levelName").textContent=levelNames[currentLevel-1].toUpperCase()+" // PSYCHEDELIC PARKOUR";
  $("time").textContent=formatTime(elapsed);
  $("flow").style.width=Math.min(100,Math.max(0,(player.vel.length()/15)*100))+"%";
 }
@@ -390,44 +400,33 @@ function resetPlayer(toCheckpoint=false){
  else {p.pos.set(spawn.x,spawn.y,spawn.z);showToast("BACK TO THE START");}
  p.yaw=spawn.yaw;p.pitch=0;p.vel.set(0,0,0);p.grounded=false;p.jumps=0;p.wall=null;p.wallTime=0;p.wallCooldown=.25;p.roll=0;fallLock=.4;
 }
-function resetRun(){
- currentLevel=1;goal=levelGoals[0];checkpoint={...levelCheckpoints[0],active:false};
- elapsed=0;beanCount=0;finished=false;active=true;
- for(const b of pickups){b.got=false;b.group.visible=true}
- resetPlayer(false);camera.position.set(player.pos.x,player.pos.y+1.65,player.pos.z);
- $("finish").classList.add("hidden");$("pause").classList.add("hidden");updateHud();
+function startLevel(level){
+ currentLevel=Math.max(1,Math.min(10,Number(level)||1));goal=levelGoals[currentLevel-1];checkpoint={...levelCheckpoints[currentLevel-1],active:false};
+ elapsed=0;finished=false;active=true;paused=false;resetPlayer(false);camera.position.set(player.pos.x,player.pos.y+1.65,player.pos.z);
+ $("intro").classList.add("hidden");$("finish").classList.add("hidden");$("pause").classList.add("hidden");loadBest();updateHud();
+ showToast(currentLevel===1?"TUTORIAL — LEARN THE MOVEMENT":"LEVEL "+String(currentLevel).padStart(2,"0")+" — "+levelNames[currentLevel-1].toUpperCase());requestLock();renderer.domElement.focus();
 }
-function startRun(){resetRun();$("intro").classList.add("hidden");requestLock();renderer.domElement.focus()}
 function requestLock(){renderer.domElement.requestPointerLock?.()}
 function pauseGame(){if(!active||finished)return;paused=true;$("pause").classList.remove("hidden")}
 function resumeGame(){paused=false;$("pause").classList.add("hidden");requestLock()}
-function advanceLevel(){
- if(currentLevel>=3){finishRun();return;}
- currentLevel++;
- const spawn=levelSpawns[currentLevel-1];
- goal=levelGoals[currentLevel-1];
- checkpoint={...levelCheckpoints[currentLevel-1],active:false};
- beanCount=0;
- player.pos.set(spawn.x,spawn.y,spawn.z);player.vel.set(0,0,0);player.yaw=spawn.yaw;player.pitch=0;player.grounded=false;player.jumps=0;player.wall=null;player.wallTime=0;player.wallCooldown=.35;player.roll=0;
- showToast("LEVEL "+currentLevel+" / 3 — KEEP MOVING");
- updateHud();
-}
+function advanceLevel(){finishRun();}
 function finishRun(){
- active=false;finished=true;document.exitPointerLock?.();
- const time=Math.round(elapsed*100)/100;
- const total=pickups.filter(b=>b.level===currentLevel).length;
- $("endStats").textContent=beanCount+" / "+total+" BEANS  ·  "+formatTime(elapsed)+"  ·  "+(best&&time>=best?"BEST: "+formatTime(best):"NEW PERSONAL BEST");
- if(!best||time<best){best=time;localStorage.setItem("bean-sky-best",best);$("best").textContent=formatTime(best)}
- $("finish").classList.remove("hidden");
+ active=false;finished=true;document.exitPointerLock?.();const time=Math.round(elapsed*100)/100;
+ $("endTitle").textContent=levelNames[currentLevel-1].toUpperCase()+" CLEARED";$("endStats").textContent="LEVEL "+String(currentLevel).padStart(2,"0")+" / 10  ·  "+formatTime(elapsed);
+ const key="psychedelic-best-"+currentLevel,oldBest=Number(localStorage.getItem(key)||0);
+ if(!oldBest||time<oldBest){localStorage.setItem(key,String(time));best=time;$("best").textContent=formatTime(best);$("endStats").textContent+="  ·  NEW BEST";}
+ const cleared=JSON.parse(localStorage.getItem("psychedelic-cleared")||"[]");if(!cleared.includes(currentLevel)){cleared.push(currentLevel);localStorage.setItem("psychedelic-cleared",JSON.stringify(cleared));}
+ $("nextLevel").disabled=currentLevel>=10;$("nextLevel").textContent=currentLevel>=10?"ALL COURSES CLEARED":"NEXT LEVEL";$("finish").classList.remove("hidden");
 }
-window.BeanSkyUI?.bind({
- start: startRun,
- how: () => showToast("KEEP YOUR SPEED · JUMP LATE · WALL-JUMP OFF THE PANELS"),
- resume: resumeGame,
- restartPause: () => { resetRun(); requestLock(); },
- again: () => { resetRun(); requestLock(); },
- menu: () => { $("finish").classList.add("hidden"); $("intro").classList.remove("hidden"); }
+window.PsychedelicUI?.bind({
+ ...Object.fromEntries(Array.from({length:10},(_,i)=>["level"+(i+1),()=>startLevel(i+1)])),
+ how:()=>showToast("BUILD SPEED · JUMP · DOUBLE-JUMP · WALL-RUN · WALL-JUMP"),resume:resumeGame,restartPause:()=>startLevel(currentLevel),
+ levelMenu:()=>{active=false;paused=false;document.exitPointerLock?.();$("pause").classList.add("hidden");$("intro").classList.remove("hidden");refreshLevelCards();},
+ again:()=>startLevel(currentLevel),nextLevel:()=>startLevel(Math.min(10,currentLevel+1)),
+ menu:()=>{document.exitPointerLock?.();$("finish").classList.add("hidden");$("intro").classList.remove("hidden");refreshLevelCards();}
 });
+function refreshLevelCards(){const cleared=JSON.parse(localStorage.getItem("psychedelic-cleared")||"[]");for(let i=1;i<=10;i++){const b=$("level"+i);if(!b)continue;const old=b.querySelector(".status");if(old)old.remove();const stamp=document.createElement("em");stamp.className="status";stamp.textContent=cleared.includes(i)?"CLEARED":"READY";b.appendChild(stamp);}}
+refreshLevelCards();
 document.addEventListener("pointerlockchange",()=>{locked=document.pointerLockElement===renderer.domElement;if(!locked&&active&&!paused)pauseGame()});
 document.addEventListener("mousemove",e=>{if(!locked||!active||paused)return;player.yaw-=e.movementX*.00225;player.pitch-=e.movementY*.0021;player.pitch=Math.max(-1.25,Math.min(1.25,player.pitch))});
 addEventListener("keydown",e=>{
@@ -530,11 +529,9 @@ function updatePhysics(dt,t){
   }
  }
  // Spring launch pads
- if(p.grounded){for(const s of springPads){if(s.cooldown<=0&&Math.abs(p.pos.x-s.x)<s.w/2&&Math.abs(p.pos.z-s.z)<s.d/2){p.vel.y=13.8;p.grounded=false;p.jumps=1;s.cooldown=.85;showToast("BEAN BOUNCE!");break}}}
+ if(p.grounded){for(const s of springPads){if(s.cooldown<=0&&Math.abs(p.pos.x-s.x)<s.w/2&&Math.abs(p.pos.z-s.z)<s.d/2){p.vel.y=13.8;p.grounded=false;p.jumps=1;s.cooldown=.85;showToast("PRISM BOOST!");break}}}
  // Moving island follows its own path, carrying the player's ground position.
  for(const m of moving){const z=m.base+Math.sin(t*m.rate+m.phase)*m.amp;m.collider.z=z;m.collider.mesh.position.z=z;m.collider.cap.position.z=z;}
- // Pickup beans
- for(const b of pickups){if(b.got||b.level!==currentLevel)continue;const bp=b.group.position;if(p.pos.distanceTo(new THREE.Vector3(bp.x,bp.y,bp.z))<1.55){b.got=true;b.group.visible=false;beanCount++;showToast("BEAN COLLECTED");updateHud()}}
  // Checkpoint
  if(!checkpoint.active&&p.pos.x>checkpoint.x-4&&Math.abs(p.pos.z-checkpoint.z)<7&&Math.abs(p.pos.y-checkpoint.y)<3){checkpoint.active=true;showToast("CHECKPOINT SAVED")}
  // Fall recovery
@@ -545,10 +542,10 @@ function updatePhysics(dt,t){
  p.pos.z=Math.max(-18,Math.min(18,p.pos.z));
 }
 function updateVisuals(dt,t){
- for(const b of pickups){if(!b.got){b.group.position.y=b.baseY+Math.sin(t*2.1+b.phase)*.22;b.group.rotation.y+=dt*.45;b.group.rotation.z=Math.sin(t+b.phase)*.12}}
- for(const w of wallRuns){w.mesh.material.emissive=new THREE.Color(0x153f4a);w.mesh.material.emissiveIntensity=.18}
- for(const c of colliders){if(c.kind==="moving"){}}
- goal.beacon.rotation.y=t*.7;goal.beacon.position.y=goal.y+2.9+Math.sin(t*2)*.3;
+ psyMaterials.forEach((material,i)=>{const hue=(t*.035+i*.113+currentLevel*.047)%1;material.color.setHSL(hue,.86,.48);material.emissive.setHSL(hue,.95,.22);material.emissiveIntensity=.14+.16*(.5+.5*Math.sin(t*1.7+i));});
+ for(const w of wallRuns)w.mesh.material.emissiveIntensity=.35+.25*Math.sin(t*3+w.x*.1);
+ for(const d of psyDecor){d.mesh.rotation.y+=dt*d.speed;d.mesh.rotation.x+=dt*d.speed*.35;}
+ if(goal?.beacon){goal.beacon.rotation.y=t*.7;goal.beacon.position.y=goal.y+2.9+Math.sin(t*2)*.3;}
 }
 function animate(now){
  requestAnimationFrame(animate);
