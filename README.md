@@ -1,28 +1,32 @@
-# AFTERLIGHT — Rift Runner
+# UNDER THE BEAN SKY
 
-A fast, keyboard-driven platform game built as a single HTML file. Cross a fractured skyline, collect energy shards, hit the checkpoint, and reach the extraction gate.
+A browser-based first-person 3D parkour course set on floating islands above the clouds. Build momentum, chain jumps, wall-run across the gap, ride a moving platform, and collect 24 very important sky beans.
 
 ## Play
 
-Open the GitHub Pages site. The game runs directly in the browser with no build step, external libraries, or asset downloads.
+Open the GitHub Pages site. The game is a single HTML page and loads Three.js from jsDelivr; no local build step or asset folder is needed.
 
 ## Controls
 
 | Input | Action |
 |---|---|
-| A / D or ← / → | Move |
-| Space | Jump (press again in the air for a double jump) |
-| Shift | Dash |
+| W / A / S / D or arrow keys | Move |
+| Mouse | Look around |
+| Space | Jump, double-jump, or wall-jump |
+| Shift | Sprint |
 | R | Restart the run |
+| Esc | Pause / release the mouse |
+
+Click **Enter the Bean Sky** to start and lock the mouse. Click the game again to recapture the mouse after unlocking it.
 
 ## Features
 
-- Side-scrolling platform course with multiple routes and floating platforms
-- Momentum-based movement, double jump, and dash
-- 21 collectible energy shards; collect at least 12 to unlock extraction
-- Hazards, a checkpoint, particle effects, and a moving camera
-- Timer, progress bar, shard counter, and locally saved best score
-- Responsive canvas rendering with no external dependencies
+- First-person 3D movement and mouse-look
+- Momentum-based running and chained jumps
+- Wall-running and wall-jumping section
+- Moving platform, spring pad, and a raised final course
+- 24 collectible beans, drifting bean decorations, and a finish beacon
+- Checkpoint, timer, and locally saved best time
 
 ## GitHub Pages
 
