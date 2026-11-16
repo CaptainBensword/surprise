@@ -107,6 +107,7 @@ function platform(x,top,z,w,d,color,thick=0.8,kind=""){
  colliders.push({x,z,w,d,top,mesh:body,cap,kind,baseZ:z});
  // chunky underside ledges
  const seam=box(x,top-thick+.07,z,w*.84,.12,d*.84,mats.dark,false);
+ colliders[colliders.length-1].seam=seam;
  return body;
 }
 function wall(x,y,z,w,h,d,axis){
@@ -186,10 +187,10 @@ function buildWorld(){
  goal={x:217,y:21.4,z:5,beacon};
  // simple obstacle bars over one platform, requiring a jump
  const hurdle=box(88,7.6,5,1.0,1.4,6,mats.pink,false);hurdle.rotation.z=.12;
- obstacles.push({mesh:hurdle,x:88,z:5,w:1.2,d:6,y:6.6});
+ obstacles.push({mesh:hurdle,x:88,z:5,w:1.2,d:6,bottom:6.9,top:8.3});
  // trampoline pad that launches the player
  const pad=box(124,9.23,4,3.2,.16,3.2,mats.gold,false);pad.material=mat(0xffca66,.4);
- springPads.push({x:124,z:4,y:9.3,w:2.2,d:2.2});
+ springPads.push({x:124,z:4,y:9.3,w:2.2,d:2.2,cooldown:0});
  // Collectibles placed along the course, plus a few optional high beans.
  const spots=[
  [2,2.0,0],[13,3.2,-3],[22,4.5,1.5],[31,6.2,5],[40,5.6,1.5],
@@ -309,11 +310,18 @@ function updatePhysics(dt,t){
   const oldZ=m.collider.z;
   const newZ=m.base+Math.sin(t*m.rate+m.phase)*m.amp;
   if(p.grounded&&Math.abs(p.pos.x-m.collider.x)<m.collider.w/2+.3&&Math.abs(p.pos.z-oldZ)<m.collider.d/2+.3&&Math.abs(p.pos.y-m.collider.top)<.15)p.pos.z+=newZ-oldZ;
-  m.collider.z=newZ;m.collider.mesh.position.z=newZ;m.collider.cap.position.z=newZ;
+  m.collider.z=newZ;m.collider.mesh.position.z=newZ;m.collider.cap.position.z=newZ;m.collider.seam.position.z=newZ;
  }
- // Apply horizontal movement first. Platforms are top-collision surfaces.
- const oldY=p.pos.y;
+ // Apply movement; low bars block the route unless the player clears them with a jump.
+ const oldY=p.pos.y,oldX=p.pos.x,oldZ=p.pos.z;
  p.pos.x+=p.vel.x*dt;p.pos.z+=p.vel.z*dt;p.pos.y+=p.vel.y*dt;
+ for(const o of obstacles){
+  const overlap=Math.abs(p.pos.x-o.x)<o.w/2+.34&&Math.abs(p.pos.z-o.z)<o.d/2+.34;
+  const vertical=p.pos.y<o.top&&p.pos.y+1.65>o.bottom;
+  if(overlap&&vertical){p.pos.x=oldX;p.pos.z=oldZ;p.vel.x*=.18;p.vel.z*=.18;}
+ }
+ if(p.wall){if(p.wall.axis==="x")p.pos.z=p.wall.z+p.wallNormal.z*.46;else p.pos.x=p.wall.x+p.wallNormal.x*.46;}
+ for(const s of springPads)s.cooldown=Math.max(0,s.cooldown-dt);
  p.grounded=false;
  for(const c of colliders){
   const dynamicZ=c.z;
@@ -324,7 +332,7 @@ function updatePhysics(dt,t){
   }
  }
  // Spring launch pads
- if(p.grounded){for(const s of springPads){if(Math.abs(p.pos.x-s.x)<s.w/2&&Math.abs(p.pos.z-s.z)<s.d/2){p.vel.y=13.8;p.grounded=false;p.jumps=1;showToast("BEAN BOUNCE!");break}}}
+ if(p.grounded){for(const s of springPads){if(s.cooldown<=0&&Math.abs(p.pos.x-s.x)<s.w/2&&Math.abs(p.pos.z-s.z)<s.d/2){p.vel.y=13.8;p.grounded=false;p.jumps=1;s.cooldown=.85;showToast("BEAN BOUNCE!");break}}}
  // Moving island follows its own path, carrying the player's ground position.
  for(const m of moving){const z=m.base+Math.sin(t*m.rate+m.phase)*m.amp;m.collider.z=z;m.collider.mesh.position.z=z;m.collider.cap.position.z=z;}
  // Pickup beans
