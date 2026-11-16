@@ -1,10 +1,12 @@
-# UNDER THE BEAN SKY
+# PSYCHEDELIC
 
-A browser-based first-person 3D parkour game set on floating islands above the clouds. Build speed, chain jumps, wall-run across gaps, hit spring pads, and collect the sky beans.
+A browser-based first-person 3D parkour game. Sprint, double-jump, wall-run, wall-jump, and cross ten surreal neon courses.
 
 ## Play
 
-Open the [GitHub Pages game](https://captainbensword.github.io/surprise/). The game is a single HTML page and loads Three.js from jsDelivr, with an Unpkg fallback. No local build step or asset folder is needed.
+[Launch Psychedelic](https://captainbensword.github.io/surprise/)
+
+The game runs from a single HTML file and loads Three.js from jsDelivr, with an Unpkg fallback.
 
 ## Controls
 
@@ -14,28 +16,35 @@ Open the [GitHub Pages game](https://captainbensword.github.io/surprise/). The g
 | Mouse | Look around |
 | Space | Jump, double-jump, or wall-jump |
 | Shift | Sprint |
-| R | Restart the run |
-| Esc | Pause / release the mouse |
+| R | Restart the current level |
+| Esc | Pause and release the mouse |
 
-Click **Enter the Bean Sky** to start and lock the mouse. To wall-run, jump beside a marked wall and keep moving forward along it. Press Space while attached to launch away from the wall.
+To wall-run, jump beside a marked wall and keep moving along it. Press Space while attached to wall-jump away.
 
-## Courses
+## Ten courses
 
-1. **Cloudline** — the opening route, first wall-run gap, moving island, and checkpoint
-2. **Windlift** — a higher route with another wall-run, a moving platform, and a spring pad
-3. **Beanfall Summit** — a final climb with wall-running, a bounce pad, and a finish beacon
+1. **Tutorial** — learn movement, jumping, sprinting, and wall-running
+2. **Chroma Circuit** — neon first steps
+3. **Prism Ascent** — high-altitude flow
+4. **Violet Void** — wall-run gauntlet
+5. **Acid Garden** — moving platforms
+6. **Laser Lagoon** — long jumps
+7. **Fractal Fields** — precision route
+8. **Neon Maze** — keep your line
+9. **Static Storm** — fast and tricky
+10. **The Afterglow** — final course
 
-Each course has its own bean count and checkpoint. The timer tracks the full three-course run.
+Choose any course from the level screen. Each level has its own checkpoint, timer, and saved best time. Cleared levels are marked in the selection screen.
 
 ## Features
 
 - First-person 3D movement and mouse-look
 - Momentum-based running, double-jumps, wall-runs, and wall-jumps
-- Three connected parkour courses
+- Ten individually selectable parkour levels
+- Animated neon palette, geometric sky decorations, and glowing course elements
 - Moving platforms, spring pads, and jump obstacles
-- 52 collectible beans, plus drifting bean decorations
-- Checkpoints, a full-run timer, and locally saved best time
+- Per-level checkpoints, completion records, and best times
 
 ## GitHub Pages
 
-The site is configured to deploy from the `main` branch at the repository root.
+The site deploys from the `main` branch at the repository root.
