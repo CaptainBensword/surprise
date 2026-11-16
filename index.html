@@ -203,7 +203,7 @@ function buildWorld(){
  for(let i=0;i<20;i++){const b=bean(8+i*10,5+(i%4)*2.3,(i%2?1:-1)*(9+(i%3)*2),.55+(i%3)*.16,(i+2)%6,false);b.userData.decor=true;}
 }
 const obstacles=[],springPads=[];
-let goal={x:217,y:21,z:5},checkpoint={x:125,y:9.1,z:4,active:false};
+let checkpoint={x:125,y:9.1,z:4,active:false};
 buildWorld();
 
 const player={pos:new THREE.Vector3(-8,.04,0),vel:new THREE.Vector3(),yaw:-Math.PI/2,pitch:0,grounded:false,lastGround:0,jumps:0,wall:null,wallTime:0,wallNormal:new THREE.Vector3(),roll:0,flow:1,checkpoint:false};
@@ -287,7 +287,6 @@ function updatePhysics(dt,t){
    if(w.axis==="x"){distance=Math.abs(p.pos.z-w.z);along=p.pos.x;normal=new THREE.Vector3(0,0,p.pos.z>w.z?1:-1)}
    else{distance=Math.abs(p.pos.x-w.x);along=p.pos.z;normal=new THREE.Vector3(p.pos.x>w.x?1:-1,0,0)}
    const tangentOK=w.axis==="x"?Math.abs(wish.x)>.45:Math.abs(wish.z)>.45;
-   if(distance<.82&&along>w.axis==="x"?false:false){} // intentionally empty; bounds handled below
    const inBounds=w.axis==="x"?(along>w.x-w.w/2&&along<w.x+w.w/2):(along>w.z-w.d/2&&along<w.z+w.d/2);
    if(distance<.82&&inBounds&&tangentOK){candidate={wall:w,normal};break}
   }
@@ -304,6 +303,13 @@ function updatePhysics(dt,t){
  }else{
   p.roll+=(0-p.roll)*Math.min(1,dt*8);
   p.vel.y-=23.5*dt;
+ }
+ // Move the floating island before collision checks, carrying the player if standing on it.
+ for(const m of moving){
+  const oldZ=m.collider.z;
+  const newZ=m.base+Math.sin(t*m.rate+m.phase)*m.amp;
+  if(p.grounded&&Math.abs(p.pos.x-m.collider.x)<m.collider.w/2+.3&&Math.abs(p.pos.z-oldZ)<m.collider.d/2+.3&&Math.abs(p.pos.y-m.collider.top)<.15)p.pos.z+=newZ-oldZ;
+  m.collider.z=newZ;m.collider.mesh.position.z=newZ;m.collider.cap.position.z=newZ;
  }
  // Apply horizontal movement first. Platforms are top-collision surfaces.
  const oldY=p.pos.y;
