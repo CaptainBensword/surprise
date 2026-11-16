@@ -382,7 +382,7 @@ buildingLevel=1;
 
 const player={pos:new THREE.Vector3(levelSpawns[0].x,levelSpawns[0].y,levelSpawns[0].z),vel:new THREE.Vector3(),yaw:levelSpawns[0].yaw,pitch:0,grounded:false,lastGround:0,jumps:0,wall:null,wallTime:0,wallCooldown:0,wallNormal:new THREE.Vector3(),roll:0,flow:1,checkpoint:false};
 const levelNames=["Tutorial","Chroma Circuit","Prism Ascent","Violet Void","Acid Garden","Laser Lagoon","Fractal Fields","Neon Maze","Static Storm","The Afterglow"];
-const keys={};let locked=false,active=false,paused=false,finished=false,elapsed=0,best=0,toastTimer=0,fallLock=0;
+const keys={};let locked=false,active=false,paused=false,finished=false,elapsed=0,best=0,toastTimer=0,fallLock=0,tutorialStep=0;
 function loadBest(){best=Number(localStorage.getItem("psychedelic-best-"+currentLevel)||0);$("best").textContent=best?formatTime(best):"—";}
 function formatTime(n){return Math.floor(n/60)+":"+String(Math.floor(n%60)).padStart(2,"0")}
 function showToast(txt){$("toast").textContent=txt;$("toast").classList.add("show");toastTimer=1.35}
@@ -401,7 +401,7 @@ function resetPlayer(toCheckpoint=false){
 }
 function startLevel(level){
  currentLevel=Math.max(1,Math.min(10,Number(level)||1));goal=levelGoals[currentLevel-1];checkpoint={...levelCheckpoints[currentLevel-1],active:false};
- elapsed=0;finished=false;active=true;paused=false;resetPlayer(false);camera.position.set(player.pos.x,player.pos.y+1.65,player.pos.z);
+ elapsed=0;finished=false;active=true;paused=false;tutorialStep=0;resetPlayer(false);camera.position.set(player.pos.x,player.pos.y+1.65,player.pos.z);
  $("intro").classList.add("hidden");$("finish").classList.add("hidden");$("pause").classList.add("hidden");loadBest();updateHud();
  showToast(currentLevel===1?"TUTORIAL — LEARN THE MOVEMENT":"LEVEL "+String(currentLevel).padStart(2,"0")+" — "+levelNames[currentLevel-1].toUpperCase());requestLock();renderer.domElement.focus();
 }
@@ -451,6 +451,16 @@ function jump(){
 }
 function updatePhysics(dt,t){
  const p=player;
+ if(currentLevel===1){
+  const lessons=[
+   {x:0,message:"WASD TO MOVE · MOUSE TO LOOK"},
+   {x:18,message:"SPACE TO JUMP · HOLD SHIFT TO SPRINT"},
+   {x:42,message:"JUMP BESIDE THE NEON WALL TO WALL-RUN"},
+   {x:54,message:"PRESS SPACE WHILE WALL-RUNNING TO WALL-JUMP"},
+   {x:124,message:"STEP ON THE PRISM PAD FOR A BOOST"}
+  ];
+  while(tutorialStep<lessons.length&&p.pos.x>lessons[tutorialStep].x){showToast(lessons[tutorialStep].message);tutorialStep++;}
+ }
  p.wallCooldown=Math.max(0,p.wallCooldown-dt);
  const fwdInput=(keys.KeyW||keys.ArrowUp?1:0)-(keys.KeyS||keys.ArrowDown?1:0);
  const sideInput=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0);
