@@ -7,18 +7,18 @@
 <title>UNDER THE BEAN SKY</title>
 <style>
 :root{--ink:#172b40;--paper:#f5fbff;--blue:#70d4f5;--gold:#ffd36e;--line:#ffffff55}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#8bdcff;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}canvas{display:block;width:100%;height:100%;outline:0}
-#hud{position:fixed;inset:0;pointer-events:none;padding:18px;display:flex;justify-content:space-between;align-items:flex-start}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#8bdcff;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}canvas{position:fixed;inset:0;z-index:0;display:block;width:100%;height:100%;outline:0}
+#hud{position:fixed;z-index:2;inset:0;pointer-events:none;padding:18px;display:flex;justify-content:space-between;align-items:flex-start}
 .brand{font-size:12px;letter-spacing:.18em;font-weight:1000;color:#183750;text-shadow:0 1px 0 #fff8}.brand span{color:#e45e73}.tag{font:9px ui-monospace,monospace;letter-spacing:.16em;color:#28516b;margin-top:5px}
 .stats{display:flex;gap:8px}.stat{min-width:82px;padding:9px 12px;border:1px solid #fff9;background:#eaf8ffb8;backdrop-filter:blur(10px);border-radius:9px;box-shadow:0 5px 18px #38759a1c}.stat label{display:block;font:8px ui-monospace,monospace;letter-spacing:.13em;color:#58788d}.stat b{display:block;margin-top:4px;font:900 16px ui-monospace,monospace;color:#17344d}.stat b small{font-size:9px;color:#62869d}
-#hint{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 14px;border:1px solid #ffffffaa;background:#e8f8ffd9;backdrop-filter:blur(9px);border-radius:8px;font:9px ui-monospace,monospace;letter-spacing:.06em;color:#234d68;white-space:nowrap;pointer-events:none}
+#hint{z-index:2;position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 14px;border:1px solid #ffffffaa;background:#e8f8ffd9;backdrop-filter:blur(9px);border-radius:8px;font:9px ui-monospace,monospace;letter-spacing:.06em;color:#234d68;white-space:nowrap;pointer-events:none}
 #hint strong{color:#d34e69}
-#crosshair{position:fixed;left:50%;top:50%;width:6px;height:6px;margin:-3px;border:1px solid #fff;box-shadow:0 0 4px #16415b;transform:rotate(45deg);opacity:.8;pointer-events:none}
-#toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-8px);opacity:0;transition:.22s;padding:9px 14px;border:1px solid #fff;background:#f3fbffe8;border-radius:7px;font:10px ui-monospace,monospace;letter-spacing:.1em;color:#21445c;pointer-events:none}
+#crosshair{z-index:2;position:fixed;left:50%;top:50%;width:6px;height:6px;margin:-3px;border:1px solid #fff;box-shadow:0 0 4px #16415b;transform:rotate(45deg);opacity:.8;pointer-events:none}
+#toast{z-index:30;position:fixed;left:50%;top:76px;transform:translate(-50%,-8px);opacity:0;transition:.22s;padding:9px 14px;border:1px solid #fff;background:#f3fbffe8;border-radius:7px;font:10px ui-monospace,monospace;letter-spacing:.1em;color:#21445c;pointer-events:none}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 #flowWrap{position:fixed;left:18px;bottom:64px;width:140px;height:5px;border-radius:8px;background:#fff8;overflow:hidden;pointer-events:none}
 #flow{height:100%;width:0;background:#e75b75;box-shadow:0 0 12px #e75b75;transition:width .08s}
-.overlay{position:fixed;inset:0;z-index:5;display:grid;place-items:center;padding:20px;background:linear-gradient(145deg,#bcecffd9,#f3d7d4cf);backdrop-filter:blur(8px)}
+.overlay{position:fixed;inset:0;z-index:20;pointer-events:auto;display:grid;place-items:center;padding:20px;background:linear-gradient(145deg,#bcecffd9,#f3d7d4cf);backdrop-filter:blur(8px)}
 .overlay.hidden{display:none}
 .card{width:min(620px,100%);padding:clamp(22px,5vw,40px);border:1px solid #fff;background:linear-gradient(150deg,#f8fdffef,#e8f7ffed);border-radius:16px;box-shadow:0 24px 90px #22577b35}
 .eyebrow{font:900 9px ui-monospace,monospace;letter-spacing:.22em;color:#d64d67}
@@ -32,7 +32,7 @@ h1 span{color:#df5b72}
 .control{border:1px solid #cee8f5;background:#ffffffa8;padding:10px;border-radius:8px}
 .control b{display:block;font:900 10px ui-monospace,monospace;color:#20465f;margin-bottom:4px}.control small{font-size:9px;color:#65869a;line-height:1.5}
 .actions{display:flex;gap:9px}
-button{border:1px solid #b5dbea;background:#e2f3fb;color:#234861;padding:13px 16px;border-radius:8px;font:900 10px ui-monospace,monospace;letter-spacing:.1em;cursor:pointer}
+button{position:relative;z-index:21;pointer-events:auto;touch-action:manipulation;border:1px solid #b5dbea;background:#e2f3fb;color:#234861;padding:13px 16px;border-radius:8px;font:900 10px ui-monospace,monospace;letter-spacing:.1em;cursor:pointer}
 button.primary{background:#e95d76;color:white;border-color:#e95d76;box-shadow:0 6px 16px #e95d763b}
 button:hover{filter:brightness(1.04);transform:translateY(-1px)}
 .actions button{flex:1}
@@ -66,8 +66,81 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
 </div></div>
 <div class="overlay hidden" id="pause"><div class="card"><div class="eyebrow">TAKE A BREATHER</div><h1>PAUSED<span>.</span></h1><p>Your beans are right where you left them.</p><div class="actions"><button class="primary" id="resume">BACK TO IT</button><button id="restartPause">RESTART RUN</button></div></div></div>
 <div class="overlay hidden" id="finish"><div class="card"><div class="eyebrow">THE SKY BEANS SALUTE YOU</div><h2 id="endTitle">COURSE CLEARED</h2><p>You made it to the top of the sky. The beans have witnessed your achievement.</p><div id="endStats"></div><div class="actions"><button class="primary" id="again">RUN IT AGAIN</button><button id="menu">MAIN MENU</button></div></div></div>
+<script>
+(() => {
+  const handlers = Object.create(null);
+  const pending = [];
+  let ready = false;
+  const intro = () => document.getElementById("intro");
+  const toast = (message) => {
+    const el = document.getElementById("toast");
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add("show");
+    setTimeout(() => el.classList.remove("show"), 2200);
+  };
+  const fallback = {
+    start: () => { pending.push("start"); toast("Loading the 3D world…"); },
+    how: () => toast("Keep your speed · jump late · jump away from the wall while beside it"),
+    resume: () => { document.getElementById("pause").classList.add("hidden"); },
+    restartPause: () => { document.getElementById("pause").classList.add("hidden"); intro().classList.remove("hidden"); },
+    again: () => { document.getElementById("finish").classList.add("hidden"); intro().classList.remove("hidden"); },
+    menu: () => { document.getElementById("finish").classList.add("hidden"); intro().classList.remove("hidden"); }
+  };
+  window.BeanSkyUI = {
+    bind(map) {
+      Object.assign(handlers, map);
+      ready = true;
+      while (pending.length) {
+        const name = pending.shift();
+        if (handlers[name]) handlers[name]();
+      }
+    },
+    fail(message) {
+      ready = false;
+      pending.length = 0;
+      document.querySelectorAll("button").forEach(button => button.disabled = false);
+      const p = intro()?.querySelector("p");
+      if (p) p.textContent = message || "The 3D engine could not start. Refresh the page and try again.";
+      const start = document.getElementById("start");
+      if (start) start.textContent = "RETRY";
+      toast("3D ENGINE DID NOT START");
+    }
+  };
+  document.addEventListener("click", event => {
+    const button = event.target.closest("button[id]");
+    if (!button) return;
+    const name = button.id;
+    if (handlers[name]) {
+      event.preventDefault();
+      handlers[name]();
+      return;
+    }
+    if (name in fallback) {
+      event.preventDefault();
+      fallback[name]();
+    }
+  }, true);
+  window.addEventListener("error", event => {
+    if (event.message) window.BeanSkyUI.fail("The game hit a loading error. Refresh the page to retry. " + event.message.slice(0, 110));
+  });
+  window.addEventListener("unhandledrejection", event => {
+    window.BeanSkyUI.fail("The game could not load its 3D engine. Refresh the page to retry.");
+  });
+})();
+</script>
 <script type="module">
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+let THREE;
+try {
+  THREE = await import("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js");
+} catch (firstError) {
+  try {
+    THREE = await import("https://unpkg.com/three@0.160.0/build/three.module.js");
+  } catch (secondError) {
+    window.BeanSkyUI?.fail("Could not load the 3D engine from either backup source. Check your connection and refresh.");
+    throw secondError;
+  }
+}
 
 const $=id=>document.getElementById(id);
 const scene=new THREE.Scene();
@@ -75,7 +148,13 @@ scene.background=new THREE.Color(0x91dafa);
 scene.fog=new THREE.FogExp2(0x9bdef5,0.0065);
 const camera=new THREE.PerspectiveCamera(76,innerWidth/innerHeight,0.08,260);
 camera.rotation.order="YXZ";
-const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+let renderer;
+try {
+ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+} catch (error) {
+ window.BeanSkyUI?.fail("Your browser could not create a WebGL 3D view. Try enabling hardware acceleration, then reload.");
+ throw error;
+}
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
 renderer.setSize(innerWidth,innerHeight);
 renderer.shadowMap.enabled=true;
@@ -240,7 +319,14 @@ function finishRun(){
  if(!best||time<best){best=time;localStorage.setItem("bean-sky-best",best);$("best").textContent=formatTime(best)}
  $("finish").classList.remove("hidden");
 }
-$("start").onclick=startRun;$("how").onclick=()=>showToast("KEEP YOUR SPEED. JUMP LATE. WALL-RUN BESIDE THE TALL PANELS.");$("resume").onclick=resumeGame;$("restartPause").onclick=()=>{resetRun();requestLock()};$("again").onclick=()=>{resetRun();requestLock()};$("menu").onclick=()=>{$("finish").classList.add("hidden");$("intro").classList.remove("hidden")};
+window.BeanSkyUI?.bind({
+ start: startRun,
+ how: () => showToast("KEEP YOUR SPEED · JUMP LATE · WALL-JUMP OFF THE PANELS"),
+ resume: resumeGame,
+ restartPause: () => { resetRun(); requestLock(); },
+ again: () => { resetRun(); requestLock(); },
+ menu: () => { $("finish").classList.add("hidden"); $("intro").classList.remove("hidden"); }
+});
 document.addEventListener("pointerlockchange",()=>{locked=document.pointerLockElement===renderer.domElement;if(!locked&&active&&!paused)pauseGame()});
 document.addEventListener("mousemove",e=>{if(!locked||!active||paused)return;player.yaw-=e.movementX*.00225;player.pitch-=e.movementY*.0021;player.pitch=Math.max(-1.25,Math.min(1.25,player.pitch))});
 addEventListener("keydown",e=>{
