@@ -183,7 +183,6 @@ const mats={
 };
 const psyMaterials=[...mats.island,mats.top,mats.gold,mats.pink,mats.mint,mats.wall,...mats.accent];
 const psyDecor=[];
-};
 const colliders=[],wallRuns=[],moving=[];
 const levelGoals=Array(10).fill(null);
 const levelSpawns=[
@@ -433,7 +432,7 @@ addEventListener("keydown",e=>{
  if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();
  keys[e.code]=true;
  if(e.code==="Escape"&&active&&!paused){pauseGame();return}
- if(e.code==="KeyR"&&active){resetRun();if(!locked)requestLock();return}
+ if(e.code==="KeyR"&&active){startLevel(currentLevel);if(!locked)requestLock();return}
  if(e.code==="Space"&&!e.repeat&&active&&!paused)jump();
 });
 addEventListener("keyup",e=>keys[e.code]=false);
