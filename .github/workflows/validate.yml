@@ -1,4 +1,4 @@
-name: Validate Bean Sky
+name: Validate Psychedelic
 on:
   push:
     branches: [main]
@@ -19,8 +19,8 @@ jobs:
           if (scripts.length !== 2) {
             throw new Error('Expected the UI script and the 3D game module');
           }
-          fs.writeFileSync('/tmp/bean-sky-ui.js', scripts[0][1]);
-          fs.writeFileSync('/tmp/bean-sky-game.mjs', scripts[1][1]);
+          fs.writeFileSync('/tmp/psychedelic-ui.js', scripts[0][1]);
+          fs.writeFileSync('/tmp/psychedelic-game.mjs', scripts[1][1]);
           NODE
-          node --check /tmp/bean-sky-ui.js
-          node --check /tmp/bean-sky-game.mjs
+          node --check /tmp/psychedelic-ui.js
+          node --check /tmp/psychedelic-game.mjs
