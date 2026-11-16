@@ -71,6 +71,7 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
   const handlers = Object.create(null);
   const pending = [];
   let ready = false;
+  let failed = false;
   const intro = () => document.getElementById("intro");
   const toast = (message) => {
     const el = document.getElementById("toast");
@@ -80,7 +81,7 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
     setTimeout(() => el.classList.remove("show"), 2200);
   };
   const fallback = {
-    start: () => { pending.push("start"); toast("Loading the 3D world…"); },
+    start: () => { if (failed) { toast("Reloading the 3D engine…"); window.location.reload(); return; } pending.push("start"); toast("Loading the 3D world…"); },
     how: () => toast("Keep your speed · jump late · jump away from the wall while beside it"),
     resume: () => { document.getElementById("pause").classList.add("hidden"); },
     restartPause: () => { document.getElementById("pause").classList.add("hidden"); intro().classList.remove("hidden"); },
@@ -91,6 +92,7 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
     bind(map) {
       Object.assign(handlers, map);
       ready = true;
+      failed = false;
       while (pending.length) {
         const name = pending.shift();
         if (handlers[name]) handlers[name]();
